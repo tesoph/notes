@@ -1,5 +1,6 @@
 from flask import render_template, flash, redirect
 from app import app
+from app.forms import LoginForm
 
 '''
 A decorator modifies the function that follows it.
@@ -10,7 +11,7 @@ Flask invokes this function and passes the return value back to the browser as a
 @app.route('/index')
 def index():
     user = {'username': 'Miguel'}
-     posts = [
+    posts = [
         {
             'author': {'username': 'John'},
             'body': 'Beautiful day in Portland!'
