@@ -1,3 +1,5 @@
 venv/
 .flaskenv
 __pycache__
+.vscode/
+*.code-workspace
