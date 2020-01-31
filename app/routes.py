@@ -1,5 +1,6 @@
 from flask import render_template, flash, redirect, url_for
 from app import app
+from app import db
 from app.forms import LoginForm
 from flask_pymongo import PyMongo
 from flask_mongoengine import MongoEngine
@@ -23,7 +24,7 @@ Flask invokes this function and passes the return value back to the browser as a
 @app.route('/')
 @app.route('/index')
 def index():
-    u= User.objects.first()
+    u=db.users.count()
     #u =mongo.db.users.count()
     return render_template('index.html', title='Home', user=u)
 

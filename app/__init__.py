@@ -3,6 +3,10 @@ from config import Config
 from flask_pymongo import PyMongo
 import os 
 from flask_mongoengine import MongoEngine
+from pymongo import MongoClient
+from flask_login import LoginManager
+from flask_login import current_user, login_user, logout_user, login_required
+
 #Creates the app object as an instance of class Flask
 #__name__is a Python predefined variable which is set to the name of the module in which it is used.
 app = Flask(__name__)
@@ -10,7 +14,14 @@ app = Flask(__name__)
 app.config.from_object(Config)
 #db = SQLAlchemy(app)
 #migrate = Migrate(app, db)
-db = MongoEngine(app)
+#db = MongoEngine(app)
+client = MongoClient(Config.MONGO_URI)
+db = client.microblog
+
+#login-manager
+login= LoginManager(app)
+login.login_view = 'login'
+
 #routes module is imported at the bottom.
 #Workaround to circular imports
 #(routes needs to import app which is defined above)
