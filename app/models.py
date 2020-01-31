@@ -5,6 +5,8 @@ from mongoengine import DateTimeField, StringField, ReferenceField, ListField
 from werkzeug.security import generate_password_hash, check_password_hash
 ##chp5 user-logins
 from flask_login import UserMixin
+from flask_login import current_user, login_user
+
 '''
 class User(db.Document):
     first_name = db.StringField(max_length=50)
@@ -46,11 +48,16 @@ class User(Document):
     def get_id(self):
         return self.username
 
-
+'''
+don't use flask-login
 
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+'''
+#@login.user_loader
+#def load_user(id):
+    #return User.query.get(int(id))
 
 class Article(Document):
     body =StringField(max_lenth=100)
