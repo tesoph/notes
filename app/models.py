@@ -3,6 +3,7 @@ from flask_mongoengine import MongoEngine
 from mongoengine import Document
 from mongoengine import DateTimeField, StringField, ReferenceField, ListField
 from werkzeug.security import generate_password_hash, check_password_hash
+import datetime
 ##chp5 user-logins
 #from flask_login import UserMixin
 #from flask_login import current_user, login_user
@@ -16,6 +17,8 @@ class User(db.Model):
 #class User(db.UserMixin, db.Document)
     username = StringField(max_length=50)
     hash
+    #last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    last_seen = DateTimeField(default=datetime.datetime.now)
 
     def __init__(self, username, password_hash):
         self.username = username
