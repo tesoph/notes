@@ -30,5 +30,5 @@ login.login_view = 'login'
 #routes module is imported at the bottom.
 #Workaround to circular imports
 #(routes needs to import app which is defined above)
-from app import routes
+from app import routes, errors
 #from app import routes, models
