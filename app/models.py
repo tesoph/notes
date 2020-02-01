@@ -1,11 +1,11 @@
-from app import db, login
+from app import db
 from flask_mongoengine import MongoEngine
 from mongoengine import Document
 from mongoengine import DateTimeField, StringField, ReferenceField, ListField
 from werkzeug.security import generate_password_hash, check_password_hash
 ##chp5 user-logins
-from flask_login import UserMixin
-from flask_login import current_user, login_user
+#from flask_login import UserMixin
+#from flask_login import current_user, login_user
 
 '''
 class User(db.Document):
