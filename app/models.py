@@ -11,7 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 class User(db.Document):
     first_name = db.StringField(max_length=50)
 '''
-class User(Document):
+class User(db.Model):
 #class User(UserMixin, Document)
 #class User(db.UserMixin, db.Document)
     username = StringField(max_length=50)
