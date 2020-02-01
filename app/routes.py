@@ -142,3 +142,14 @@ def register():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("register.html")
+
+@app.route('/user')
+#@login_required
+def user():
+    u=db.users.find_one({"_id": session['user_id']})
+    #user = User.query.filter_by(username=username).first_or_404()
+    posts = [
+        {'author': user, 'body': 'Test post #1'},
+        {'author': user, 'body': 'Test post #2'}
+    ]
+    return render_template('user.html', user=u, posts=posts)
