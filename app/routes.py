@@ -173,7 +173,7 @@ def register():
         flash("registering")
         return render_template("register.html")
 
-
+'''
 @app.route('/user')
 # @login_required
 def user():
@@ -187,7 +187,20 @@ def user():
         return render_template('user.html', user=u, posts=posts)
     else:
         return redirect('/login')
-
+'''
+@app.route('/user/<username>')
+# @login_required
+def user(username):
+    #user_obj = User(username)
+    #u = db.users.find_one({"_id": session['user_id']})
+    u = current_user
+    #user_obj =User(current_user)
+    # user = User.query.filter_by(username=username).first_or_404()
+    posts = [
+            {'author': user, 'body': 'Test post #1'},
+            {'author': user, 'body': 'Test post #2'}
+    ]
+    return render_template('user.html', user=u, posts=posts)
 '''
 @app.before_request
 def before_request():

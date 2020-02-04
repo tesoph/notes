@@ -17,8 +17,11 @@
     <a href="{{ url_for('login') }}">Login</a>
 
     <a href="{{ url_for('logout') }}">Logout</a>
-    <a href="{{ url_for('user', username='ray') }}">Profile</a>
+  
+    <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
+   
   </div>
+ 
   <div>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
