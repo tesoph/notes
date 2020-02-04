@@ -9,7 +9,7 @@ import os
 # from flask_login import current_user, login_user
 from app.models import User
 # from flask_login import logout_user
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user
 # from app.models import User
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -71,8 +71,8 @@ def index():
 
 @app.route('/logout')
 def logout():
-    # logout_user()
-    session.clear()
+    logout_user()
+    #session.clear()
     return redirect(url_for('index'))
 
 

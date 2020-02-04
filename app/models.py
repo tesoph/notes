@@ -72,7 +72,7 @@ class User(Document):
 @login.user_loader
 def load_user(username):
     u = db.users.find_one({'username': username})
-    return User(u)
+    return u
 
 
 '''
