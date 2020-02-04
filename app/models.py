@@ -32,11 +32,15 @@ class User(Document):
     # hash
     #last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     #last_seen = DateTimeField(default=datetime.datetime.now)
-
+    #password = db.users.find_one
     #def __init__(self, username, password_hash):
     def __init__(self, username):
-        self.username = username
-        #self.password_hash = password_hash
+        us = db.users.find_one({"username": username})
+        self.username =username
+        self.password = us['password']
+        self._id= us['_id']
+        #self.password_hash = Document['password']
+        #self.password=password
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -72,7 +76,8 @@ class User(Document):
 @login.user_loader
 def load_user(username):
     u = db.users.find_one({'username': username})
-    return u
+    #return u
+    return User(u['username'])
 
 
 '''
