@@ -32,6 +32,7 @@ Flask invokes this function and passes the return value back to the browser as a
 @app.route('/')
 @app.route('/index')
 def index():
+    flash("hello")
     # u=db.users.count()
     # "username": user['username'
     '''
@@ -77,6 +78,9 @@ def logout():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        flash("Already logged in! Log out to login in as a different user")
+        return redirect(url_for('index'))
     """Log user in"""
 
     # Forget any user_id
@@ -85,10 +89,21 @@ def login():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        userinfo = request.form.to_dict()
-        # user = db.users.find_one({"username": user['username']})
-        user = db.users.find_one({"username": userinfo['username']})
-        user_obj = User(username=user['username'])
+        u = request.form.to_dict()
+        user = db.users.find_one({"username": u['username']})
+        #user= db.users.find_one({"username": u['username']})
+        #user = User.query.filter_by(username=u['username']).first()
+        '''
+        user_obj = User(username=u['username'])
+        if user_obj.check_password(u['password']):
+            flash("Invalid password")
+            return redirect(url_for('login'))'''
+        #https://stackoverflow.com/questions/54992412/flask-login-usermixin-class-with-a-mongodb
+        if not User.check_password((user['password']), (u['password'])):
+            flash("Invalid password")
+            return render_template('login.html')
+            #return redirect('/login')
+        user_obj = User(username=u['username'])
         login_user(user_obj)
         # Ensure username exists and password is correct
         '''
@@ -129,11 +144,12 @@ def register():
 
         del user['confirmation']
         plain = request.form.get("password")
-        user['password'] = generate_password_hash(plain)
+        user['password_hash'] = generate_password_hash(plain)
 
         if alreadyExists:
-            raise ValueError(
-                'Username already exists, choose a different username')
+            flash("Username already exists!")
+            return redirect(url_for('register'))
+            #raise ValueError('Username already exists, choose a different username')
         # display flashed message
         if not alreadyExists:
             db.users.insert_one(user)
@@ -145,10 +161,12 @@ def register():
         session['user_id'] = (db.users.find_one(
             {"username": user['username']}))['_id']
         # Redirect user to home page
-        return redirect("/")
+        flash("Congratulations, you are now a registered user!")
+        return redirect(url_for('login'))
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
+        flash("registering")
         return render_template("register.html")
 
 
