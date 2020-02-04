@@ -99,8 +99,10 @@ def login():
             flash("Invalid password")
             return redirect(url_for('login'))'''
         #https://stackoverflow.com/questions/54992412/flask-login-usermixin-class-with-a-mongodb
+        #?requires page load to display flash msgs?
+        #https://stackoverflow.com/questions/58521122/no-message-flashing-on-flask-without-error-message
         if not User.check_password((user['password']), (u['password'])):
-            flash("Invalid password")
+            flash("Invalid username or password")
             return render_template('login.html')
             #return redirect('/login')
         user_obj = User(username=u['username'])
@@ -139,30 +141,32 @@ def register():
             return apology("must provide password", 403)
         '''
 
-        user = request.form.to_dict()
-        alreadyExists = db.users.find_one({"username": user['username']})
+        u = request.form.to_dict()
+        alreadyExists = db.users.find_one({"username": u['username']})
 
-        del user['confirmation']
+        del u['confirmation']
         plain = request.form.get("password")
-        user['password_hash'] = generate_password_hash(plain)
+        u['password'] = generate_password_hash(plain)
 
         if alreadyExists:
             flash("Username already exists!")
-            return redirect(url_for('register'))
+            return render_template('register.html')
             #raise ValueError('Username already exists, choose a different username')
         # display flashed message
         if not alreadyExists:
-            db.users.insert_one(user)
+            db.users.insert_one(u)
 
         # log user in
         # user=db.users.find_one({"username": user['username']})
         # Remember which user has logged in
         # session["user_id"] = rows[0]["id"]
         session['user_id'] = (db.users.find_one(
-            {"username": user['username']}))['_id']
+            {"username": u['username']}))['_id']
         # Redirect user to home page
         flash("Congratulations, you are now a registered user!")
-        return redirect(url_for('login'))
+        user_obj = User(username=u['username'])
+        login_user(user_obj)
+        return render_template('index.html')
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:

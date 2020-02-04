@@ -24,7 +24,8 @@ class User(db.Document):
 # class User(Document):
 
 
-class User:
+class User(Document):
+    # user = db.users.find_one({"username": u['username']})
     # class User(UserMixin, Document)
     # class User(db.UserMixin, db.Document)
     ##username = StringField(max_length=50)
@@ -42,6 +43,7 @@ class User:
     '''
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)'''
+        
     @staticmethod
     def check_password(password_hash, password):
         return check_password_hash(password_hash, password)
@@ -70,7 +72,7 @@ class User:
 @login.user_loader
 def load_user(username):
     u = db.users.find_one({'username': username})
-    return User(username=u['username'])
+    return User(u)
 
 
 '''
