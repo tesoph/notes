@@ -204,10 +204,16 @@ def user(username):
 
 @app.before_request
 def before_request():
-    
     if current_user.is_authenticated:
-        current_user.last_seen = datetime.utcnow()
+        t=datetime.now()
+        u=current_user
+        #current_user['last_seen'] = datetime.now()
+        #user =db.users.find_one({"_id": current_user._id})
+        #db.users.update_one(user, {'$set': {"last_seen": t}})
+        u.set_lastseen(t)
         #db.session.commit()
+        #u = current_user
+
 
 '''
 @app.before_request

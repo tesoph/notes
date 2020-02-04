@@ -39,12 +39,17 @@ class User(Document):
         self.username =username
         self.password = user['password']
         self._id= user['_id']
-       
+        
         #self.password_hash = Document['password']
         #self.password=password
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
+
+    def set_lastseen(self, lastseen):
+        self.last_seen = lastseen
+        user =db.users.find_one({"_id": self._id})
+        db.users.update_one(user, {'$set': {"last_seen": lastseen}})
     '''
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)'''
