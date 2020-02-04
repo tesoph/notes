@@ -7,9 +7,9 @@ from flask_mongoengine import MongoEngine
 import os
 # from app.models import User
 # from flask_login import current_user, login_user
-# from app.models import User
+from app.models import User
 # from flask_login import logout_user
-# from flask_login import current_user, login_user
+from flask_login import current_user, login_user
 # from app.models import User
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -53,6 +53,7 @@ def index():
     else:
         return render_template("index.html", title='Home Page')
         '''
+    '''
     if session:
         userid = session['user_id']
         u = db.users.find_one({"_id": userid})
@@ -60,6 +61,8 @@ def index():
         return render_template("index.html", title='Home Page', user=name)
     else:
         return render_template("index.html", title='Home Page', user='unsigned in user')
+    '''
+    return render_template('index.html', title='Home Page')
 # ...'
 
 # ...
@@ -85,11 +88,13 @@ def login():
         userinfo = request.form.to_dict()
         # user = db.users.find_one({"username": user['username']})
         user = db.users.find_one({"username": userinfo['username']})
+        user_obj = User(username=user['username'])
+        login_user(user_obj)
         # Ensure username exists and password is correct
-
+        '''
         # Remember which user has logged in
-        session['user_id'] = (db.users.find_one(
-            {"username": user['username']}))['_id']
+        # session['user_id'] = (db.users.find_one({"username": user['username']}))['_id']
+        '''
         # Redirect user to home page
         return redirect("/")
 
@@ -161,23 +166,23 @@ def user():
     else:
         return redirect('/login')
 
-
+'''
 @app.before_request
 def before_request():
-    '''
+    
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
-        '''
+        
     t= datetime.now()
     print(f'hi, {t}', file=sys.stderr)
     if session:
-            #db.users.find_one_and_update({"_id": session['user_id']}, {'$set': {"last_seen": 'now'}})
+            # db.users.find_one_and_update({"_id": session['user_id']}, {'$set': {"last_seen": 'now'}})
             db.users.update_one({"_id": session['user_id']}, {'$set': {"last_seen": t}})
             user =db.users.find_one({"_id": session['user_id']})
             time = user['last_seen']
             print(f'updated? {time}', file=sys.stderr)
-
+'''
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP', '0.0.0.0'),
             port=int(os.environ.get('PORT', '5000')),

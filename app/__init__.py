@@ -4,8 +4,8 @@ from flask_pymongo import PyMongo
 import os 
 from flask_mongoengine import MongoEngine
 from pymongo import MongoClient
-#from flask_login import LoginManager
-#from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import LoginManager
+from flask_login import current_user, login_user, logout_user, login_required
 from flask_session import Session
 
 #Creates the app object as an instance of class Flask
@@ -20,15 +20,15 @@ client = MongoClient(Config.MONGO_URI)
 db = client.microblog
 
 Session(app)
+
 #login-manager
-'''
 login= LoginManager(app)
 login.login_view = 'login'
-'''
+
 
 
 #routes module is imported at the bottom.
 #Workaround to circular imports
 #(routes needs to import app which is defined above)
-from app import routes, errors
+from app import routes, models, errors
 #from app import routes, models
