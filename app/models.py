@@ -35,10 +35,11 @@ class User(Document):
     #password = db.users.find_one
     #def __init__(self, username, password_hash):
     def __init__(self, username):
-        us = db.users.find_one({"username": username})
+        user = db.users.find_one({"username": username})
         self.username =username
-        self.password = us['password']
-        self._id= us['_id']
+        self.password = user['password']
+        self._id= user['_id']
+       
         #self.password_hash = Document['password']
         #self.password=password
 

@@ -197,10 +197,18 @@ def user(username):
     #user_obj =User(current_user)
     # user = User.query.filter_by(username=username).first_or_404()
     posts = [
-            {'author': user, 'body': 'Test post #1'},
-            {'author': user, 'body': 'Test post #2'}
+            {'author': u, 'body': 'Test post #1'},
+            {'author': u, 'body': 'Test post #2'}
     ]
     return render_template('user.html', user=u, posts=posts)
+
+@app.before_request
+def before_request():
+    
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.utcnow()
+        #db.session.commit()
+
 '''
 @app.before_request
 def before_request():
