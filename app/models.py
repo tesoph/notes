@@ -78,13 +78,13 @@ class User(Document):
 
     def get_id(self):
         return self.username
-
+'''
 @login.user_loader
 def load_user(username):
     u = db.users.find_one({'username': username})
     #return u
     return User(u['username'])
-
+'''
 
 '''
 don't use flask-login
