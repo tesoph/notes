@@ -1,15 +1,9 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
-from app import app
-from app import db
+from app import app, db
 # from app.forms import LoginForm
 from flask_pymongo import PyMongo
-from flask_mongoengine import MongoEngine
+#from flask_mongoengine import MongoEngine
 import os
-# from app.models import User
-# from flask_login import current_user, login_user
-#from app.models import User
-# from flask_login import logout_user
-#from flask_login import current_user, login_user, logout_user
 # from app.models import User
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -32,6 +26,7 @@ Flask invokes this function and passes the return value back to the browser as a
 @app.route('/')
 @app.route('/index')
 def index():
+    #userLoggedIn = True if 'user_id' in session else False
     flash("hello")
     # u=db.users.count()
     # "username": user['username'
@@ -63,7 +58,13 @@ def index():
     else:
         return render_template("index.html", title='Home Page', user='unsigned in user')
     '''
-    return render_template('index.html', title='Home Page')
+    if 'user_id' in session:
+         users=db.users
+         userid=session['user_id']
+         user = users.find_one({'_id': userid})
+         return render_template('index.html', title='Home Page', user=user, userLoggedIn=True)
+    else:
+        return render_template('index.html', title='Home Page', user='anonymous user', userLoggedIn=False)
 # ...'
 
 # ...
@@ -71,9 +72,12 @@ def index():
 
 @app.route('/logout')
 def logout():
+    '''
     #flask-login
     #logout_user()
+    '''
     session.clear()
+    userLoggedIn=False
     return redirect(url_for('index'))
 
 
@@ -95,11 +99,14 @@ def login():
         users=db.users
         loginform = request.form.to_dict()
         user = users.find_one({"username": loginform['username']})
-        if not user:
-            flash('Username does not exist')
+        if not user or not check_password_hash(user['password'], loginform['password']):
+            flash('Invalid username or password')
             return render_template('login.html')
-        if check_password_hash(user['password'], loginform['password']):
+        else:
             session['user_id'] = user['_id']
+            session['username']=user['username']
+            userLoggedIn=True 
+            return redirect("/")
         #user= db.users.find_one({"username": u['username']})
         #user = User.query.filter_by(username=u['username']).first()
         '''
@@ -128,7 +135,7 @@ def login():
         # session['user_id'] = (db.users.find_one({"username": user['username']}))['_id']
         '''
         # Redirect user to home page
-        return redirect("/")
+        
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -156,28 +163,28 @@ def register():
             return apology("must provide password", 403)
         '''
         users=db.users
-        
         form = request.form.to_dict()
-        alreadyExists = user.find_one({"username": form['username']})
-
+        alreadyExists = users.find_one({"username": form['username']})
+        if alreadyExists:
+            flash("Username already exists!")
+            return render_template('register.html')
+        
         del form['confirmation']
         #plain = form["password"]
         form['password'] = generate_password_hash(form['password'])
 
-        if alreadyExists:
-            flash("Username already exists!")
-            return render_template('register.html')
-            #raise ValueError('Username already exists, choose a different username')
+   
+        #raise ValueError('Username already exists, choose a different username')
         # display flashed message
         if not alreadyExists:
             users.insert_one(form)
 
         # log user in
-        # user=db.users.find_one({"username": user['username']})
+        user=db.users.find_one({"username": form['username']})
         # Remember which user has logged in
         # session["user_id"] = rows[0]["id"]
-        session['user_id'] = (users.find_one(
-            {"username": form['username']}))['_id']
+        session['user_id'] = user['_id']
+        session['username'] = user['username']
 
         # Redirect user to home page
         flash("Congratulations, you are now a registered user!")
@@ -189,7 +196,7 @@ def register():
         '''
         
 
-        return render_template('index.html')
+        return render_template('index.html', user =user)
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -214,19 +221,35 @@ def user():
 @app.route('/user/<username>')
 # @login_required
 def user(username):
+    if 'user_id' in session:
+         users=db.users
+         userid=session['user_id']
+         user = users.find_one({'_id': userid})
+         return render_template('user.html', title='Profile page', user=user, username=user['username'])
+    else:
+        return render_template('index.html', user='anonymous user')
     #user_obj = User(username)
     #u = db.users.find_one({"_id": session['user_id']})
-    u = current_user
+    #u = current_user
     #user_obj =User(current_user)
     # user = User.query.filter_by(username=username).first_or_404()
+    '''
     posts = [
             {'author': u, 'body': 'Test post #1'},
             {'author': u, 'body': 'Test post #2'}
     ]
     return render_template('user.html', user=u, posts=posts)
+    '''
 
 @app.before_request
 def before_request():
+    time= datetime.now()
+    if 'user_id' in session:
+            # db.users.find_one_and_update({"_id": session['user_id']}, {'$set': {"last_seen": 'now'}})
+            db.users.update_one({"_id": session['user_id']}, {'$set': {"last_seen": time}})
+            #user =db.users.find_one({"_id": session['user_id']})
+            #time = user['last_seen']
+            #print(f'updated? {time}', file=sys.stderr)
     '''
     if current_user.is_authenticated:
         t=datetime.now()
