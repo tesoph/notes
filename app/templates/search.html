@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Search
+{% endblock %}
+
+{% block content %}
+    <form action="/search" method="post">
+        <div class="form-group">
+        <p>Search:</p>
+            <input autocomplete="off" autofocus class="form-control" name="searchTerm" placeholder="Search Wikipedia" type="text">
+        </div>
+    </form>
+{% endblock %}

@@ -20,6 +20,7 @@
     {% if userLoggedIn %}
     <a href="{{ url_for('user', username = session['user']) }}">Profile</a>
     {% endif %}
+    <a href="{{ url_for('search') }}">Search wikipedia</a>
    
   </div>
  

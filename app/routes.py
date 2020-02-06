@@ -9,7 +9,7 @@ from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import sys
-
+from app.wiki import get_content
 # mongo = PyMongo(app)
 
 '''
@@ -72,6 +72,7 @@ def index():
 
 @app.route('/logout')
 def logout():
+
     '''
     #flask-login
     #logout_user()
@@ -280,6 +281,18 @@ def before_request():
             time = user['last_seen']
             print(f'updated? {time}', file=sys.stderr)
 '''
+
+@app.route('/search', methods=["GET", "POST"])
+def search():
+    #POST route
+    if request.method == "POST":
+        searchTerm = request.form.get('searchTerm')
+        pageContent=get_content(searchTerm)
+        #render list
+        return render_template('wiki.html', content=pageContent)
+    #GET route
+    else:
+         return render_template('search.html')
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP', '0.0.0.0'),
