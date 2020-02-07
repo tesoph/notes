@@ -226,7 +226,8 @@ def user(username):
          users=db.users
          userid=session['user_id']
          user = users.find_one({'_id': userid})
-         return render_template('user.html', title='Profile page', user=user, username=user['username'])
+         uname=user['username']
+         return render_template('user.html', title='Profile page', user=user, username=uname)
     else:
         return render_template('index.html', user='anonymous user')
     #user_obj = User(username)
@@ -286,6 +287,7 @@ def before_request():
 def search():
     #POST route
     if request.method == "POST":
+        pageContent=[]
         searchTerm = request.form.get('searchTerm')
         pageContent=get_content(searchTerm)
         #render list
@@ -293,6 +295,90 @@ def search():
     #GET route
     else:
          return render_template('search.html')
+'''
+class Bookmark(db.Model):
+    url = CharField()
+    created_date = DateTimeField(default=datetime.datetime.now)
+    image = CharField(default='')
+    javascript:location.href='http://127.0.0.1:5000/add/?password=shh&amp;url='+location.href;
+    javascript:location.href='http://127.0.0.1:5000/add/'+window.location.href.replace(/^http(s?):\/\//i, "")
+'''
+
+#javascript:(function(){var list=prompt('Save to List');window.open('http://'+ list +'.saved.io/'+ document.location.href);})();
+#javascript:(function(){var list=prompt('Save to List');window.open('http://127.0.0.1:5000/add/'+ document.location.href);})();
+#javascript:(function(){window.open('http://127.0.0.1:5000/add/'+ document.location.href);})();
+#take out https://
+#https://stackoverflow.com/questions/43482152/how-can-i-remove-http-or-https-using-javascript
+#window.location.href.replace(/^http(s?):\/\//i, "")
+
+
+#can't cope with the /
+#https://stackoverflow.com/questions/2992231/slashes-in-url-variables
+#You can use encodeURIComponent and decodeURIComponent for this purpose. – Keavon Jun 26 '17 
+# encodeURIComponent( document.location.href )
+#javascript:location.href='http://127.0.0.1:5000/add/'+encodeURIComponent(window.location.href);
+
+
+'''
+javascript:(function(){
+    location.href='http://127.0.0.1:5000/add/?url='+
+    encodeURIComponent(window.location.href)+
+    '&title='+encodeURIComponent(document.title)
+})()
+'''
+'''
+javascript:(function(){
+    location.href='http://127.0.0.1:5000/add/'+
+    encodeURIComponent(window.location.href)
+})()
+'''
+#javascript:void(location.href="http://www.yacktrack.com/home?query="+encodeURI(location.href))
+#javascript:void(location.href="http://127.0.0.1:5000/add?url="+encodeURI(location.href))
+#javascript:void(location.href="http://127.0.0.1:5000/add/"+encodeURIComponent(location.href))
+#https://gist.github.com/Nodja/34cfd28ba0e89a9bbcc3de604355b704
+'''
+javascript: 
+            args = location.href;
+            window.open("http://127.0.0.1:5500/youtubedl"
+                       
+                            + "&args="  + encodeURIComponent(args)
+                        , '_blank');
+'''
+'''
+javascript: 
+            args = location.href;
+            window.open("http://127.0.0.1:5000/add/"
+                       
+                            + "&args="  + encodeURIComponent(args)
+                     );
+'''
+#javascript:location.href='http://127.0.0.1:5000/add/?password=shh&amp;url='+location.href;
+#javascript:location.href='http://127.0.0.1:5000/add/?url='+location.href;
+@app.route('/add/', methods=["GET", "POST"])
+def add():
+    print('add route')
+    #https://charlesleifer.com/blog/building-bookmarking-service-python-and-phantomjs/
+    '''
+    password = request.args.get('password')
+    if password != PASSWORD:
+        abort(404)
+    '''
+    #args = request.args.get('args', ""
+    #)
+    url = request.args.get('url')
+    print(url)
+    #print(args)
+    #a=url
+    #print('xxxxxxxxxxx' + a)
+    #return render_template('search.html')
+    return redirect(url)
+    '''
+    if url:
+        bookmark = Bookmark(url=url)
+        bookmark.fetch_image()
+        bookmark.save()
+        return redirect(url)
+    '''
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP', '0.0.0.0'),
