@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<iframe src="{{ url }}" width="640" height="480"></iframe>
+<div id='frameContainer'>
+    <iframe id='pageFrame' src="{{ url }}"></iframe>
+</div>
+<div id='noteContainer'>
+    <form action='/page/?url={{ url }}' method='POST'>
+        <textarea name="note" url="{{ url }}" id='note' placeholder="Note"></textarea>
+        <button class="btn btn-primary" id='submitNote' type="submit">Save</button>
+    </form>
+</div>
 {% endblock %}

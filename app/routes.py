@@ -415,13 +415,68 @@ def add():
         bookmark.save()
         return redirect(url)
     '''
+'''
+flask.debughelpers.FormDataRoutingRedirect
 
+flask.debughelpers.FormDataRoutingRedirect: b'A request was sent to this URL (http://127.0.0.1:5000/page) 
+but a redirect was issued automatically by the routing system to "http://127.0.0.1:5000/page/". 
+ The URL was defined with a trailing slash so Flask will automatically redirect to the URL with the trailing slash if it was accessed without one.
+   Make sure to directly send your POST-request to this URL since we can\'t make browsers or HTTP clients redirect with form data reliably or without user interaction.
+   \n\nNote: this exception is only raised in debug mode'
+
+'''
+'''
 @app.route('/page/', methods=["GET", "POST"])
 #@login_required
 def page():
     url = request.args.get('url')
-    return render_template('page.html', url=url)
+    if request.method == "GET":
+        url = request.args.get('url')
+        return render_template('page.html', url=url)
+    if request.method == 'POST':
+        note = request.form['note']
+        print(note)
+        return render_template('page.html', url=url)
+'''
+'''
+@app.route('/page/', methods=["GET", "POST"])
+#@login_required
+def page():
+    #a=request.args.getlist()
+    #print(a)
+    #url = request.args.get('url')
+    print('a')
+    
+    if request.method == "GET":
+      #  url =decodeURIComponent(url)
+        url = request.args.get('url')
+        #url=url
+        return render_template('page.html', url=url)
+    if request.method == 'POST':
+        url=request.path
+        #url=request.form['url']
+        note = request.form['note']
+        print(note)
+        print(url)
+        return render_template('page.html', url=url)
+'''
+@app.route('/page/', methods=["GET", "POST"])
+#@login_required
+def page():
+    if request.method == "GET":
+        url = request.args.get('url')
+        return render_template('page.html', url=url)
+    if request.method == 'POST':
+        note={}
+        note['url'] = request.args.get('url')
+        note['body'] = request.form['note']
+        #print(note)
+        #print(url)
+        return render_template('page.html', url=url)
 
+#javascript:location.href=http://127.0.0.1:5000/page/'+location.href
+#encodeURIComponent(args)
+#javascript:location.href=http://127.0.0.1:5000/page/'+encodeURIComponent(location.href)
 #<iframe src="https://fr.wikipedia.org/wiki/Main_Page" width="640" height="480">
 
 if __name__ == '__main__':
