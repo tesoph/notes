@@ -416,7 +416,13 @@ def add():
         return redirect(url)
     '''
 
+@app.route('/page/', methods=["GET", "POST"])
+#@login_required
+def page():
+    url = request.args.get('url')
+    return render_template('page.html', url=url)
 
+#<iframe src="https://fr.wikipedia.org/wiki/Main_Page" width="640" height="480">
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP', '0.0.0.0'),
