@@ -67,10 +67,13 @@ def index():
     else:
         return render_template("index.html", title='Home Page', user='unsigned in user')
     '''
+    #latest saved articles
     if 'user_id' in session:
          users=db.users
          userid=session['user_id']
          user = users.find_one({'_id': userid})
+         #pages = user['saved_pages']
+         #articles = db.articles
          return render_template('index.html', title='Home Page', user=user, userLoggedIn=True)
     else:
         return render_template('index.html', title='Home Page', user='anonymous user', userLoggedIn=False)
@@ -375,10 +378,14 @@ def login_required(f):
     return decorated_function
 
 #javascript:location.href='http://127.0.0.1:5000/add/?password=shh&amp;url='+location.href;
-#javascript:location.href='http://127.0.0.1:5000/add/?url='+location.href;
+#javascript:location.href='http://127.0.0.1:5000/add/?url='+location.href+'&title='+document.title;
 @app.route('/add/', methods=["GET", "POST"])
 @login_required
 def add():
+
+    #db.users.find_one_and_update({"_id": session['user_id']}, {"$set": {"published": True}})
+    #user =db.users.find_one(({"_id": session['user_id']}))
+
     print('add route')
     #https://charlesleifer.com/blog/building-bookmarking-service-python-and-phantomjs/
     '''
@@ -388,12 +395,15 @@ def add():
     '''
     #args = request.args.get('args', ""
     #)
+    title=request.args.get('title')
     url = request.args.get('url')
     print(url)
+    print('title:' + title)
     #print(args)
     #a=url
     #print('xxxxxxxxxxx' + a)
     #return render_template('search.html')
+    
     return redirect(url)
     '''
     if url:
