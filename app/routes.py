@@ -10,8 +10,17 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import sys
 from app.wiki import get_content
+#for login_required
+from functools import wraps
+#logi_required fom cs50
+#whats args and kwargs
 # mongo = PyMongo(app)
 
+'''
+*whats g
+
+This example assumes that the login page is called 'login' and that the current user is stored in g.user and is None if there is no-one logged in.
+'''
 '''
 app.config['MONGODB_SETTINGS'] = {
     'db': 'microblog',
@@ -352,9 +361,23 @@ javascript:
                             + "&args="  + encodeURIComponent(args)
                      );
 '''
+def login_required(f):
+    """
+    Decorate routes to require login.
+
+    http://flask.pocoo.org/docs/1.0/patterns/viewdecorators/
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
+
 #javascript:location.href='http://127.0.0.1:5000/add/?password=shh&amp;url='+location.href;
 #javascript:location.href='http://127.0.0.1:5000/add/?url='+location.href;
 @app.route('/add/', methods=["GET", "POST"])
+@login_required
 def add():
     print('add route')
     #https://charlesleifer.com/blog/building-bookmarking-service-python-and-phantomjs/
@@ -379,6 +402,8 @@ def add():
         bookmark.save()
         return redirect(url)
     '''
+
+
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP', '0.0.0.0'),
