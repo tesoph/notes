@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ user.username}}!</h1>
-    <p></p>
+<h1>Hi, {{ user.username }}!</h1>
+{% if userLoggedIn %}
+<p>userLoggedIn check</p>
+{% for page in user.saved_pages %}
+<p><a href="{{ page['url'] }}">{{ page['title'] }}</a></p>
+{% endfor %}
+{% endif %}
 {% endblock %}

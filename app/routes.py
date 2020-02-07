@@ -382,8 +382,11 @@ def login_required(f):
 @app.route('/add/', methods=["GET", "POST"])
 @login_required
 def add():
-
-    #db.users.find_one_and_update({"_id": session['user_id']}, {"$set": {"published": True}})
+    page={}
+    page['url']=request.args.get('url')
+    page['title']=request.args.get('title')
+    print(page)
+    db.users.find_one_and_update({"_id": session['user_id']}, {"$push": {"saved_pages": page}})
     #user =db.users.find_one(({"_id": session['user_id']}))
 
     print('add route')
@@ -395,10 +398,10 @@ def add():
     '''
     #args = request.args.get('args', ""
     #)
-    title=request.args.get('title')
+    #title=request.args.get('title')
     url = request.args.get('url')
-    print(url)
-    print('title:' + title)
+    #print(url)
+    #print('title:' + title)
     #print(args)
     #a=url
     #print('xxxxxxxxxxx' + a)
