@@ -461,18 +461,44 @@ def page():
         return render_template('page.html', url=url)
 '''
 @app.route('/page/', methods=["GET", "POST"])
-#@login_required
+@login_required
 def page():
+    user =db.users.find_one(({"_id": session['user_id']}))
     if request.method == "GET":
         url = request.args.get('url')
-        return render_template('page.html', url=url)
+        note=  db.notes.find_one({'$and': [{'url': url},{'author': user['username']}]})
+        if note:
+            return render_template('page.html', url=url, note=note)
+        else:
+            return render_template('page.html', url=url)
     if request.method == 'POST':
+        #db.activities.find_one_and_update({"_id": ObjectId(activity_id)}, {"$set": {"published": True}})
+        url=request.args.get('url')
         note={}
         note['url'] = request.args.get('url')
-        note['body'] = request.form['note']
+        body = note['body'] = request.form['note']
+        note['author'] = user['username']
+        author=user['username']
+        #note['author'] = 
+        #db.notes.find_one_and_update({'url':note['url']}, {'$set': {'body':note['body']}})
+        #https://docs.mongodb.com/manual/reference/operator/query/and/
+        #db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
+        #db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
+        alreadyExists = db.notes.find_one({'$and': [{'url': url},{'author': author}]})
+        if not alreadyExists:
+            db.notes.insert(note)
+            #  db.users.find_one_and_update({"_id": session['user_id']}, {"$push": {"saved_pages": page}})
+            #?
+            #user.update_one({'$push': {'notes': note['url']}})
+            db.users.find_one_and_update(user, {'$push': {'notes': note['url']}})
+        else:
+            #unhashable type 'dict'
+            # db.activities.find_one_and_update({"_id": ObjectId(activity_id)}, {"$set": {"published": True}})
+            db.notes.update_one(alreadyExists, {'$set': {'body':body}})
+
         #print(note)
         #print(url)
-        return render_template('page.html', url=url)
+        return render_template('page.html', url=url, note=note)
 
 #javascript:location.href=http://127.0.0.1:5000/page/'+location.href
 #encodeURIComponent(args)
