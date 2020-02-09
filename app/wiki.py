@@ -79,4 +79,4 @@ def clean(text):
 This usually isn't a problem, but if you run this code on another system, or in a different virtual environment, it may use a different parser and behave differently.
 The code that caused this warning is on line 389 of the file /home/ray/microblog/venv/lib/python3.7/site-packages/wikipedia/wikipedia.py. 
 To get rid of this warning, pass the additional argument 'features="html.parser"' to the BeautifulSoup constructor.
-'''
+'''g

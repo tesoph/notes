@@ -2,6 +2,7 @@
   width: 100vw;
   height: 50vh;
 }
+
 #pageFrame {
   width: 100%;
   height: 100%;
@@ -11,7 +12,25 @@
   width: 100vw;
   height: 50vh;
 }
+
 #note{
     height:100%;
     width:100%;
+}
+
+/*https://stackoverflow.com/questions/14523319/responsive-form-controlling-height-of-a-textarea*/
+input[type="text"], textarea {
+    width: 100%;
+    height:100%;
+    border: none;
+    background: #ccc;
+    font-family: arial;
+    padding: 10px;
+    box-sizing: border-box;
+    display: block;
+}
+
+form{
+    width:100%;
+    height:100%;
 }

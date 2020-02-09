@@ -5,12 +5,12 @@
 <h1>Hi, {{ user.username }}!</h1>
 
 {% if userLoggedIn %}
-<h3>Save pages:</h3>
+<h3>Saved pages:</h3>
 
 {% for page in user.saved_pages %}
-
 <p><a href="{{ page['url'] }}">{{ page['title'] }}</a></p>
 {% endfor %}
+
 {% endif %}
 
 {% endblock %}

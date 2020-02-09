@@ -7,7 +7,7 @@
 <div id='noteContainer'>
     <form action='/page/?url={{ url }}' method='POST'>
         {% if note %}
-        <textarea name="note" id='note' placeholder="">{{note.body}}</textarea>
+        <textarea name="note" id='note' placeholder="" width='100%' height='100%'>{{note.body}}</textarea>
         {% endif%}
         {% if not note %}
         <textarea name="note" id='note' placeholder="Note"></textarea>
