@@ -4,3 +4,4 @@ __pycache__
 .vscode/
 *.code-workspace
 app/templates/indexold.html
+old/

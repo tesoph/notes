@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 # chp5 user-logins
 #from flask_login import UserMixin
-from flask_login import current_user, login_user, logout_user, login_required
+#from flask_login import current_user, login_user, logout_user, login_required
 
 '''
 db.document=

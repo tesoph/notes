@@ -15,7 +15,31 @@ from functools import wraps
 #logi_required fom cs50
 #whats args and kwargs
 # mongo = PyMongo(app)
-
+from app.forms import loginForm
+'''
+JQMIGRATE: Migrate is installed with logging active, version 3.1.0
+'''
+'''
+ * Debugger PIN: 244-756-859
+127.0.0.1 - - [11/Feb/2020 22:16:50] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x02\x00\x01\x00\x01ü\x03\x03\x1bÆ\x15FWïÊ9«:Mn©^\x84ÈL¼\x10`ÔÆ\x9d§wï\x8f~t\x88tØ')
+127.0.0.1 - - [11/Feb/2020 22:16:50] "üFWïÊ9«:Mn©^
+                                                  ÈL¼`ÔÆ~ttØ ËØ²ãß7WÝ¼"¥f¥
+                                                                          dVèû~üØ¼C(¼
+                                                                                     Y%"À+À/À,À0Ì©Ì¨ÀÀlB
+µÝó^ûÊ DVä$Æ»ÅEË©lP é¥3IÊÛÕTÑäP
+                               [×E µÆ"À+À/À,À0Ì©Ì¨ÀÀÄÓë
+                                                       3=ÍP}:Håõ± 2ÅZÌ
+¡á³r_[,lâµàCq9w" HTTPStatus.BAD_REQUEST -
+27.0.0.1 - - [11/Feb/2020 22:17:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [11/Feb/2020 22:17:45] code 400, message Bad request version (']¹1|\x8d\x9b7Ö\x10Ä\x82\x1bF\x00"\x1a\x1a\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x00')
+127.0.0.1 - - [11/Feb/2020 22:17:45] "ü;Iü\S½q­wÒIÜ9ÅÕvwgX5°Ù´'ð á      H<¡Ó®sùÄ"À+À/À,À0Ì©Ì¨ÀÀ>Æ±ÒÎ7Tè
+<þäe²n<ù¿©¨yd®<jâeÃUX"::À+À/À,À0Ì©Ì¨ÀÀeL£ÉÊÆô§f¹ÿ¿v
+Á å6Ô§þ3æ³      E¦ÏVkI¡­åü"ÚÚÀ+À/À,À0Ì©Ì¨ÀÀò<   a}
+                                                  RÐoz Z" HTTPStatus.BAD_REQUEST -
+127.0.0.1 - - [11/Feb/2020 22:17:46] code 400, message Bad request version ('ñ\x11s½!hòqµ.±éeK±hûß¡H\x94õözQ\x00"ªª\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x00')
+127.0.0.1 - - [11/Feb/2020 22:17:46] "ü¬ø¾ ³ó;n¬]½âæ?QçÈJîég/×Sù £Öfr
+ñs½!hòqµ.±éeK±hûß¡HõözQ"ªªÀ+À/À,À0Ì©Ì¨ÀÀÕr|áé!M]Cg¶·´·×
+'''
 '''
 *whats g
 
@@ -96,14 +120,8 @@ def logout():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    '''
-    flask-login
-    if current_user.is_authenticated:
-        flash("Already logged in! Log out to login in as a different user")
-        return redirect(url_for('index'))
-    '''
     """Log user in"""
-
+    
     # Forget any user_id
     session.clear()
 
@@ -113,6 +131,7 @@ def login():
         loginform = request.form.to_dict()
         user = users.find_one({"username": loginform['username']})
         if not user or not check_password_hash(user['password'], loginform['password']):
+            '''flash only happens click another href'''
             flash('Invalid username or password')
             return render_template('login.html')
         else:
@@ -120,36 +139,7 @@ def login():
             session['username']=user['username']
             userLoggedIn=True 
             return redirect("/")
-        #user= db.users.find_one({"username": u['username']})
-        #user = User.query.filter_by(username=u['username']).first()
-        '''
-        user_obj = User(username=u['username'])
-        if user_obj.check_password(u['password']):
-            flash("Invalid password")
-            return redirect(url_for('login'))'''
-        #https://stackoverflow.com/questions/54992412/flask-login-usermixin-class-with-a-mongodb
-        #?requires page load to display flash msgs?
-        #https://stackoverflow.com/questions/58521122/no-message-flashing-on-flask-without-error-message
-        '''
-        flask-login
-        if not User.check_password((user['password']), (loginform['password'])):
-            flash("Invalid username or password")
-            return render_template('login.html')
-            #return redirect('/login')
-        '''
-        '''
-        flask-login
-        user_obj = User(username=loginform['username'])
-        login_user(user_obj)
-        '''
-        # Ensure username exists and password is correct
-        '''
-        # Remember which user has logged in
-        # session['user_id'] = (db.users.find_one({"username": user['username']}))['_id']
-        '''
-        # Redirect user to home page
-        
-
+    
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
@@ -164,56 +154,33 @@ def register():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-        '''
-        # check password confirmation
-        if not request.form.get('password') == request.form.get('confirmation'):
-            return apology("passwords don't match", 403)
-        # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
-        # Ensure password was submitted
-        elif not request.form.get("password"):
-            return apology("must provide password", 403)
-        '''
         users=db.users
         form = request.form.to_dict()
         alreadyExists = users.find_one({"username": form['username']})
         if alreadyExists:
             flash("Username already exists!")
             return render_template('register.html')
+        if form['confirmation'] != form['password']:
+            flash("Passwords do not match")
+            return render_template('register.html')
         
         del form['confirmation']
-        #plain = form["password"]
-        form['password'] = generate_password_hash(form['password'])
-
-   
-        #raise ValueError('Username already exists, choose a different username')
-        # display flashed message
         if not alreadyExists:
             users.insert_one(form)
 
         # log user in
         user=db.users.find_one({"username": form['username']})
+
         # Remember which user has logged in
-        # session["user_id"] = rows[0]["id"]
         session['user_id'] = user['_id']
         session['username'] = user['username']
 
         # Redirect user to home page
         flash("Congratulations, you are now a registered user!")
-
-        '''
-        #flask-login
-        user_obj = User(username=form['username'])
-        login_user(user_obj)
-        '''
-        
-
         return render_template('index.html', user =user)
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        flash("registering")
         return render_template("register.html")
 
 '''
@@ -231,6 +198,7 @@ def user():
     else:
         return redirect('/login')
 '''
+
 @app.route('/user/<username>')
 # @login_required
 def user(username):
@@ -242,6 +210,7 @@ def user(username):
          return render_template('user.html', title='Profile page', user=user, username=uname)
     else:
         return render_template('index.html', user='anonymous user')
+
     #user_obj = User(username)
     #u = db.users.find_one({"_id": session['user_id']})
     #u = current_user
