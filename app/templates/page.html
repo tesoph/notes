@@ -6,10 +6,13 @@
 </div>
 <div id='noteContainer'>
     <form action='/page/?url={{ url }}' method='POST' id='noteForm'>
+       
         {% if note %}
+     <!--   <textarea name="title" id='title' placeholder="">{{note.title}}</textarea>-->
         <textarea name="note" id='note' placeholder="">{{note.body}}</textarea>
         {% endif%}
         {% if not note %}
+        <!--<textarea name="title" id='title' placeholder="">Note title</textarea>-->
         <textarea name="note" id='note' placeholder="Note"></textarea>
         {% endif %}
         <button class="btn btn-primary" id='submitNote' type="submit">Save</button>

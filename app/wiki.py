@@ -62,6 +62,40 @@ def get_content(term):
         return None
     #return s
     return clean(s)
+
+#!/usr/bin/python3
+
+"""
+    parse.py
+
+    MediaWiki API Demos
+    Demo of `Parse` module: Parse content of a page
+
+    MIT License
+"""
+
+import requests
+
+def get(url_):
+    url=url_
+    '''
+    wikipedia.url= url_
+    s= page.content
+    return s
+    '''
+
+
+def get_title(url_):
+    S = requests.Session()
+
+    PARAMS = {
+         "action": "parse",
+         "format": "json"
+    }
+    url=url_
+    response = S.get(url=url, params=PARAMS)
+    data= response.json()
+    return data
 '''
 def clean(text):
     l = []

@@ -6,11 +6,22 @@
 
 {% if userLoggedIn %}
 <h3>Saved pages:</h3>
-
 {% for page in user.saved_pages %}
-<p><a href="{{ page['url'] }}">{{ page['title'] }}</a></p>
+<p><a href="{{ page['url'] }}">{{page['title']}}</a></p>
 {% endfor %}
 
+<h3>Notes:</h3>
+{% for note in notes %}
+<div>
+<i class="material-icons">expand_more</i>
+<a href="{{ note['url'] }}">{{ note['title'] }}</a>
+<a href="{{url_for('delete_note', note_id=note._id)}}" class="waves-effect waves-light btn btn_small">Delete</a>
+</div>
+{% endfor %}
+<!--{% for page in user.saved_pages %}
+<p><a href="{{ page['url'] }}">{{ page['title'] }}</a></p>
+{% endfor %}
+-->
 {% endif %}
 
 {% endblock %}
