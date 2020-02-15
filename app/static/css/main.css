@@ -11,6 +11,9 @@
 #noteContainer {
   width: 100vw;
   height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #note{
@@ -20,7 +23,7 @@
 }
 #noteForm{
   height:100%;
-  width:100%;
+  width:90%;
   display: flex;
   justify-content: center;
   align-items: center;

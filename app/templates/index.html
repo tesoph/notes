@@ -3,7 +3,7 @@
 {% block app_content %}
 
 <h1>Hi, {{ user.username }}!</h1>
-
+<p id="demo"></p>
 {% if userLoggedIn %}
 <h3>Saved pages:</h3>
 {% for page in user.saved_pages %}
@@ -14,14 +14,13 @@
 {% for note in notes %}
 <div>
 <i class="material-icons">expand_more</i>
-<a href="{{ note['url'] }}">{{ note['title'] }}</a>
-<a href="{{url_for('delete_note', note_id=note._id)}}" class="waves-effect waves-light btn btn_small">Delete</a>
+<a href="{{ url_for('note', note_id=note._id )}}">{{ note['title'] }}</a>
+<!--<a href="{{ note['url'] }}">{{ note['title'] }}</a>-->
+<a href="{{url_for('delete_note', note_id=note._id)}}" class='deleteNoteButton'>Delete</a>
+
 </div>
 {% endfor %}
-<!--{% for page in user.saved_pages %}
-<p><a href="{{ page['url'] }}">{{ page['title'] }}</a></p>
-{% endfor %}
--->
+
 {% endif %}
 
 {% endblock %}

@@ -8,6 +8,10 @@
 <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" type="text/css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 {% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{{super()}}
+{% endblock %}
 {% block navbar %}
     <nav class="navbar navbar-default">
       <a href="{{ url_for('index') }}">Home</a>
