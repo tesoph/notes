@@ -10,10 +10,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import sys
 from app.wiki import get_content, get_title, get
-#for login_required
+# for login_required
 from functools import wraps
-#logi_required fom cs50
-#whats args and kwargs
+# logi_required fom cs50
+# whats args and kwargs
 # mongo = PyMongo(app)
 #from app.forms import loginForm
 #import requests
@@ -100,34 +100,36 @@ def index():
      alreadyExists = db.notes.find_one({'$and': [{'url': url},{'author': author}]})
      '''
     notes = db.notes
-    #latest saved articles
+    # latest saved articles
     if 'user_id' in session:
-         users=db.users
-         userid=session['user_id']
-         user = users.find_one({'_id': userid})
-         author = user['username']
-         userNotes = notes.find({'author': author})
-         #pages = user['saved_pages']
-         #articles = db.articles
-         return render_template('index.html', title='Home Page', user=user, userLoggedIn=True, notes= userNotes)
+        users = db.users
+        userid = session['user_id']
+        user = users.find_one({'_id': userid})
+        author = user['username']
+        userNotes = notes.find({'author': author})
+        #pages = user['saved_pages']
+        #articles = db.articles
+        return render_template('index.html', title='Home Page', user=user, userLoggedIn=True, notes=userNotes)
     else:
         return render_template('index.html', title='Home Page', user='anonymous user', userLoggedIn=False)
+
 
 @app.route('/delete_note/<note_id>')
 def delete_note(note_id):
     notes = db.notes
-    
+
     notes.remove({'_id': ObjectId(note_id)})
     #mongo.db.tasks.remove({'_id': ObjectId(task_id)})
     return redirect(url_for('index'))
 
+
 @app.route('/note/<note_id>', methods=["GET", "POST"])
-#@login_required
+# @login_required
 def note(note_id):
     note = db.notes.find_one({'_id': ObjectId(note_id)})
     url = note['url']
 
-    user =db.users.find_one(({"_id": session['user_id']}))
+    user = db.users.find_one(({"_id": session['user_id']}))
     return render_template('page.html', url=url, note=note)
     '''
     if request.method == "GET":
@@ -194,26 +196,25 @@ def note(note_id):
 
 @app.route('/logout')
 def logout():
-
     '''
     #flask-login
     #logout_user()
     '''
     session.clear()
-    userLoggedIn=False
+    userLoggedIn = False
     return redirect(url_for('index'))
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
-    
+
     # Forget any user_id
     session.clear()
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-        users=db.users
+        users = db.users
         loginform = request.form.to_dict()
         user = users.find_one({"username": loginform['username']})
         if not user:
@@ -225,10 +226,10 @@ def login():
             return render_template('login.html')
         else:
             session['user_id'] = user['_id']
-            session['username']=user['username']
-            userLoggedIn=True 
+            session['username'] = user['username']
+            userLoggedIn = True
             return redirect("/")
-    
+
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
@@ -243,17 +244,17 @@ def register():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-        users=db.users
+        users = db.users
         form = request.form.to_dict()
         alreadyExists = users.find_one({"username": form['username']})
         if alreadyExists:
             flash("Username already exists!")
             return render_template('register.html')
-        
+
         if form['confirmation'] != form['password']:
             flash("Passwords do not match")
             return render_template('register.html')
-        
+
         del form['confirmation']
         form['password'] = generate_password_hash(form['password'])
 
@@ -261,7 +262,7 @@ def register():
             users.insert_one(form)
 
         # log user in
-        user=db.users.find_one({"username": form['username']})
+        user = db.users.find_one({"username": form['username']})
 
         # Remember which user has logged in
         session['user_id'] = user['_id']
@@ -269,11 +270,12 @@ def register():
 
         # Redirect user to home page
         flash("Congratulations, you are now a registered user!")
-        return render_template('index.html', user =user)
+        return render_template('index.html', user=user)
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("register.html")
+
 
 '''
 @app.route('/user')
@@ -291,15 +293,16 @@ def user():
         return redirect('/login')
 '''
 
+
 @app.route('/user/<username>')
 # @login_required
 def user(username):
     if 'user_id' in session:
-         users=db.users
-         userid=session['user_id']
-         user = users.find_one({'_id': userid})
-         uname=user['username']
-         return render_template('user.html', title='Profile page', user=user, username=uname)
+        users = db.users
+        userid = session['user_id']
+        user = users.find_one({'_id': userid})
+        uname = user['username']
+        return render_template('user.html', title='Profile page', user=user, username=uname)
     else:
         return render_template('index.html', user='anonymous user')
 
@@ -316,24 +319,50 @@ def user(username):
     return render_template('user.html', user=u, posts=posts)
     '''
 
+
 @app.before_request
 def before_request():
-    time= datetime.now()
+    time = datetime.now()
     if 'user_id' in session:
-            db.users.update_one({"_id": session['user_id']}, {'$set': {"last_seen": time}})
-            
-@app.route('/search', methods=["GET", "POST"])
-def search():
-    #POST route
+        db.users.update_one({"_id": session['user_id']}, {
+                            '$set': {"last_seen": time}})
+
+
+@app.route('/searchwiki', methods=["GET", "POST"])
+def search_wiki():
+    # POST route
     if request.method == "POST":
-        pageContent=[]
+        pageContent = []
         searchTerm = request.form.get('searchTerm')
-        pageContent=get_content(searchTerm)
-        #render list
+        pageContent = get_content(searchTerm)
+        # render list
         return render_template('wiki.html', content=pageContent)
-    #GET route
+    # GET route
     else:
-         return render_template('search.html')
+        return render_template('search_wiki.html')
+
+
+@app.route('/search', methods=["GET", "POST"])
+#@login_required
+def search():
+    #user = db.users.find_one(({"_id": session['user_id']}))
+    #user_notes = user['notes']
+    #db.notes.create_index([('body', 'text')])
+    #for note in notes:
+    #   return 1
+    # POST route
+    if request.method == "POST":
+        pageContent = []
+        searchTerm = request.form.get('searchTerm')
+        pageContent=db.notes.find({"$text": {"$search": searchTerm}}).limit(5)
+        # pageContent=get_content(searchTerm)
+        # render list
+        return render_template('notes.html', content=pageContent)
+    # GET route
+    else:
+        return render_template('search.html')
+
+
 '''
 class Bookmark(db.Model):
     url = CharField()
@@ -343,19 +372,19 @@ class Bookmark(db.Model):
     javascript:location.href='http://127.0.0.1:5000/add/'+window.location.href.replace(/^http(s?):\/\//i, "")
 '''
 
-#javascript:(function(){var list=prompt('Save to List');window.open('http://'+ list +'.saved.io/'+ document.location.href);})();
-#javascript:(function(){var list=prompt('Save to List');window.open('http://127.0.0.1:5000/add/'+ document.location.href);})();
-#javascript:(function(){window.open('http://127.0.0.1:5000/add/'+ document.location.href);})();
-#take out https://
-#https://stackoverflow.com/questions/43482152/how-can-i-remove-http-or-https-using-javascript
-#window.location.href.replace(/^http(s?):\/\//i, "")
+# javascript:(function(){var list=prompt('Save to List');window.open('http://'+ list +'.saved.io/'+ document.location.href);})();
+# javascript:(function(){var list=prompt('Save to List');window.open('http://127.0.0.1:5000/add/'+ document.location.href);})();
+# javascript:(function(){window.open('http://127.0.0.1:5000/add/'+ document.location.href);})();
+# take out https://
+# https://stackoverflow.com/questions/43482152/how-can-i-remove-http-or-https-using-javascript
+# window.location.href.replace(/^http(s?):\/\//i, "")
 
 
-#can't cope with the /
-#https://stackoverflow.com/questions/2992231/slashes-in-url-variables
-#You can use encodeURIComponent and decodeURIComponent for this purpose. – Keavon Jun 26 '17 
+# can't cope with the /
+# https://stackoverflow.com/questions/2992231/slashes-in-url-variables
+# You can use encodeURIComponent and decodeURIComponent for this purpose. – Keavon Jun 26 '17
 # encodeURIComponent( document.location.href )
-#javascript:location.href='http://127.0.0.1:5000/add/'+encodeURIComponent(window.location.href);
+# javascript:location.href='http://127.0.0.1:5000/add/'+encodeURIComponent(window.location.href);
 
 
 '''
@@ -371,10 +400,10 @@ javascript:(function(){
     encodeURIComponent(window.location.href)
 })()
 '''
-#javascript:void(location.href="http://www.yacktrack.com/home?query="+encodeURI(location.href))
-#javascript:void(location.href="http://127.0.0.1:5000/add?url="+encodeURI(location.href))
-#javascript:void(location.href="http://127.0.0.1:5000/add/"+encodeURIComponent(location.href))
-#https://gist.github.com/Nodja/34cfd28ba0e89a9bbcc3de604355b704
+# javascript:void(location.href="http://www.yacktrack.com/home?query="+encodeURI(location.href))
+# javascript:void(location.href="http://127.0.0.1:5000/add?url="+encodeURI(location.href))
+# javascript:void(location.href="http://127.0.0.1:5000/add/"+encodeURIComponent(location.href))
+# https://gist.github.com/Nodja/34cfd28ba0e89a9bbcc3de604355b704
 '''
 javascript: 
             args = location.href;
@@ -392,6 +421,8 @@ javascript:
                      );
 '''
 '''login_required from cs50-finance'''
+
+
 def login_required(f):
     """
     Decorate routes to require login.
@@ -405,42 +436,43 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-#javascript:location.href='http://127.0.0.1:5000/add/?password=shh&amp;url='+location.href;
-#javascript:location.href='http://127.0.0.1:5000/add/?url='+location.href+'&title='+document.title;
+# javascript:location.href='http://127.0.0.1:5000/add/?password=shh&amp;url='+location.href;
+# javascript:location.href='http://127.0.0.1:5000/add/?url='+location.href+'&title='+document.title;
 @app.route('/add/', methods=["GET", "POST"])
 @login_required
 def add():
-    url= request.args.get('url')
-    response=requests.post(url)
-    resp=response.text
-    html_doc=resp
+    url = request.args.get('url')
+    response = requests.post(url)
+    resp = response.text
+    html_doc = resp
     soup = BeautifulSoup(html_doc, 'html.parser')
     print('soup title:' + soup.title.string)
-    page={}
-    page['url']=request.args.get('url')
-    page['title']=soup.title.string
+    page = {}
+    page['url'] = request.args.get('url')
+    page['title'] = soup.title.string
     print(page)
-    db.users.find_one_and_update({"_id": session['user_id']}, {"$push": {"saved_pages": page}})
+    db.users.find_one_and_update({"_id": session['user_id']}, {
+                                 "$push": {"saved_pages": page}})
     #user =db.users.find_one(({"_id": session['user_id']}))
 
     print('add route')
-    #https://charlesleifer.com/blog/building-bookmarking-service-python-and-phantomjs/
+    # https://charlesleifer.com/blog/building-bookmarking-service-python-and-phantomjs/
     '''
     password = request.args.get('password')
     if password != PASSWORD:
         abort(404)
     '''
-    #args = request.args.get('args', ""
-    #)
-    #title=request.args.get('title')
+    # args = request.args.get('args', ""
+    # )
+    # title=request.args.get('title')
     url = request.args.get('url')
-    #print(url)
+    # print(url)
     #print('title:' + title)
-    #print(args)
-    #a=url
+    # print(args)
+    # a=url
     #print('xxxxxxxxxxx' + a)
-    #return render_template('search.html')
-    
+    # return render_template('search.html')
+
     return redirect(url)
     '''
     if url:
@@ -449,6 +481,8 @@ def add():
         bookmark.save()
         return redirect(url)
     '''
+
+
 '''
 flask.debughelpers.FormDataRoutingRedirect
 
@@ -497,140 +531,147 @@ def page():
 @app.route('/page/', methods=["GET", "POST"])
 @login_required
 def page():
- 
-    user =db.users.find_one(({"_id": session['user_id']}))
+
+    user = db.users.find_one(({"_id": session['user_id']}))
 
     if request.method == "GET":
         url = request.args.get('url')
-        #url=note_url
+        # url=note_url
         title = request.args.get('title')
-        note=  db.notes.find_one({'$and': [{'url': url},{'author': user['username']}]})
+        note = db.notes.find_one(
+            {'$and': [{'url': url}, {'author': user['username']}]})
         if note:
-            return render_template('page.html', url=url, note=note,title=title)
+            return render_template('page.html', url=url, note=note, title=title)
         else:
             return render_template('page.html', url=url)
 
     if request.method == 'POST':
- 
-        #https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
-        #https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
-        url= request.values.get('url')
-        response=requests.post(url)
-        resp=response.text
-        html_doc=resp
+
+        # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
+        # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
+        url = request.values.get('url')
+        response = requests.post(url)
+        resp = response.text
+        html_doc = resp
         soup = BeautifulSoup(html_doc, 'html.parser')
         print('soup title:' + soup.title.string)
- 
-        note={}
-        
+
+        note = {}
+
         print('asdsad' + url)
         #print('title' + request.values.get('title'))
         note['url'] = request.values.get('url')
         note['title'] = soup.title.string
-        #note['title']=request.values.get('title')
+        # note['title']=request.values.get('title')
         #note['url'] = request.args.get('url')
        # note['title']=request.args.get('title')
         body = note['body'] = request.form['note']
         #title = note['title'] = request.form['title']
         note['author'] = user['username']
-        author=user['username']
-        #note['author'] = 
+        author = user['username']
+        # note['author'] =
         #db.notes.find_one_and_update({'url':note['url']}, {'$set': {'body':note['body']}})
-        #https://docs.mongodb.com/manual/reference/operator/query/and/
-        #db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
+        # https://docs.mongodb.com/manual/reference/operator/query/and/
+        # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
         #db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
-        alreadyExists = db.notes.find_one({'$and': [{'url': url},{'author': author}]})
+        alreadyExists = db.notes.find_one(
+            {'$and': [{'url': url}, {'author': author}]})
         if not alreadyExists:
             print('not alreadyexists')
             print('note:' + note['body'])
             db.notes.insert(note)
             #  db.users.find_one_and_update({"_id": session['user_id']}, {"$push": {"saved_pages": page}})
-            #?
+            # ?
             #user.update_one({'$push': {'notes': note['url']}})
-            db.users.find_one_and_update(user, {'$push': {'notes': note['url']}})
+            db.users.find_one_and_update(
+                user, {'$push': {'notes': note['url']}})
         else:
             print('does exists already')
-            #unhashable type 'dict'
+            # unhashable type 'dict'
             # db.activities.find_one_and_update({"_id": ObjectId(activity_id)}, {"$set": {"published": True}})
-            db.notes.update_one(alreadyExists, {'$set': {'body':body}})
+            db.notes.update_one(alreadyExists, {'$set': {'body': body}})
             '''  response = jsonify(data)'''
             #print('note:' + note)
 
-        #print(note)
-        #print(url)
+        # print(note)
+        # print(url)
         return render_template('page.html', url=url, note=note)
-    
+
+
 @app.route('/page2/<note_url>', methods=["GET", "POST"])
 @login_required
 def page2(note_url):
- 
-    user =db.users.find_one(({"_id": session['user_id']}))
+
+    user = db.users.find_one(({"_id": session['user_id']}))
 
     if request.method == "GET":
-        
-        url=note_url
+
+        url = note_url
         #title = request.args.get('title')
-        note=  db.notes.find_one({'$and': [{'url': url},{'author': user['username']}]})
+        note = db.notes.find_one(
+            {'$and': [{'url': url}, {'author': user['username']}]})
         if note:
             return render_template('page.html', url=url, note=note)
         else:
             return render_template('page.html', url=url)
 
     if request.method == 'POST':
- 
-        #https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
-        #https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
-        url= request.values.get('url')
-        response=requests.post(url)
-        resp=response.text
-        html_doc=resp
+
+        # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
+        # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
+        url = request.values.get('url')
+        response = requests.post(url)
+        resp = response.text
+        html_doc = resp
         soup = BeautifulSoup(html_doc, 'html.parser')
         print('soup title:' + soup.title.string)
- 
-        note={}
-        
+
+        note = {}
+
         print('asdsad' + url)
         #print('title' + request.values.get('title'))
         note['url'] = request.values.get('url')
         note['title'] = soup.title.string
-        #note['title']=request.values.get('title')
+        # note['title']=request.values.get('title')
         #note['url'] = request.args.get('url')
        # note['title']=request.args.get('title')
         body = note['body'] = request.form['note']
         #title = note['title'] = request.form['title']
         note['author'] = user['username']
-        author=user['username']
-        #note['author'] = 
+        author = user['username']
+        # note['author'] =
         #db.notes.find_one_and_update({'url':note['url']}, {'$set': {'body':note['body']}})
-        #https://docs.mongodb.com/manual/reference/operator/query/and/
-        #db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
+        # https://docs.mongodb.com/manual/reference/operator/query/and/
+        # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
         #db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
-        alreadyExists = db.notes.find_one({'$and': [{'url': url},{'author': author}]})
+        alreadyExists = db.notes.find_one(
+            {'$and': [{'url': url}, {'author': author}]})
         if not alreadyExists:
             print('not alreadyexists')
             print('note:' + note['body'])
             db.notes.insert(note)
             #  db.users.find_one_and_update({"_id": session['user_id']}, {"$push": {"saved_pages": page}})
-            #?
+            # ?
             #user.update_one({'$push': {'notes': note['url']}})
-            db.users.find_one_and_update(user, {'$push': {'notes': note['url']}})
+            db.users.find_one_and_update(
+                user, {'$push': {'notes': note['url']}})
         else:
             print('does exists already')
-            #unhashable type 'dict'
+            # unhashable type 'dict'
             # db.activities.find_one_and_update({"_id": ObjectId(activity_id)}, {"$set": {"published": True}})
-            db.notes.update_one(alreadyExists, {'$set': {'body':body}})
+            db.notes.update_one(alreadyExists, {'$set': {'body': body}})
             '''  response = jsonify(data)'''
             #print('note:' + note)
 
-        #print(note)
-        #print(url)
+        # print(note)
+        # print(url)
         return render_template('page.html', url=url, note=note)
 
 
-#javascript:location.href=http://127.0.0.1:5000/page/'+location.href
-#encodeURIComponent(args)
-#javascript:location.href=http://127.0.0.1:5000/page/'+encodeURIComponent(location.href)
-#<iframe src="https://fr.wikipedia.org/wiki/Main_Page" width="640" height="480">
+# javascript:location.href=http://127.0.0.1:5000/page/'+location.href
+# encodeURIComponent(args)
+# javascript:location.href=http://127.0.0.1:5000/page/'+encodeURIComponent(location.href)
+# <iframe src="https://fr.wikipedia.org/wiki/Main_Page" width="640" height="480">
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP', '0.0.0.0'),
