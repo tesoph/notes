@@ -6,11 +6,7 @@ Wiki Reader
 
 {% block app_content %}
 
-{% for note in notes %}
-<h3><a href="{{note['url']}}">{{note['title']}}</a></h3>
-<h4>author: {{note['author']}}</h4>
-<h6>Note:</h6>
-<p>{{note['body']}}</p></div>
-<hr>
+{% for i in data %}
+{{i}}
 {% endfor %}
 {% endblock %}
