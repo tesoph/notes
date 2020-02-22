@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div id='frameContainer'>
+    <iframe id='pageFrame' srcdoc="{{ soup }}"></iframe>
+</div>
+
+<div id='noteContainer'>
+    <form action='/page/?url={{ url }}' method='POST' id='noteForm'>
+
+        {% if note %}
+        <!--   <textarea name="title" id='title' placeholder="">{{note.title}}</textarea>-->
+        <textarea name="note" id='note' placeholder="">{{note.body}}</textarea>
+        {% endif%}
+        {% if not note %}
+        <!--<textarea name="title" id='title' placeholder="">Note title</textarea>-->
+        <textarea name="note" id='note' placeholder="Note"></textarea>
+        {% endif %}
+        <button class="btn btn-primary" id='submitNote' type="submit">Save</button>
+    </form>
+</div>
+{% block scripts %}
+<script>
+    //https://stackoverflow.com/questions/50657574/iframe-with-srcdoc-same-page-links-load-the-parent-page-in-the-frame
+    // Get the document content
+    const doc = document.querySelector('iframe').srcdoc;
+    // Convert it to blob
+    const blob = new Blob([doc], { type: 'text/html' });
+    // Load the blob on the src attr
+    document.querySelector('iframe').src = URL.createObjectURL(blob);
+    // Remove srcdoc to allow src
+    document.querySelector('iframe').removeAttribute('srcdoc');</script>
+
+{{super()}}
+{% endblock %}
+{% endblock %}

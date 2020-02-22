@@ -9,7 +9,7 @@ from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import sys
-from app.wiki import get_content, get_title, get
+from app.wiki import get_content, get_title
 # for login_required
 from functools import wraps
 # logi_required fom cs50
@@ -22,6 +22,7 @@ import json
 import requests
 from bs4 import BeautifulSoup
 from bson.objectid import ObjectId
+from urllib.parse import urlparse
 '''
 JQMIGRATE: Migrate is installed with logging active, version 3.1.0
 '''
@@ -61,6 +62,22 @@ A decorator modifies the function that follows it.
 @app.route('/index') = when web browser requests the /index url,
 Flask invokes this function and passes the return value back to the browser as a response
 '''
+
+
+def login_required(f):
+    """
+    Decorate routes to require login.
+
+    http://flask.pocoo.org/docs/1.0/patterns/viewdecorators/
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -343,21 +360,34 @@ def search_wiki():
 
 
 @app.route('/search', methods=["GET", "POST"])
-#@login_required
+@login_required
 def search():
-    #user = db.users.find_one(({"_id": session['user_id']}))
-    #user_notes = user['notes']
+    user = db.users.find_one(({"_id": session['user_id']}))
+    author = user['username']
+    user_notes = user['notes']
     #db.notes.create_index([('body', 'text')])
-    #for note in notes:
+    # for note in notes:
     #   return 1
     # POST route
+
     if request.method == "POST":
-        pageContent = []
+        #pageContent = []
         searchTerm = request.form.get('searchTerm')
-        pageContent=db.notes.find({"$text": {"$search": searchTerm}}).limit(5)
+        #pageContent=db.notes.find({"$text": {"$search": searchTerm}}).limit(5)
         # pageContent=get_content(searchTerm)
         # render list
-        return render_template('notes.html', content=pageContent)
+        user_notes = db.notes.aggregate([
+            {'$match': {'$text': {'$search': searchTerm}}},
+            {'$match': {'author': author}}
+        ])
+        #https://stackoverflow.com/questions/31954014/typeerror-commandcursor-object-has-no-attribute-getitem
+        '''
+        In PyMongo 3 the aggregate method returns an iterable of result documents (an instance of CommandCursor), not a single document. 
+        You have to iterate the results, or alternatively turn them into a list with list(res).
+        '''
+        #print(type(pageContent))
+
+        return render_template('notes.html', notes=user_notes)
     # GET route
     else:
         return render_template('search.html')
@@ -422,19 +452,6 @@ javascript:
 '''
 '''login_required from cs50-finance'''
 
-
-def login_required(f):
-    """
-    Decorate routes to require login.
-
-    http://flask.pocoo.org/docs/1.0/patterns/viewdecorators/
-    """
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("user_id") is None:
-            return redirect("/login")
-        return f(*args, **kwargs)
-    return decorated_function
 
 # javascript:location.href='http://127.0.0.1:5000/add/?password=shh&amp;url='+location.href;
 # javascript:location.href='http://127.0.0.1:5000/add/?url='+location.href+'&title='+document.title;
@@ -528,6 +545,47 @@ def page():
         print(url)
         return render_template('page.html', url=url)
 '''
+# javascript:location.href='http://127.0.0.1:5000/get_page/?url='+location.href+'&title='+document.title;
+# javascript:location.href='http://127.0.0.1:5000/get_page/?url='+location.href+'&title='+document.title;
+@app.route('/get_page/', methods=["GET", "POST"])
+@login_required
+def get_page():
+    #https://hackersandslackers.com/scraping-urls-with-beautifulsoup/
+    #Set headers
+    headers = requests.utils.default_headers()
+    headers.update({ 'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'})
+
+    user = db.users.find_one(({"_id": session['user_id']}))
+    if request.method == "GET":
+        url = request.args.get('url')
+        req= requests.get(url, headers)
+        soup = BeautifulSoup(req.content, 'html.parser')
+        print(soup.prettify())
+        #https://stackoverflow.com/questions/50657574/iframe-with-srcdoc-same-page-links-load-the-parent-page-in-the-frame
+        '''
+        the trouble starts with an iframe that has its content set with srcdoc: no unique base URL is specified, and in that case the base URL of the parent 
+        frame/document is used--the playground in my case (see the HTML Standard).
+
+        Therefore, the question becomes: is there a way to reference the srcdoc iframe in a base URL? or is it possible to make the browser not prepend the base?
+         or to make a base URL that doesn't change the relative #sec-id URLs?
+        '''
+        #https://stackoverflow.com/questions/9626535/get-protocol-host-name-from-url
+        parsed_uri = urlparse(url)
+        result = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+        print(result)
+
+        return render_template('getpage.html', soup=soup, url=result)
+        """
+        # url=note_url
+        title = request.args.get('title')
+        note = db.notes.find_one(
+            {'$and': [{'url': url}, {'author': user['username']}]})
+        if note:
+            return render_template('page.html', url=url, note=note, title=title)
+        else:
+            return render_template('page.html', url=url)
+        """
+    
 @app.route('/page/', methods=["GET", "POST"])
 @login_required
 def page():
@@ -667,7 +725,7 @@ def page2(note_url):
         # print(url)
         return render_template('page.html', url=url, note=note)
 
-
+# javascript:location.href='http://127.0.0.1:5000/page/?url='+location.href+'&title='+document.title;
 # javascript:location.href=http://127.0.0.1:5000/page/'+location.href
 # encodeURIComponent(args)
 # javascript:location.href=http://127.0.0.1:5000/page/'+encodeURIComponent(location.href)
