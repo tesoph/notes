@@ -2,20 +2,20 @@
 
 {% block app_content %}
 
-    <div id='frameContainer'>
+    <div class='resizable draggable' id='frameContainer'>
         <!--https://stackoverflow.com/questions/8117761/how-can-i-make-an-iframe-resizable-->
-        <iframe id='pageFrame' src="{{ url }}"></iframe>
+        <iframe class='resizable draggable' id='pageFrame' src="{{ url }}"></iframe>
     </div>
     <div id='noteContainer'>
         <form action='/page/?url={{ url }}' method='POST' id='noteForm'>
 
             {% if note %}
             <!--   <textarea name="title" id='title' placeholder="">{{note.title}}</textarea>-->
-            <textarea name="note" id='note' placeholder="">{{note.body}}</textarea>
+            <textarea name="note" class='resizeable draggable' id='note' placeholder="">{{note.body}}</textarea>
             {% endif%}
             {% if not note %}
             <!--<textarea name="title" id='title' placeholder="">Note title</textarea>-->
-            <textarea name="note" id='note' placeholder="Note"></textarea>
+            <textarea name="note" id='note'class='resizable draggable' placeholder="Note"></textarea>
             {% endif %}
             <button class="btn btn-primary" id='submitNote' type="submit">Save</button>
         </form>

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Search
+{% endblock %}
+
+{% block app_content %}
+    <form action="/skincare" method="post">
+        <div class="form-group">
+        <p>Search for products containing an ingredient:</p>
+            <input autocomplete="off" autofocus class="form-control" name="ingredientSearchTerm" placeholder="Enter an ingredient here" type="text">
+            <p>Search for a product by brand:</p>
+            <input autocomplete="off" autofocus class="form-control" name="brandSearchTerm" placeholder="Enter brand name here" type="text">
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+    </form>
+{% endblock %}

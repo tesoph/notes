@@ -2,7 +2,7 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, ses
 from app import app, db
 # from app.forms import LoginForm
 from flask_pymongo import PyMongo
-#from flask_mongoengine import MongoEngine
+# from flask_mongoengine import MongoEngine
 import os
 # from app.models import User
 from flask_session import Session
@@ -15,8 +15,8 @@ from functools import wraps
 # logi_required fom cs50
 # whats args and kwargs
 # mongo = PyMongo(app)
-#from app.forms import loginForm
-#import requests
+# from app.forms import loginForm
+# import requests
 import urllib
 import json
 import requests
@@ -78,34 +78,58 @@ def login_required(f):
     return decorated_function
 
 
-
 @app.route('/skincare', methods=["GET", "POST"])
 def skincare():
-    #GET /product?q=rose+water
-    #https://skincare-api.herokuapp.com/product?q=rose&limit=25&page=1
+    # POST route
+    ingredientSearch=False
+    brandSearch=False
+    if request.method == "POST":
+        SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+        json_url = os.path.join(SITE_ROOT, "data", "products.json")
+        # data = json.load(open(json_url))
+        with open(json_url, "r") as read_file:
+            data = json.load(read_file)
+        print(type(data))
+        # print(data[:2])
+        for c in data[:5]:
+            print(c['brand'])
+        # pageContent = []
+        ingredientSearchTerm = request.form.get('ingredientSearchTerm')
+        brandSearchTerm = request.form.get('brandSearchTerm')
+        il = []
+        bl = []
+        if ingredientSearchTerm:
+            ingredientSearch=True
+            for i in data:
+                if ingredientSearchTerm in i['ingredient_list']:
+                 # print(i)
+                      il.append(i)
+        if brandSearchTerm:
+            brandSearch=True
+            for i in data:
+                if brandSearchTerm in i['brand']:
+                     bl.append(i)
+        # render list
+        #print(l)
+        return render_template('skincare.html', il=il, bl=bl,ingredientSearch=ingredientSearch, brandSearch=brandSearch)
+    # GET route
+    else:
+        return render_template('search_skincare.html')
+
+    # GET /product?q=rose+water
+    # https://skincare-api.herokuapp.com/product?q=rose&limit=25&page=1
     '''
     filename = os.path.join(app, 'data', 'products.json')
     with open(filename) as f:
              d= json.load(f)
              '''
-    #https://stackoverflow.com/questions/21133976/flask-load-local-json
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    json_url = os.path.join(SITE_ROOT, "data", "products.json")
-    #data = json.load(open(json_url))
-    with open(json_url, "r") as read_file:
-           data = json.load(read_file)
-    print(type(data))
-    #print(data[:2])
-    for c in data[:5]:
-        print(c['brand'])
-
-    return render_template('skincare.html',data=data)
+    # https://stackoverflow.com/questions/21133976/flask-load-local-json
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    #userLoggedIn = True if 'user_id' in session else False
+    # userLoggedIn = True if 'user_id' in session else False
     flash("hello")
     # u=db.users.count()
     # "username": user['username'
@@ -148,8 +172,8 @@ def index():
         user = users.find_one({'_id': userid})
         author = user['username']
         userNotes = notes.find({'author': author})
-        #pages = user['saved_pages']
-        #articles = db.articles
+        # pages = user['saved_pages']
+        # articles = db.articles
         return render_template('index.html', title='Home Page', user=user, userLoggedIn=True, notes=userNotes)
     else:
         return render_template('index.html', title='Home Page', user='anonymous user', userLoggedIn=False)
@@ -160,9 +184,45 @@ def delete_note(note_id):
     notes = db.notes
 
     notes.remove({'_id': ObjectId(note_id)})
-    #mongo.db.tasks.remove({'_id': ObjectId(task_id)})
+    # mongo.db.tasks.remove({'_id': ObjectId(task_id)})
     return redirect(url_for('index'))
 
+'''
+from code institue https://github.com/Code-Institute-Solutions/TaskManager/blob/master/04-EditingATask/05-update_the_task_in_the_database/app.py
+@app.route('/edit_task/<task_id>')
+def edit_task(task_id):
+    the_task =  mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
+    all_categories =  mongo.db.categories.find()
+    return render_template('edittask.html', task=the_task,
+                           categories=all_categories)
+                           '''
+
+@app.route('/edit_note_title/<note_id>')
+def edit_note_title(note_id):
+    notes = db.notes
+    note = notes.find_one({'_id': ObjectId(note_id)})
+    #notes.remove({'_id': ObjectId(note_id)})
+    # mongo.db.tasks.remove({'_id': ObjectId(task_id)})
+    return render_template('edit_note.html', note=note)
+
+
+@app.route('/update_task/<note_id>', methods=["POST"])
+def update_note(note_id):
+    notes = db.notes
+    #db.notes.update_one(alreadyExists, {'$set': {'body': body}})
+    note = notes.find_one({'_id': ObjectId(note_id)})
+    #db.users.find_one_and_update(
+        #        user, {'$push': {'notes': note['url']}})
+    notes.update_one( note,
+    {'$set':{
+        'title':request.form.get('note_title'),
+
+        'body':request.form.get('note')
+      
+    }
+    })
+    
+    return redirect(url_for('index'))
 
 @app.route('/note/<note_id>', methods=["GET", "POST"])
 # @login_required
@@ -184,8 +244,8 @@ def note(note_id):
 
     if request.method == 'POST':
  
-        #https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
-        #https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
+        # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
+        # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
         url= request.values.get('url')
         response=requests.post(url)
         resp=response.text
@@ -196,40 +256,40 @@ def note(note_id):
         note={}
         
         print('asdsad' + url)
-        #print('title' + request.values.get('title'))
+        # print('title' + request.values.get('title'))
         note['url'] = request.values.get('url')
         note['title'] = soup.title.string
-        #note['title']=request.values.get('title')
-        #note['url'] = request.args.get('url')
+        # note['title']=request.values.get('title')
+        # note['url'] = request.args.get('url')
        # note['title']=request.args.get('title')
         body = note['body'] = request.form['note']
-        #title = note['title'] = request.form['title']
+        # title = note['title'] = request.form['title']
         note['author'] = user['username']
         author=user['username']
-        #note['author'] = 
-        #db.notes.find_one_and_update({'url':note['url']}, {'$set': {'body':note['body']}})
-        #https://docs.mongodb.com/manual/reference/operator/query/and/
-        #db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
-        #db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
+        # note['author'] = 
+        # db.notes.find_one_and_update({'url':note['url']}, {'$set': {'body':note['body']}})
+        # https://docs.mongodb.com/manual/reference/operator/query/and/
+        # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
+        # db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
         alreadyExists = db.notes.find_one({'$and': [{'url': url},{'author': author}]})
         if not alreadyExists:
             print('not alreadyexists')
             print('note:' + note['body'])
             db.notes.insert(note)
             #  db.users.find_one_and_update({"_id": session['user_id']}, {"$push": {"saved_pages": page}})
-            #?
-            #user.update_one({'$push': {'notes': note['url']}})
+            # ?
+            # user.update_one({'$push': {'notes': note['url']}})
             db.users.find_one_and_update(user, {'$push': {'notes': note['url']}})
         else:
             print('does exists already')
-            #unhashable type 'dict'
+            # unhashable type 'dict'
             # db.activities.find_one_and_update({"_id": ObjectId(activity_id)}, {"$set": {"published": True}})
             db.notes.update_one(alreadyExists, {'$set': {'body':body}})
             ''' ''' response = jsonify(data)''''''
-            #print('note:' + note)
+            # print('note:' + note)
 
-        #print(note)
-        #print(url)
+        # print(note)
+        # print(url)
         return render_template('page.html', url=url, note=note)
         '''
 # ...
@@ -238,8 +298,8 @@ def note(note_id):
 @app.route('/logout')
 def logout():
     '''
-    #flask-login
-    #logout_user()
+    # flask-login
+    # logout_user()
     '''
     session.clear()
     userLoggedIn = False
@@ -347,10 +407,10 @@ def user(username):
     else:
         return render_template('index.html', user='anonymous user')
 
-    #user_obj = User(username)
-    #u = db.users.find_one({"_id": session['user_id']})
-    #u = current_user
-    #user_obj =User(current_user)
+    # user_obj = User(username)
+    # u = db.users.find_one({"_id": session['user_id']})
+    # u = current_user
+    # user_obj =User(current_user)
     # user = User.query.filter_by(username=username).first_or_404()
     '''
     posts = [
@@ -383,38 +443,38 @@ def search_wiki():
         return render_template('search_wiki.html')
 
 
-@app.route('/search', methods=["GET", "POST"])
+@app.route('/search_notes', methods=["GET", "POST"])
 @login_required
-def search():
+def search_notes():
     user = db.users.find_one(({"_id": session['user_id']}))
     author = user['username']
     user_notes = user['notes']
-    #db.notes.create_index([('body', 'text')])
+    # db.notes.create_index([('body', 'text')])
     # for note in notes:
     #   return 1
     # POST route
 
     if request.method == "POST":
-        #pageContent = []
+        # pageContent = []
         searchTerm = request.form.get('searchTerm')
-        #pageContent=db.notes.find({"$text": {"$search": searchTerm}}).limit(5)
+        # pageContent=db.notes.find({"$text": {"$search": searchTerm}}).limit(5)
         # pageContent=get_content(searchTerm)
         # render list
         user_notes = db.notes.aggregate([
             {'$match': {'$text': {'$search': searchTerm}}},
             {'$match': {'author': author}}
         ])
-        #https://stackoverflow.com/questions/31954014/typeerror-commandcursor-object-has-no-attribute-getitem
+        # https://stackoverflow.com/questions/31954014/typeerror-commandcursor-object-has-no-attribute-getitem
         '''
         In PyMongo 3 the aggregate method returns an iterable of result documents (an instance of CommandCursor), not a single document. 
         You have to iterate the results, or alternatively turn them into a list with list(res).
         '''
-        #print(type(pageContent))
+        # print(type(pageContent))
 
         return render_template('notes.html', notes=user_notes)
     # GET route
     else:
-        return render_template('search.html')
+        return render_template('search_notes.html')
 
 
 '''
@@ -494,7 +554,7 @@ def add():
     print(page)
     db.users.find_one_and_update({"_id": session['user_id']}, {
                                  "$push": {"saved_pages": page}})
-    #user =db.users.find_one(({"_id": session['user_id']}))
+    # user =db.users.find_one(({"_id": session['user_id']}))
 
     print('add route')
     # https://charlesleifer.com/blog/building-bookmarking-service-python-and-phantomjs/
@@ -508,10 +568,10 @@ def add():
     # title=request.args.get('title')
     url = request.args.get('url')
     # print(url)
-    #print('title:' + title)
+    # print('title:' + title)
     # print(args)
     # a=url
-    #print('xxxxxxxxxxx' + a)
+    # print('xxxxxxxxxxx' + a)
     # return render_template('search.html')
 
     return redirect(url)
@@ -536,7 +596,7 @@ but a redirect was issued automatically by the routing system to "http://127.0.0
 '''
 '''
 @app.route('/page/', methods=["GET", "POST"])
-#@login_required
+# @login_required
 def page():
     url = request.args.get('url')
     if request.method == "GET":
@@ -549,21 +609,21 @@ def page():
 '''
 '''
 @app.route('/page/', methods=["GET", "POST"])
-#@login_required
+# @login_required
 def page():
-    #a=request.args.getlist()
-    #print(a)
-    #url = request.args.get('url')
+    # a=request.args.getlist()
+    # print(a)
+    # url = request.args.get('url')
     print('a')
     
     if request.method == "GET":
       #  url =decodeURIComponent(url)
         url = request.args.get('url')
-        #url=url
+        # url=url
         return render_template('page.html', url=url)
     if request.method == 'POST':
         url=request.path
-        #url=request.form['url']
+        # url=request.form['url']
         note = request.form['note']
         print(note)
         print(url)
@@ -574,18 +634,19 @@ def page():
 @app.route('/get_page/', methods=["GET", "POST"])
 @login_required
 def get_page():
-    #https://hackersandslackers.com/scraping-urls-with-beautifulsoup/
-    #Set headers
+    # https://hackersandslackers.com/scraping-urls-with-beautifulsoup/
+    # Set headers
     headers = requests.utils.default_headers()
-    headers.update({ 'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'})
+    headers.update(
+        {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'})
 
     user = db.users.find_one(({"_id": session['user_id']}))
     if request.method == "GET":
         url = request.args.get('url')
-        req= requests.get(url, headers)
+        req = requests.get(url, headers)
         soup = BeautifulSoup(req.content, 'html.parser')
         print(soup.prettify())
-        #https://stackoverflow.com/questions/50657574/iframe-with-srcdoc-same-page-links-load-the-parent-page-in-the-frame
+        # https://stackoverflow.com/questions/50657574/iframe-with-srcdoc-same-page-links-load-the-parent-page-in-the-frame
         '''
         the trouble starts with an iframe that has its content set with srcdoc: no unique base URL is specified, and in that case the base URL of the parent 
         frame/document is used--the playground in my case (see the HTML Standard).
@@ -593,7 +654,7 @@ def get_page():
         Therefore, the question becomes: is there a way to reference the srcdoc iframe in a base URL? or is it possible to make the browser not prepend the base?
          or to make a base URL that doesn't change the relative #sec-id URLs?
         '''
-        #https://stackoverflow.com/questions/9626535/get-protocol-host-name-from-url
+        # https://stackoverflow.com/questions/9626535/get-protocol-host-name-from-url
         parsed_uri = urlparse(url)
         result = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
         print(result)
@@ -609,7 +670,8 @@ def get_page():
         else:
             return render_template('page.html', url=url)
         """
-    
+
+
 @app.route('/page/', methods=["GET", "POST"])
 @login_required
 def page():
@@ -641,21 +703,21 @@ def page():
         note = {}
 
         print('asdsad' + url)
-        #print('title' + request.values.get('title'))
+        # print('title' + request.values.get('title'))
         note['url'] = request.values.get('url')
         note['title'] = soup.title.string
         # note['title']=request.values.get('title')
-        #note['url'] = request.args.get('url')
+        # note['url'] = request.args.get('url')
        # note['title']=request.args.get('title')
         body = note['body'] = request.form['note']
-        #title = note['title'] = request.form['title']
+        # title = note['title'] = request.form['title']
         note['author'] = user['username']
         author = user['username']
         # note['author'] =
-        #db.notes.find_one_and_update({'url':note['url']}, {'$set': {'body':note['body']}})
+        # db.notes.find_one_and_update({'url':note['url']}, {'$set': {'body':note['body']}})
         # https://docs.mongodb.com/manual/reference/operator/query/and/
         # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
-        #db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
+        # db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
         alreadyExists = db.notes.find_one(
             {'$and': [{'url': url}, {'author': author}]})
         if not alreadyExists:
@@ -664,7 +726,7 @@ def page():
             db.notes.insert(note)
             #  db.users.find_one_and_update({"_id": session['user_id']}, {"$push": {"saved_pages": page}})
             # ?
-            #user.update_one({'$push': {'notes': note['url']}})
+            # user.update_one({'$push': {'notes': note['url']}})
             db.users.find_one_and_update(
                 user, {'$push': {'notes': note['url']}})
         else:
@@ -673,7 +735,7 @@ def page():
             # db.activities.find_one_and_update({"_id": ObjectId(activity_id)}, {"$set": {"published": True}})
             db.notes.update_one(alreadyExists, {'$set': {'body': body}})
             '''  response = jsonify(data)'''
-            #print('note:' + note)
+            # print('note:' + note)
 
         # print(note)
         # print(url)
@@ -689,7 +751,7 @@ def page2(note_url):
     if request.method == "GET":
 
         url = note_url
-        #title = request.args.get('title')
+        # title = request.args.get('title')
         note = db.notes.find_one(
             {'$and': [{'url': url}, {'author': user['username']}]})
         if note:
@@ -711,21 +773,21 @@ def page2(note_url):
         note = {}
 
         print('asdsad' + url)
-        #print('title' + request.values.get('title'))
+        # print('title' + request.values.get('title'))
         note['url'] = request.values.get('url')
         note['title'] = soup.title.string
         # note['title']=request.values.get('title')
-        #note['url'] = request.args.get('url')
+        # note['url'] = request.args.get('url')
        # note['title']=request.args.get('title')
         body = note['body'] = request.form['note']
-        #title = note['title'] = request.form['title']
+        # title = note['title'] = request.form['title']
         note['author'] = user['username']
         author = user['username']
         # note['author'] =
-        #db.notes.find_one_and_update({'url':note['url']}, {'$set': {'body':note['body']}})
+        # db.notes.find_one_and_update({'url':note['url']}, {'$set': {'body':note['body']}})
         # https://docs.mongodb.com/manual/reference/operator/query/and/
         # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
-        #db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
+        # db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
         alreadyExists = db.notes.find_one(
             {'$and': [{'url': url}, {'author': author}]})
         if not alreadyExists:
@@ -734,7 +796,7 @@ def page2(note_url):
             db.notes.insert(note)
             #  db.users.find_one_and_update({"_id": session['user_id']}, {"$push": {"saved_pages": page}})
             # ?
-            #user.update_one({'$push': {'notes': note['url']}})
+            # user.update_one({'$push': {'notes': note['url']}})
             db.users.find_one_and_update(
                 user, {'$push': {'notes': note['url']}})
         else:
@@ -743,7 +805,7 @@ def page2(note_url):
             # db.activities.find_one_and_update({"_id": ObjectId(activity_id)}, {"$set": {"published": True}})
             db.notes.update_one(alreadyExists, {'$set': {'body': body}})
             '''  response = jsonify(data)'''
-            #print('note:' + note)
+            # print('note:' + note)
 
         # print(note)
         # print(url)
@@ -754,6 +816,7 @@ def page2(note_url):
 # encodeURIComponent(args)
 # javascript:location.href=http://127.0.0.1:5000/page/'+encodeURIComponent(location.href)
 # <iframe src="https://fr.wikipedia.org/wiki/Main_Page" width="640" height="480">
+
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP', '0.0.0.0'),

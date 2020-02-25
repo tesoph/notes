@@ -1,0 +1,30 @@
+{% extends 'base.html'%} 
+
+{% block app_content %}
+
+<form action="{{ url_for('update_note', note_id=note._id) }}" method="POST" class="col s12">
+    <div class="row">
+       
+    </div>
+    <div class="row">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">assignment</i>
+            <input id="note_title" name="note_title" type="text" class="validate" value="{{note.title}}">
+            <label for="icon_prefix">Note title</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">subject</i>
+            <textarea name="note" class='resizeable draggable' id='note' class="materialize-textarea">{{ note.body }}</textarea>
+            <label for="icon_telephone">Note body</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <button class="btn waves-effect waves-light" type="submit" name="action">Edit Note
+           
+         </button>
+    </div>
+</form>
+{% endblock %}

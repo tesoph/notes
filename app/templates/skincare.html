@@ -5,8 +5,25 @@ Wiki Reader
 {% endblock %}
 
 {% block app_content %}
+{% if ingredientSearch%}
 
-{% for i in data %}
-{{i}}
+{% for item in il%}
+<h3>{{loop.index}}</h3>
+<h4>{{item['brand']}} - {{item['name']}}</h4>
+<p>Ingredients:</p>
+<p>{{item['ingredient_list']}}</p>
+<hr>
 {% endfor %}
+{% endif %}
+<p>....</p>
+{% if brandSearch %}
+
+{% for item in bl%}
+<h3>{{loop.index}}</h3>
+<h4>{{item['brand']}} - {{item['name']}}</h4>
+<p>Ingredients:</p>
+<p>{{item['ingredient_list']}}</p>
+<hr>
+{% endfor %}
+{% endif %}
 {% endblock %}
