@@ -61,12 +61,25 @@ from functools import wraps
 
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 #from app.models import User
 
-def loginForm(loginform_):
+class NoteForm(FlaskForm):
+    title = StringField('title')
+    body = TextAreaField('note')
+    submit = SubmitField('save')
 
+'''
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    #remember_me = BooleanField('Remember Me')
+    submit = SubmitField('Sign In')
+
+'''
+'''
+def loginForm(loginform_):
         users=db.users
         loginform = loginform_
         user = users.find_one({"username": loginform['username']})
@@ -78,5 +91,4 @@ def loginForm(loginform_):
             session['username']=user['username']
             userLoggedIn=True 
             return redirect("/")
-    # User reached route via GET (as by clicking a link or via redirect)
- 
+'''

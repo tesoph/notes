@@ -23,6 +23,7 @@ import requests
 from bs4 import BeautifulSoup
 from bson.objectid import ObjectId
 from urllib.parse import urlparse
+from app.forms import NoteForm
 '''
 JQMIGRATE: Migrate is installed with logging active, version 3.1.0
 '''
@@ -77,6 +78,10 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@app.route('/notemaker')
+def notemaker():
+    form = NoteForm()
+    return render_template('page2.html', title='Make Note', form=form)
 
 @app.route('/skincare', methods=["GET", "POST"])
 def skincare():
@@ -232,7 +237,7 @@ def note(note_id):
 
     user = db.users.find_one(({"_id": session['user_id']}))
     return render_template('page.html', url=url, note=note)
-    '''
+    '''930 536
     if request.method == "GET":
         url = request.args.get('url')
         title = request.args.get('title')
@@ -687,7 +692,7 @@ def page():
         if note:
             return render_template('page.html', url=url, note=note, title=title)
         else:
-            return render_template('page.html', url=url)
+            return render_template('page.html', url=url, title=title)
 
     if request.method == 'POST':
 
@@ -705,11 +710,12 @@ def page():
         print('asdsad' + url)
         # print('title' + request.values.get('title'))
         note['url'] = request.values.get('url')
-        note['title'] = soup.title.string
+        #note['title'] = soup.title.string
         # note['title']=request.values.get('title')
         # note['url'] = request.args.get('url')
        # note['title']=request.args.get('title')
         body = note['body'] = request.form['note']
+        title = note['title'] = request.form['note_title']
         # title = note['title'] = request.form['title']
         note['author'] = user['username']
         author = user['username']

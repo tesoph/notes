@@ -11,9 +11,13 @@
 
             {% if note %}
             <!--   <textarea name="title" id='title' placeholder="">{{note.title}}</textarea>-->
+            <input id="note_title" name="note_title" type="text" class="validate" value="{{note.title}}">
+            <label for="icon_prefix">Title</label>
             <textarea name="note" class='resizeable draggable' id='note' placeholder="">{{note.body}}</textarea>
             {% endif%}
             {% if not note %}
+            <input id="note_title" name="note_title" type="text" class="validate" value="{{title}}">
+            <label for="icon_prefix">Title</label>
             <!--<textarea name="title" id='title' placeholder="">Note title</textarea>-->
             <textarea name="note" id='note'class='resizable draggable' placeholder="Note"></textarea>
             {% endif %}
