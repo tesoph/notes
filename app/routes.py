@@ -171,6 +171,8 @@ def index():
      '''
     notes = db.notes
     # latest saved articles
+    '''
+    #pre public/private notes
     if 'user_id' in session:
         users = db.users
         userid = session['user_id']
@@ -179,9 +181,17 @@ def index():
         userNotes = notes.find({'author': author})
         # pages = user['saved_pages']
         # articles = db.articles
+    '''
+    if 'user_id' in session:
+        users = db.users
+        userid = session['user_id']
+        user = users.find_one({'_id': userid})
+        author = user['username']
+        userNotes = notes.find({'author': author})
+   
         return render_template('index.html', title='Home Page', user=user, userLoggedIn=True, notes=userNotes)
-    else:
-        return render_template('index.html', title='Home Page', user='anonymous user', userLoggedIn=False)
+    #else:
+    return render_template('index.html', title='Home Page', user='anonymous user', userLoggedIn=False)
 
 
 @app.route('/delete_note/<note_id>')
@@ -234,9 +244,17 @@ def update_note(note_id):
 def note(note_id):
     note = db.notes.find_one({'_id': ObjectId(note_id)})
     url = note['url']
-
+    '''
+    #https://stackoverflow.com/questions/12030487/mongo-conditional-for-key-doesnt-exist
+    cursor =note.find({'public': { '$exists': True }})
+    '''
+    if 'public' in note:
+        public=note['public']
+    else:
+        public=False
+    public=str(public)
     user = db.users.find_one(({"_id": session['user_id']}))
-    return render_template('page.html', url=url, note=note)
+    return render_template('page.html', url=url, note=note, public= public)
     '''930 536
     if request.method == "GET":
         url = request.args.get('url')
@@ -690,9 +708,14 @@ def page():
         note = db.notes.find_one(
             {'$and': [{'url': url}, {'author': user['username']}]})
         if note:
-            return render_template('page.html', url=url, note=note, title=title)
+             public=note['public']
+             public=str(public)
+             print('note exists, is it public or private?' + str(public))
+             return render_template('page.html', url=url, note=note, title=title, public=public)
         else:
-            return render_template('page.html', url=url, title=title)
+            public=False
+            public=str(public)
+            return render_template('page.html', url=url, title=title, public=public)
 
     if request.method == 'POST':
 
@@ -716,6 +739,9 @@ def page():
        # note['title']=request.args.get('title')
         body = note['body'] = request.form['note']
         title = note['title'] = request.form['note_title']
+        public = note['public']=request.form['publicOption']
+        public=str(public)
+        print('is it public or private?' + public)
         # title = note['title'] = request.form['title']
         note['author'] = user['username']
         author = user['username']
@@ -735,17 +761,20 @@ def page():
             # user.update_one({'$push': {'notes': note['url']}})
             db.users.find_one_and_update(
                 user, {'$push': {'notes': note['url']}})
+            return render_template('page.html', url=url, note=note, public=public)
         else:
             print('does exists already')
             # unhashable type 'dict'
             # db.activities.find_one_and_update({"_id": ObjectId(activity_id)}, {"$set": {"published": True}})
-            db.notes.update_one(alreadyExists, {'$set': {'body': body}})
+            db.notes.update_one(alreadyExists, {'$set': {'body': body, 'public':public}})
+            public=str(public)
+            return render_template('page.html', url=url, note=note, public=public)
             '''  response = jsonify(data)'''
             # print('note:' + note)
 
         # print(note)
         # print(url)
-        return render_template('page.html', url=url, note=note)
+        
 
 
 @app.route('/page2/<note_url>', methods=["GET", "POST"])

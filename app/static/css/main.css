@@ -20,13 +20,21 @@
 }
 
 #noteContainer {
+  /*background-color: #eeebcf;*/
+  margin:1.5%;
+  color:black;
   width: 100vw;
   height: 50vh;
   display: flex;
   justify-content: center;
   align-items: center;
+
 }
 
+#noteContainer input, textarea{
+background-color:#fffef2;
+color:black;
+}
 #note{
   margin:auto;
     height:95%;
@@ -35,9 +43,9 @@
 #noteForm{
   height:100%;
   width:95%;
-  display: flex;
+  /*display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center;*/
 }
 
 /*
