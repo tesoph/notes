@@ -1,1 +1,1 @@
-web: python notes.py
+web: flask run notes.py
