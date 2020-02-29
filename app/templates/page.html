@@ -29,6 +29,7 @@
         <label for="private">Private</label>
         <input type="radio" id="public" value="True" name="publicOption" checked>
         <label for="public">Public</label>
+
         {% elif public == 'False' %}
         <input type="radio" id="private" value="False" name="publicOption" checked>
         <label for="private">Private</label>
@@ -42,9 +43,10 @@
         <button class="btn btn-info" id='submitNote' type="submit">Save Note</button>
         <textarea name="note" id='note' placeholder="">{{note.body}}</textarea>
         {% endif%}
+
         {% if not note %}
         <p>note didn't already exist</p>
-        <label for="icon_prefix">Title: not note bte</label>
+        <label for="icon_prefix">Title: </label>
         <input id="note_title" name="note_title" type="text" class="validate" value="{{title}}">
         <input type="radio" id="private" value="False" name="publicOption" checked>
         <label for="private">Private</label>

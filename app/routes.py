@@ -135,7 +135,6 @@ def skincare():
 @app.route('/index')
 def index():
     # userLoggedIn = True if 'user_id' in session else False
-    flash("hello")
     # u=db.users.count()
     # "username": user['username'
     '''
@@ -143,10 +142,6 @@ def index():
     u=db.users.find_one({"_id": id})
     name = u['username']
     '''
-    # db.users.find_one({"username": user['username']}))[id]
-    # u =mongo.db.users.count()
-    # u='ray'
-    #  name='emma'
     '''
     if session:
         userid=session["user_id"]
