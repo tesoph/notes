@@ -248,6 +248,7 @@ def note(note_id):
     #https://stackoverflow.com/questions/12030487/mongo-conditional-for-key-doesnt-exist
     cursor =note.find({'public': { '$exists': True }})
     '''
+    #https://stackoverflow.com/questions/1602934/check-if-a-given-key-already-exists-in-a-dictionary
     if 'public' in note:
         public=note['public']
     else:
