@@ -24,6 +24,7 @@ from bs4 import BeautifulSoup
 from bson.objectid import ObjectId
 from urllib.parse import urlparse
 from app.forms import NoteForm
+
 '''
 JQMIGRATE: Migrate is installed with logging active, version 3.1.0
 '''
@@ -663,8 +664,11 @@ def get_page():
     if request.method == "GET":
         url = request.args.get('url')
         req = requests.get(url, headers)
-        soup = BeautifulSoup(req.content, 'html.parser')
-        print(soup.prettify())
+        #soup = BeautifulSoup(req.content, 'html.parser')
+        soup = BeautifulSoup(urllib.request.urlopen(url).read())
+        div=soup.find('div', id='bodyContent')
+        content=div.content
+        #print(soup.prettify())
         # https://stackoverflow.com/questions/50657574/iframe-with-srcdoc-same-page-links-load-the-parent-page-in-the-frame
         '''
         the trouble starts with an iframe that has its content set with srcdoc: no unique base URL is specified, and in that case the base URL of the parent 
@@ -673,12 +677,13 @@ def get_page():
         Therefore, the question becomes: is there a way to reference the srcdoc iframe in a base URL? or is it possible to make the browser not prepend the base?
          or to make a base URL that doesn't change the relative #sec-id URLs?
         '''
+        
         # https://stackoverflow.com/questions/9626535/get-protocol-host-name-from-url
         parsed_uri = urlparse(url)
         result = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
         print(result)
-
-        return render_template('getpage.html', soup=soup, url=result)
+        
+        return render_template('getpage.html', soup=soup, url=result, content=content)
         """
         # url=note_url
         title = request.args.get('title')
@@ -690,6 +695,51 @@ def get_page():
             return render_template('page.html', url=url)
         """
 
+
+@app.route('/page3/', methods=["GET", "POST"])
+#@login_required
+def page3():
+
+    #user = db.users.find_one(({"_id": session['user_id']}))
+
+    if request.method == "GET":
+        print('getting')
+        url = request.args.get('url')
+        # url=note_url
+        #title = request.args.get('title')
+        #note = db.notes.find_one(
+        #    {'$and': [{'url': url}, {'author': user['username']}]})
+        #if note:
+          #   public=note['public']
+          #   public=str(public)
+          #   print('note exists, is it public or private?' + str(public))
+          #   return render_template('page.html', url=url, note=note, title=title, public=public)
+       # else:
+         #   public=False
+         #   public=str(public)
+        return render_template('page.html', url=url, title='my title', public=True)
+
+    if request.method == 'POST':
+        print('posting')
+        # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
+        # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
+        #url = request.values.get('url')
+        url = request.values.get('url')
+        val = str(dict(request.values))
+        print('vALS;'+val)
+        note = {}
+        #data = dict(request.form['n'])
+        data2 = request.form['n']
+        #return render_template(url, url=url, note=note, public=True, title='hello')
+        return redirect(url)
+        #print('asdsad' + url)
+        #note['url'] = request.values.get('url')
+      #  body = note['body'] = request.form['n']
+       # note['url'] =url
+       # print('note url:' + url)
+        #print('...req form:' + data2)
+       # print('note body' + body + '...note url:' + url)
+        #return render_template('page.html', url=url, note=note, public=True, title='hello')
 
 @app.route('/page/', methods=["GET", "POST"])
 @login_required

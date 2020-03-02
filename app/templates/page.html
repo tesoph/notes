@@ -4,25 +4,19 @@
 
 <div class='resizable draggable' id='frameContainer'>
     <!--https://stackoverflow.com/questions/8117761/how-can-i-make-an-iframe-resizable-->
-    <iframe class='resizable draggable' id='pageFrame' src="{{ url }}"></iframe>
+    <!--<iframe class='resizable draggable' id='pageFrame' srcdoc="{{ content }}"></iframe>-->
+    <!-- <iframe class='resizable draggable' id='pageFrame' src="{{ url }}"></iframe>-->
 </div>
 <div id='noteContainer'>
     <form action='/page/?url={{ url }}' method='POST' id='noteForm'>
 
         {% if note %}
-        <!--   <textarea name="title" id='title' placeholder="">{{note.title}}</textarea>-->
+        <p>note already existed</p>
         <!-- Note Title -->
         <label for="icon_prefix">Title:</label>
         <input id="note_title" name="note_title" type="text" class="validate" value="{{note.title}}">
         <!-- Public or private note -->
         <!-- https://stackoverflow.com/questions/55296164/jinja2-if-ignores-boolean-value -->
-        <!--  <label for="publicOption2">Make note public or private:</label>
-        <select id="publicOption2">
-          <option value="False">Private</option>
-          <option value="True">Public</option>
-        </select> -->
-
-        <p>note already existed</p>
         <p>is note public: {{ note.public }}</p>
         {% if public == 'True' %}
         <input type="radio" id="private" value="False" name="publicOption">
@@ -35,9 +29,8 @@
         <label for="private">Private</label>
         <input type="radio" id="public" value="True" name="publicOption">
         <label for="public">Public</label>
-       
+
         {% endif %}
-        
 
         <!-- Submit Button -->
         <button class="btn btn-info" id='submitNote' type="submit">Save Note</button>
@@ -45,6 +38,7 @@
         {% endif%}
 
         {% if not note %}
+
         <p>note didn't already exist</p>
         <label for="icon_prefix">Title: </label>
         <input id="note_title" name="note_title" type="text" class="validate" value="{{title}}">
@@ -52,8 +46,10 @@
         <label for="private">Private</label>
         <input type="radio" id="public" value="True" name="publicOption">
         <label for="public">Public</label>
+
+        <!-- Submit Button -->
         <button class="btn btn-info" id='submitNote' type="submit">Save Note</button>
-        <!--<textarea name="title" id='title' placeholder="">Note title</textarea>-->
+
         <textarea name="note" id='note' placeholder="Note"></textarea>
         {% endif %}
 
