@@ -5,4 +5,3 @@ __pycache__
 *.code-workspace
 app/templates/indexold.html
 old/
-app/data

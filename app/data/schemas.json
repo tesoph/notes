@@ -1,0 +1,24 @@
+User [{
+    "_id": {
+        "$oid": "<objectId>"
+    },
+    "username": "<string>",
+    "password": "<hashed_password_string>",
+    "last_seen": "<string>",
+    "notes": array of page(note) [urls] ids,
+    "saved_pages": array of page urls,
+    "following": array of user _ids,
+
+}]
+
+Note [{
+    "_id": {
+        "$oid": "<objectId>"
+    },
+    "url": "<string>",
+    "title": "<string>",
+    "body": "<string>",
+    "author": "<string>",
+    "date_created": "<string>",
+    "public": "<boolean>"
+}]
