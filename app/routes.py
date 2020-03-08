@@ -25,51 +25,10 @@ from bson.objectid import ObjectId
 from urllib.parse import urlparse
 from app.forms import NoteForm
 
-'''
-JQMIGRATE: Migrate is installed with logging active, version 3.1.0
-'''
-'''
- * Debugger PIN: 244-756-859
-127.0.0.1 - - [11/Feb/2020 22:16:50] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x02\x00\x01\x00\x01ü\x03\x03\x1bÆ\x15FWïÊ9«:Mn©^\x84ÈL¼\x10`ÔÆ\x9d§wï\x8f~t\x88tØ')
-127.0.0.1 - - [11/Feb/2020 22:16:50] "üFWïÊ9«:Mn©^bobqqq
-                                                                          dVèû~üØ¼C(¼
-                                                                                     Y%"À+À/À,À0Ì©Ì¨ÀÀlB
-µÝó^ûÊ DVä$Æ»ÅEË©lP é¥3IÊÛÕTÑäP
-                               [×E µÆ"À+À/À,À0Ì©Ì¨ÀÀÄÓë
-                                                       3=ÍP}:Håõ± 2ÅZÌ
-¡á³r_[,lâµàCq9w" HTTPStatus.BAD_REQUEST -
-27.0.0.1 - - [11/Feb/2020 22:17:34] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [11/Feb/2020 22:17:45] code 400, message Bad request version (']¹1|\x8d\x9b7Ö\x10Ä\x82\x1bF\x00"\x1a\x1a\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x00')
-127.0.0.1 - - [11/Feb/2020 22:17:45] "ü;Iü\S½q­wÒIÜ9ÅÕvwgX5°Ù´'ð á      H<¡Ó®sùÄ"À+À/À,À0Ì©Ì¨ÀÀ>Æ±ÒÎ7Tè
-<þäe²n<ù¿©¨yd®<jâeÃUX"::À+À/À,À0Ì©Ì¨ÀÀeL£ÉÊÆô§f¹ÿ¿v
-Á å6Ô§þ3æ³      E¦ÏVkI¡­åü"ÚÚÀ+À/À,À0Ì©Ì¨ÀÀò<   a}
-                                                  RÐoz Z" HTTPStatus.BAD_REQUEST -
-127.0.0.1 - - [11/Feb/2020 22:17:46] code 400, message Bad request version ('ñ\x11s½!hòqµ.±éeK±hûß¡H\x94õözQ\x00"ªª\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x00')
-127.0.0.1 - - [11/Feb/2020 22:17:46] "ü¬ø¾ ³ó;n¬]½âæ?QçÈJîég/×Sù £Öfr
-ñs½!hòqµ.±éeK±hûß¡HõözQ"ªªÀ+À/À,À0Ì©Ì¨ÀÀÕr|áé!M]Cg¶·´·×
-'''
-'''
-*whats g
-
-This example assumes that the login page is called 'login' and that the current user is stored in g.user and is None if there is no-one logged in.
-'''
-'''
-app.config['MONGODB_SETTINGS'] = {
-    'db': 'microblog',
-    'host': os.environ['MONGO_URI']
-}'''
-# db = MongoEngine(app)
-'''
-A decorator modifies the function that follows it.
-@app.route('/index') = when web browser requests the /index url,
-Flask invokes this function and passes the return value back to the browser as a response
-'''
-
 
 def login_required(f):
     """
     Decorate routes to require login.
-
     http://flask.pocoo.org/docs/1.0/patterns/viewdecorators/
     """
     @wraps(f)
@@ -79,164 +38,70 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
 @app.route('/notemaker')
 def notemaker():
     form = NoteForm()
     return render_template('page2.html', title='Make Note', form=form)
 
-@app.route('/skincare', methods=["GET", "POST"])
-def skincare():
-    # POST route
-    ingredientSearch=False
-    brandSearch=False
-    if request.method == "POST":
-        SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-        json_url = os.path.join(SITE_ROOT, "data", "products.json")
-        # data = json.load(open(json_url))
-        with open(json_url, "r") as read_file:
-            data = json.load(read_file)
-        print(type(data))
-        # print(data[:2])
-        for c in data[:5]:
-            print(c['brand'])
-        # pageContent = []
-        ingredientSearchTerm = request.form.get('ingredientSearchTerm')
-        brandSearchTerm = request.form.get('brandSearchTerm')
-        il = []
-        bl = []
-        if ingredientSearchTerm:
-            ingredientSearch=True
-            for i in data:
-                if ingredientSearchTerm in i['ingredient_list']:
-                 # print(i)
-                      il.append(i)
-        if brandSearchTerm:
-            brandSearch=True
-            for i in data:
-                if brandSearchTerm in i['brand']:
-                     bl.append(i)
-        # render list
-        #print(l)
-        return render_template('skincare.html', il=il, bl=bl,ingredientSearch=ingredientSearch, brandSearch=brandSearch)
-    # GET route
-    else:
-        return render_template('search_skincare.html')
-
-    # GET /product?q=rose+water
-    # https://skincare-api.herokuapp.com/product?q=rose&limit=25&page=1
-    '''
-    filename = os.path.join(app, 'data', 'products.json')
-    with open(filename) as f:
-             d= json.load(f)
-             '''
-    # https://stackoverflow.com/questions/21133976/flask-load-local-json
-
 
 @app.route('/')
 @app.route('/index')
 def index():
-    # userLoggedIn = True if 'user_id' in session else False
-    # u=db.users.count()
-    # "username": user['username'
-    '''
-    id = session['user_id']
-    u=db.users.find_one({"_id": id})
-    name = u['username']
-    '''
-    '''
-    if session:
-        userid=session["user_id"]
-        user = db.users.find_one({"_id": session['user_id']})
-        name = user['name]']
-    # return render_template('index.html', title='Home', user=u)
-        return render_template("index.html", title='Home Page', user=user, name=name)
-    else:
-        return render_template("index.html", title='Home Page')
-        '''
-    '''
-    if session:
-        userid = session['user_id']
-        u = db.users.find_one({"_id": userid})
-        name = u['username']
-        return render_template("index.html", title='Home Page', user=name)
-    else:
-        return render_template("index.html", title='Home Page', user='unsigned in user')
-    '''
-    '''
-     alreadyExists = db.notes.find_one({'$and': [{'url': url},{'author': author}]})
-     '''
     notes = db.notes
-    # latest saved articles
-    '''
-    #pre public/private notes
+
     if 'user_id' in session:
         users = db.users
         userid = session['user_id']
         user = users.find_one({'_id': userid})
         author = user['username']
         userNotes = notes.find({'author': author})
-        # pages = user['saved_pages']
-        # articles = db.articles
-    '''
-    if 'user_id' in session:
-        users = db.users
-        userid = session['user_id']
-        user = users.find_one({'_id': userid})
-        author = user['username']
-        userNotes = notes.find({'author': author})
-   
-        return render_template('index.html', title='Home Page', user=user, userLoggedIn=True, notes=userNotes)
-    #else:
-    return render_template('index.html', title='Home Page', user='anonymous user', userLoggedIn=False)
+        return render_template('index.html',
+                               title='Home Page',
+                               user=user,
+                               userLoggedIn=True,
+                               notes=userNotes)
+    # else:
+    return render_template('index.html',
+                           title='Home Page',
+                           user='anonymous user',
+                           userLoggedIn=False)
 
 
 @app.route('/delete_note/<note_id>')
 def delete_note(note_id):
     notes = db.notes
-
     notes.remove({'_id': ObjectId(note_id)})
-    # mongo.db.tasks.remove({'_id': ObjectId(task_id)})
     return redirect(url_for('index'))
 
-'''
-from code institue https://github.com/Code-Institute-Solutions/TaskManager/blob/master/04-EditingATask/05-update_the_task_in_the_database/app.py
-@app.route('/edit_task/<task_id>')
-def edit_task(task_id):
-    the_task =  mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
-    all_categories =  mongo.db.categories.find()
-    return render_template('edittask.html', task=the_task,
-                           categories=all_categories)
-                           '''
 
+''''
+from code institue task manager app
+https://github.com/Code-Institute-Solutions/TaskManager/blob/master/04-EditingATask/05-update_the_task_in_the_database/app.py
+'''
 @app.route('/edit_note_title/<note_id>')
 def edit_note_title(note_id):
     notes = db.notes
     note = notes.find_one({'_id': ObjectId(note_id)})
-    #notes.remove({'_id': ObjectId(note_id)})
-    # mongo.db.tasks.remove({'_id': ObjectId(task_id)})
-    return render_template('edit_note.html', note=note)
+    return render_template('edit_note.html',
+                           note=note)
 
 
 @app.route('/update_task/<note_id>', methods=["POST"])
 def update_note(note_id):
     notes = db.notes
-    #db.notes.update_one(alreadyExists, {'$set': {'body': body}})
     note = notes.find_one({'_id': ObjectId(note_id)})
-    #db.users.find_one_and_update(
-        #        user, {'$push': {'notes': note['url']}})
-    notes.update_one( note,
-    {'$set':{
-        'title':request.form.get('note_title'),
-
-        'body':request.form.get('note')
-      
-    }
-    })
-    
+    notes.update_one(note,
+                     {'$set': {
+                         'title': request.form.get('note_title'),
+                         'body': request.form.get('note')
+                     }
+                     })
     return redirect(url_for('index'))
 
+
 @app.route('/note/<note_id>', methods=["GET", "POST"])
-# @login_required
+@login_required
 def note(note_id):
     note = db.notes.find_one({'_id': ObjectId(note_id)})
     url = note['url']
@@ -244,14 +109,17 @@ def note(note_id):
     #https://stackoverflow.com/questions/12030487/mongo-conditional-for-key-doesnt-exist
     cursor =note.find({'public': { '$exists': True }})
     '''
-    #https://stackoverflow.com/questions/1602934/check-if-a-given-key-already-exists-in-a-dictionary
+    # https://stackoverflow.com/questions/1602934/check-if-a-given-key-already-exists-in-a-dictionary
     if 'public' in note:
-        public=note['public']
+        public = note['public']
     else:
-        public=False
-    public=str(public)
+        public = False
+    public = str(public)
     user = db.users.find_one(({"_id": session['user_id']}))
-    return render_template('page.html', url=url, note=note, public= public)
+    return render_template('page.html',
+                           url=url,
+                           note=note,
+                           public=public)
     '''930 536
     if request.method == "GET":
         url = request.args.get('url')
@@ -398,47 +266,21 @@ def register():
         return render_template("register.html")
 
 
-'''
-@app.route('/user')
-# @login_required
-def user():
-    if session:
-        u = db.users.find_one({"_id": session['user_id']})
-    # user = User.query.filter_by(username=username).first_or_404()
-        posts = [
-            {'author': user, 'body': 'Test post #1'},
-            {'author': user, 'body': 'Test post #2'}
-        ]
-        return render_template('user.html', user=u, posts=posts)
-    else:
-        return redirect('/login')
-'''
-
-
 @app.route('/user/<username>')
-# @login_required
+@login_required
 def user(username):
     if 'user_id' in session:
         users = db.users
         userid = session['user_id']
         user = users.find_one({'_id': userid})
         uname = user['username']
-        return render_template('user.html', title='Profile page', user=user, username=uname)
+        return render_template('user.html',
+                               title='Profile page',
+                               user=user,
+                               username=uname)
     else:
-        return render_template('index.html', user='anonymous user')
-
-    # user_obj = User(username)
-    # u = db.users.find_one({"_id": session['user_id']})
-    # u = current_user
-    # user_obj =User(current_user)
-    # user = User.query.filter_by(username=username).first_or_404()
-    '''
-    posts = [
-            {'author': u, 'body': 'Test post #1'},
-            {'author': u, 'body': 'Test post #2'}
-    ]
-    return render_template('user.html', user=u, posts=posts)
-    '''
+        return render_template('index.html',
+                               user='anonymous user')
 
 
 @app.before_request
@@ -449,41 +291,33 @@ def before_request():
                             '$set': {"last_seen": time}})
 
 
-@app.route('/searchwiki', methods=["GET", "POST"])
-def search_wiki():
-    # POST route
-    if request.method == "POST":
-        pageContent = []
-        searchTerm = request.form.get('searchTerm')
-        pageContent = get_content(searchTerm)
-        # render list
-        return render_template('wiki.html', content=pageContent)
-    # GET route
-    else:
-        return render_template('search_wiki.html')
-
-
 @app.route('/search_notes', methods=["GET", "POST"])
-@login_required
+# @login_required
 def search_notes():
-    user = db.users.find_one(({"_id": session['user_id']}))
-    author = user['username']
-    user_notes = user['notes']
-    # db.notes.create_index([('body', 'text')])
-    # for note in notes:
-    #   return 1
-    # POST route
+    loggedIn=False
+
+    if 'user_id' in session:
+        loggedIn = True
+        user = db.users.find_one(({"_id": session['user_id']}))
+        author = user['username']
+        user_notes = user['notes']
+
+    all_notes = []
+    user_notes=[]
 
     if request.method == "POST":
-        # pageContent = []
+
         searchTerm = request.form.get('searchTerm')
-        # pageContent=db.notes.find({"$text": {"$search": searchTerm}}).limit(5)
-        # pageContent=get_content(searchTerm)
-        # render list
-        user_notes = db.notes.aggregate([
+        if loggedIn==True:
+            user_notes = db.notes.aggregate([
+                  {'$match': {'$text': {'$search': searchTerm}}},
+                  {'$match': {'author': author}}
+                ])
+        public_notes = db.notes.aggregate([
             {'$match': {'$text': {'$search': searchTerm}}},
-            {'$match': {'author': author}}
+            {'$match': {'public': 'True'}}
         ])
+
         # https://stackoverflow.com/questions/31954014/typeerror-commandcursor-object-has-no-attribute-getitem
         '''
         In PyMongo 3 the aggregate method returns an iterable of result documents (an instance of CommandCursor), not a single document. 
@@ -491,7 +325,10 @@ def search_notes():
         '''
         # print(type(pageContent))
 
-        return render_template('notes.html', notes=user_notes)
+        return render_template('notes.html',
+                               user_notes=user_notes,
+                               public_notes=public_notes,
+                               loggedIn=loggedIn)
     # GET route
     else:
         return render_template('search_notes.html')
@@ -666,9 +503,9 @@ def get_page():
         req = requests.get(url, headers)
         #soup = BeautifulSoup(req.content, 'html.parser')
         soup = BeautifulSoup(urllib.request.urlopen(url).read())
-        div=soup.find('div', id='bodyContent')
-        content=div.content
-        #print(soup.prettify())
+        div = soup.find('div', id='bodyContent')
+        content = div.content
+        # print(soup.prettify())
         # https://stackoverflow.com/questions/50657574/iframe-with-srcdoc-same-page-links-load-the-parent-page-in-the-frame
         '''
         the trouble starts with an iframe that has its content set with srcdoc: no unique base URL is specified, and in that case the base URL of the parent 
@@ -677,12 +514,12 @@ def get_page():
         Therefore, the question becomes: is there a way to reference the srcdoc iframe in a base URL? or is it possible to make the browser not prepend the base?
          or to make a base URL that doesn't change the relative #sec-id URLs?
         '''
-        
+
         # https://stackoverflow.com/questions/9626535/get-protocol-host-name-from-url
         parsed_uri = urlparse(url)
         result = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
         print(result)
-        
+
         return render_template('getpage.html', soup=soup, url=result, content=content)
         """
         # url=note_url
@@ -697,7 +534,7 @@ def get_page():
 
 
 @app.route('/page3/', methods=["GET", "POST"])
-#@login_required
+# @login_required
 def page3():
 
     #user = db.users.find_one(({"_id": session['user_id']}))
@@ -707,16 +544,16 @@ def page3():
         url = request.args.get('url')
         # url=note_url
         #title = request.args.get('title')
-        #note = db.notes.find_one(
+        # note = db.notes.find_one(
         #    {'$and': [{'url': url}, {'author': user['username']}]})
-        #if note:
-          #   public=note['public']
-          #   public=str(public)
-          #   print('note exists, is it public or private?' + str(public))
-          #   return render_template('page.html', url=url, note=note, title=title, public=public)
+        # if note:
+        #   public=note['public']
+        #   public=str(public)
+        #   print('note exists, is it public or private?' + str(public))
+        #   return render_template('page.html', url=url, note=note, title=title, public=public)
        # else:
-         #   public=False
-         #   public=str(public)
+        #   public=False
+        #   public=str(public)
         return render_template('page.html', url=url, title='my title', public=True)
 
     if request.method == 'POST':
@@ -730,7 +567,7 @@ def page3():
         note = {}
         #data = dict(request.form['n'])
         data2 = request.form['n']
-        #return render_template(url, url=url, note=note, public=True, title='hello')
+        # return render_template(url, url=url, note=note, public=True, title='hello')
         return redirect(url)
         #print('asdsad' + url)
         #note['url'] = request.values.get('url')
@@ -739,7 +576,8 @@ def page3():
        # print('note url:' + url)
         #print('...req form:' + data2)
        # print('note body' + body + '...note url:' + url)
-        #return render_template('page.html', url=url, note=note, public=True, title='hello')
+        # return render_template('page.html', url=url, note=note, public=True, title='hello')
+
 
 @app.route('/page/', methods=["GET", "POST"])
 @login_required
@@ -754,13 +592,13 @@ def page():
         note = db.notes.find_one(
             {'$and': [{'url': url}, {'author': user['username']}]})
         if note:
-             public=note['public']
-             public=str(public)
-             print('note exists, is it public or private?' + str(public))
-             return render_template('page.html', url=url, note=note, title=title, public=public)
+            public = note['public']
+            public = str(public)
+            print('note exists, is it public or private?' + str(public))
+            return render_template('page.html', url=url, note=note, title=title, public=public)
         else:
-            public=False
-            public=str(public)
+            public = False
+            public = str(public)
             return render_template('page.html', url=url, title=title, public=public)
 
     if request.method == 'POST':
@@ -785,8 +623,8 @@ def page():
        # note['title']=request.args.get('title')
         body = note['body'] = request.form['note']
         title = note['title'] = request.form['note_title']
-        public = note['public']=request.form['publicOption']
-        public=str(public)
+        public = note['public'] = request.form['publicOption']
+        public = str(public)
         print('is it public or private?' + public)
         # title = note['title'] = request.form['title']
         note['author'] = user['username']
@@ -812,15 +650,15 @@ def page():
             print('does exists already')
             # unhashable type 'dict'
             # db.activities.find_one_and_update({"_id": ObjectId(activity_id)}, {"$set": {"published": True}})
-            db.notes.update_one(alreadyExists, {'$set': {'body': body, 'public':public}})
-            public=str(public)
+            db.notes.update_one(
+                alreadyExists, {'$set': {'body': body, 'public': public}})
+            public = str(public)
             return render_template('page.html', url=url, note=note, public=public)
             '''  response = jsonify(data)'''
             # print('note:' + note)
 
         # print(note)
         # print(url)
-        
 
 
 @app.route('/page2/<note_url>', methods=["GET", "POST"])
@@ -897,6 +735,68 @@ def page2(note_url):
 # encodeURIComponent(args)
 # javascript:location.href=http://127.0.0.1:5000/page/'+encodeURIComponent(location.href)
 # <iframe src="https://fr.wikipedia.org/wiki/Main_Page" width="640" height="480">
+
+
+@app.route('/skincare', methods=["GET", "POST"])
+def skincare():
+    # POST route
+    ingredientSearch = False
+    brandSearch = False
+    if request.method == "POST":
+        SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+        json_url = os.path.join(SITE_ROOT, "data", "products.json")
+        # data = json.load(open(json_url))
+        with open(json_url, "r") as read_file:
+            data = json.load(read_file)
+        print(type(data))
+        # print(data[:2])
+        for c in data[:5]:
+            print(c['brand'])
+        # pageContent = []
+        ingredientSearchTerm = request.form.get('ingredientSearchTerm')
+        brandSearchTerm = request.form.get('brandSearchTerm')
+        il = []
+        bl = []
+        if ingredientSearchTerm:
+            ingredientSearch = True
+            for i in data:
+                if ingredientSearchTerm in i['ingredient_list']:
+                 # print(i)
+                    il.append(i)
+        if brandSearchTerm:
+            brandSearch = True
+            for i in data:
+                if brandSearchTerm in i['brand']:
+                    bl.append(i)
+        # render list
+        # print(l)
+        return render_template('skincare.html', il=il, bl=bl, ingredientSearch=ingredientSearch, brandSearch=brandSearch)
+    # GET route
+    else:
+        return render_template('search_skincare.html')
+
+    # GET /product?q=rose+water
+    # https://skincare-api.herokuapp.com/product?q=rose&limit=25&page=1
+    '''
+    filename = os.path.join(app, 'data', 'products.json')
+    with open(filename) as f:
+             d= json.load(f)
+             '''
+    # https://stackoverflow.com/questions/21133976/flask-load-local-json
+
+
+@app.route('/searchwiki', methods=["GET", "POST"])
+def search_wiki():
+    # POST route
+    if request.method == "POST":
+        pageContent = []
+        searchTerm = request.form.get('searchTerm')
+        pageContent = get_content(searchTerm)
+        # render list
+        return render_template('wiki.html', content=pageContent)
+    # GET route
+    else:
+        return render_template('search_wiki.html')
 
 
 if __name__ == '__main__':
