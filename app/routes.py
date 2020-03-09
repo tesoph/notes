@@ -24,7 +24,7 @@ from bs4 import BeautifulSoup
 from bson.objectid import ObjectId
 from urllib.parse import urlparse
 from app.forms import NoteForm
-
+from app.skincare import search_skincare
 
 def login_required(f):
     """
@@ -68,6 +68,128 @@ def index():
                            userLoggedIn=False)
 
 
+'''
+Bookmarklet #1
+Clicking the bookmarklet returns the wiki page in an iframe on the app site
+'''
+@app.route('/page/', methods=["GET", "POST"])
+@login_required
+def page():
+
+    user = db.users.find_one(({"_id": session['user_id']}))
+
+    if request.method == "GET":
+        url = request.args.get('url')
+        title = request.args.get('title')
+        note = db.notes.find_one(
+            {'$and': [{'url': url}, {'author': user['username']}]})
+        if note:
+            public = note['public']
+            public = str(public)
+            print('note exists, is it public or private?' + str(public))
+            return render_template('page.html',
+                                   url=url,
+                                   note=note,
+                                   title=title,
+                                   public=public)
+        else:
+            public = False
+            public = str(public)
+            return render_template('page.html',
+                                   url=url,
+                                   title=title,
+                                   public=public)
+
+    if request.method == 'POST':
+
+        # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
+        # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
+        url = request.values.get('url')
+        response = requests.post(url)
+        resp = response.text
+        html_doc = resp
+        soup = BeautifulSoup(html_doc, 'html.parser')
+        print('soup title:' + soup.title.string)
+
+        note = {}
+        note['url'] = request.values.get('url')
+        body = note['body'] = request.form['note']
+        title = note['title'] = request.form['note_title']
+        public = note['public'] = request.form['publicOption']
+        public = str(public)
+        author = note['author'] = user['username']
+
+        # https://docs.mongodb.com/manual/reference/operator/query/and/
+        # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
+        # db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
+        alreadyExists = db.notes.find_one(
+            {'$and': [{'url': url}, {'author': author}]})
+        if not alreadyExists:
+            db.notes.insert(note)
+            db.users.find_one_and_update(
+                user, {'$push': {'notes': note['url']}})
+            return render_template('page.html',
+                                   url=url,
+                                   note=note,
+                                   public=public)
+        else:
+            # unhashable type 'dict'
+            db.notes.update_one(
+                alreadyExists, {'$set': {'body': body, 'public': public}})
+            public = str(public)
+            return render_template('page.html',
+                                   url=url,
+                                   note=note,
+                                   public=public)
+
+
+'''
+Bookmarklet #2
+Clicking the bookmarklet opens a notepad on the wiki page
+'''
+@app.route('/page3/', methods=["GET", "POST"])
+# @login_required
+def page3():
+
+    #user = db.users.find_one(({"_id": session['user_id']}))
+
+    if request.method == "GET":
+        print('getting')
+        url = request.args.get('url')
+        # url=note_url
+        #title = request.args.get('title')
+        # note = db.notes.find_one(
+        #    {'$and': [{'url': url}, {'author': user['username']}]})
+        # if note:
+        #   public=note['public']
+        #   public=str(public)
+        #   print('note exists, is it public or private?' + str(public))
+        #   return render_template('page.html', url=url, note=note, title=title, public=public)
+       # else:
+        #   public=False
+        #   public=str(public)
+        return render_template('page.html', url=url, title='my title', public=True)
+
+    if request.method == 'POST':
+        print('posting')
+        # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
+        # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
+        #url = request.values.get('url')
+        url = request.values.get('url')
+        val = str(dict(request.values))
+        print('vALS;'+val)
+        note = {}
+        data2 = request.form['n']
+        note['body'] =request.form['body']
+        note['url']=request.values.get('url')
+        note['author']='Anon'
+        note['public']=True
+        #db.notes.insert(note)
+        return redirect(url)
+
+'''
+Delete note
+'''
 @app.route('/delete_note/<note_id>')
 def delete_note(note_id):
     notes = db.notes
@@ -76,6 +198,7 @@ def delete_note(note_id):
 
 
 ''''
+Edit note #1
 from code institue task manager app
 https://github.com/Code-Institute-Solutions/TaskManager/blob/master/04-EditingATask/05-update_the_task_in_the_database/app.py
 '''
@@ -86,7 +209,9 @@ def edit_note_title(note_id):
     return render_template('edit_note.html',
                            note=note)
 
-
+'''
+Edit note #2
+'''
 @app.route('/update_task/<note_id>', methods=["POST"])
 def update_note(note_id):
     notes = db.notes
@@ -100,6 +225,9 @@ def update_note(note_id):
     return redirect(url_for('index'))
 
 
+'''
+Clicking a note on the index page
+'''
 @app.route('/note/<note_id>', methods=["GET", "POST"])
 @login_required
 def note(note_id):
@@ -180,7 +308,48 @@ def note(note_id):
         # print(url)
         return render_template('page.html', url=url, note=note)
         '''
-# ...
+'''
+Search notes
+'''
+@app.route('/search_notes', methods=["GET", "POST"])
+# @login_required
+def search_notes():
+    loggedIn = False
+
+    if 'user_id' in session:
+        loggedIn = True
+        user = db.users.find_one(({"_id": session['user_id']}))
+        author = user['username']
+        user_notes = user['notes']
+
+    all_notes = []
+    user_notes = []
+
+    if request.method == "POST":
+        searchTerm = request.form.get('searchTerm')
+        if loggedIn == True:
+            user_notes = db.notes.aggregate([
+                {'$match': {'$text': {'$search': searchTerm}}},
+                {'$match': {'author': author}}
+            ])
+        public_notes = db.notes.aggregate([
+            {'$match': {'$text': {'$search': searchTerm}}},
+            {'$match': {'public': 'True'}}
+        ])
+
+        # https://stackoverflow.com/questions/31954014/typeerror-commandcursor-object-has-no-attribute-getitem
+        '''
+        In PyMongo 3 the aggregate method returns an iterable of result documents (an instance of CommandCursor), not a single document. 
+        You have to iterate the results, or alternatively turn them into a list with list(res).
+        '''
+
+        return render_template('notes.html',
+                               user_notes=user_notes,
+                               public_notes=public_notes,
+                               loggedIn=loggedIn)
+    # GET route
+    else:
+        return render_template('search_notes.html')
 
 
 @app.route('/logout')
@@ -291,111 +460,9 @@ def before_request():
                             '$set': {"last_seen": time}})
 
 
-@app.route('/search_notes', methods=["GET", "POST"])
-# @login_required
-def search_notes():
-    loggedIn=False
-
-    if 'user_id' in session:
-        loggedIn = True
-        user = db.users.find_one(({"_id": session['user_id']}))
-        author = user['username']
-        user_notes = user['notes']
-
-    all_notes = []
-    user_notes=[]
-
-    if request.method == "POST":
-
-        searchTerm = request.form.get('searchTerm')
-        if loggedIn==True:
-            user_notes = db.notes.aggregate([
-                  {'$match': {'$text': {'$search': searchTerm}}},
-                  {'$match': {'author': author}}
-                ])
-        public_notes = db.notes.aggregate([
-            {'$match': {'$text': {'$search': searchTerm}}},
-            {'$match': {'public': 'True'}}
-        ])
-
-        # https://stackoverflow.com/questions/31954014/typeerror-commandcursor-object-has-no-attribute-getitem
-        '''
-        In PyMongo 3 the aggregate method returns an iterable of result documents (an instance of CommandCursor), not a single document. 
-        You have to iterate the results, or alternatively turn them into a list with list(res).
-        '''
-        # print(type(pageContent))
-
-        return render_template('notes.html',
-                               user_notes=user_notes,
-                               public_notes=public_notes,
-                               loggedIn=loggedIn)
-    # GET route
-    else:
-        return render_template('search_notes.html')
-
-
 '''
-class Bookmark(db.Model):
-    url = CharField()
-    created_date = DateTimeField(default=datetime.datetime.now)
-    image = CharField(default='')
-    javascript:location.href='http://127.0.0.1:5000/add/?password=shh&amp;url='+location.href;
-    javascript:location.href='http://127.0.0.1:5000/add/'+window.location.href.replace(/^http(s?):\/\//i, "")
+Route for bookmarklet to save page url to list (no notes)
 '''
-
-# javascript:(function(){var list=prompt('Save to List');window.open('http://'+ list +'.saved.io/'+ document.location.href);})();
-# javascript:(function(){var list=prompt('Save to List');window.open('http://127.0.0.1:5000/add/'+ document.location.href);})();
-# javascript:(function(){window.open('http://127.0.0.1:5000/add/'+ document.location.href);})();
-# take out https://
-# https://stackoverflow.com/questions/43482152/how-can-i-remove-http-or-https-using-javascript
-# window.location.href.replace(/^http(s?):\/\//i, "")
-
-
-# can't cope with the /
-# https://stackoverflow.com/questions/2992231/slashes-in-url-variables
-# You can use encodeURIComponent and decodeURIComponent for this purpose. – Keavon Jun 26 '17
-# encodeURIComponent( document.location.href )
-# javascript:location.href='http://127.0.0.1:5000/add/'+encodeURIComponent(window.location.href);
-
-
-'''
-javascript:(function(){
-    location.href='http://127.0.0.1:5000/add/?url='+
-    encodeURIComponent(window.location.href)+
-    '&title='+encodeURIComponent(document.title)
-})()
-'''
-'''
-javascript:(function(){
-    location.href='http://127.0.0.1:5000/add/'+
-    encodeURIComponent(window.location.href)
-})()
-'''
-# javascript:void(location.href="http://www.yacktrack.com/home?query="+encodeURI(location.href))
-# javascript:void(location.href="http://127.0.0.1:5000/add?url="+encodeURI(location.href))
-# javascript:void(location.href="http://127.0.0.1:5000/add/"+encodeURIComponent(location.href))
-# https://gist.github.com/Nodja/34cfd28ba0e89a9bbcc3de604355b704
-'''
-javascript: 
-            args = location.href;
-            window.open("http://127.0.0.1:5500/youtubedl"
-                       
-                            + "&args="  + encodeURIComponent(args)
-                        , '_blank');
-'''
-'''
-javascript: 
-            args = location.href;
-            window.open("http://127.0.0.1:5000/add/"
-                       
-                            + "&args="  + encodeURIComponent(args)
-                     );
-'''
-'''login_required from cs50-finance'''
-
-
-# javascript:location.href='http://127.0.0.1:5000/add/?password=shh&amp;url='+location.href;
-# javascript:location.href='http://127.0.0.1:5000/add/?url='+location.href+'&title='+document.title;
 @app.route('/add/', methods=["GET", "POST"])
 @login_required
 def add():
@@ -411,83 +478,19 @@ def add():
     print(page)
     db.users.find_one_and_update({"_id": session['user_id']}, {
                                  "$push": {"saved_pages": page}})
-    # user =db.users.find_one(({"_id": session['user_id']}))
-
-    print('add route')
     # https://charlesleifer.com/blog/building-bookmarking-service-python-and-phantomjs/
     '''
     password = request.args.get('password')
     if password != PASSWORD:
         abort(404)
     '''
-    # args = request.args.get('args', ""
-    # )
-    # title=request.args.get('title')
     url = request.args.get('url')
-    # print(url)
-    # print('title:' + title)
-    # print(args)
-    # a=url
-    # print('xxxxxxxxxxx' + a)
-    # return render_template('search.html')
-
     return redirect(url)
-    '''
-    if url:
-        bookmark = Bookmark(url=url)
-        bookmark.fetch_image()
-        bookmark.save()
-        return redirect(url)
-    '''
 
 
 '''
-flask.debughelpers.FormDataRoutingRedirect
-
-flask.debughelpers.FormDataRoutingRedirect: b'A request was sent to this URL (http://127.0.0.1:5000/page) 
-but a redirect was issued automatically by the routing system to "http://127.0.0.1:5000/page/". 
- The URL was defined with a trailing slash so Flask will automatically redirect to the URL with the trailing slash if it was accessed without one.
-   Make sure to directly send your POST-request to this URL since we can\'t make browsers or HTTP clients redirect with form data reliably or without user interaction.
-   \n\nNote: this exception is only raised in debug mode'
-
+iframe srcdoc=soup route
 '''
-'''
-@app.route('/page/', methods=["GET", "POST"])
-# @login_required
-def page():
-    url = request.args.get('url')
-    if request.method == "GET":
-        url = request.args.get('url')
-        return render_template('page.html', url=url)
-    if request.method == 'POST':
-        note = request.form['note']
-        print(note)
-        return render_template('page.html', url=url)
-'''
-'''
-@app.route('/page/', methods=["GET", "POST"])
-# @login_required
-def page():
-    # a=request.args.getlist()
-    # print(a)
-    # url = request.args.get('url')
-    print('a')
-    
-    if request.method == "GET":
-      #  url =decodeURIComponent(url)
-        url = request.args.get('url')
-        # url=url
-        return render_template('page.html', url=url)
-    if request.method == 'POST':
-        url=request.path
-        # url=request.form['url']
-        note = request.form['note']
-        print(note)
-        print(url)
-        return render_template('page.html', url=url)
-'''
-# javascript:location.href='http://127.0.0.1:5000/get_page/?url='+location.href+'&title='+document.title;
-# javascript:location.href='http://127.0.0.1:5000/get_page/?url='+location.href+'&title='+document.title;
 @app.route('/get_page/', methods=["GET", "POST"])
 @login_required
 def get_page():
@@ -533,134 +536,6 @@ def get_page():
         """
 
 
-@app.route('/page3/', methods=["GET", "POST"])
-# @login_required
-def page3():
-
-    #user = db.users.find_one(({"_id": session['user_id']}))
-
-    if request.method == "GET":
-        print('getting')
-        url = request.args.get('url')
-        # url=note_url
-        #title = request.args.get('title')
-        # note = db.notes.find_one(
-        #    {'$and': [{'url': url}, {'author': user['username']}]})
-        # if note:
-        #   public=note['public']
-        #   public=str(public)
-        #   print('note exists, is it public or private?' + str(public))
-        #   return render_template('page.html', url=url, note=note, title=title, public=public)
-       # else:
-        #   public=False
-        #   public=str(public)
-        return render_template('page.html', url=url, title='my title', public=True)
-
-    if request.method == 'POST':
-        print('posting')
-        # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
-        # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
-        #url = request.values.get('url')
-        url = request.values.get('url')
-        val = str(dict(request.values))
-        print('vALS;'+val)
-        note = {}
-        #data = dict(request.form['n'])
-        data2 = request.form['n']
-        # return render_template(url, url=url, note=note, public=True, title='hello')
-        return redirect(url)
-        #print('asdsad' + url)
-        #note['url'] = request.values.get('url')
-      #  body = note['body'] = request.form['n']
-       # note['url'] =url
-       # print('note url:' + url)
-        #print('...req form:' + data2)
-       # print('note body' + body + '...note url:' + url)
-        # return render_template('page.html', url=url, note=note, public=True, title='hello')
-
-
-@app.route('/page/', methods=["GET", "POST"])
-@login_required
-def page():
-
-    user = db.users.find_one(({"_id": session['user_id']}))
-
-    if request.method == "GET":
-        url = request.args.get('url')
-        # url=note_url
-        title = request.args.get('title')
-        note = db.notes.find_one(
-            {'$and': [{'url': url}, {'author': user['username']}]})
-        if note:
-            public = note['public']
-            public = str(public)
-            print('note exists, is it public or private?' + str(public))
-            return render_template('page.html', url=url, note=note, title=title, public=public)
-        else:
-            public = False
-            public = str(public)
-            return render_template('page.html', url=url, title=title, public=public)
-
-    if request.method == 'POST':
-
-        # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
-        # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
-        url = request.values.get('url')
-        response = requests.post(url)
-        resp = response.text
-        html_doc = resp
-        soup = BeautifulSoup(html_doc, 'html.parser')
-        print('soup title:' + soup.title.string)
-
-        note = {}
-
-        print('asdsad' + url)
-        # print('title' + request.values.get('title'))
-        note['url'] = request.values.get('url')
-        #note['title'] = soup.title.string
-        # note['title']=request.values.get('title')
-        # note['url'] = request.args.get('url')
-       # note['title']=request.args.get('title')
-        body = note['body'] = request.form['note']
-        title = note['title'] = request.form['note_title']
-        public = note['public'] = request.form['publicOption']
-        public = str(public)
-        print('is it public or private?' + public)
-        # title = note['title'] = request.form['title']
-        note['author'] = user['username']
-        author = user['username']
-        # note['author'] =
-        # db.notes.find_one_and_update({'url':note['url']}, {'$set': {'body':note['body']}})
-        # https://docs.mongodb.com/manual/reference/operator/query/and/
-        # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
-        # db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
-        alreadyExists = db.notes.find_one(
-            {'$and': [{'url': url}, {'author': author}]})
-        if not alreadyExists:
-            print('not alreadyexists')
-            print('note:' + note['body'])
-            db.notes.insert(note)
-            #  db.users.find_one_and_update({"_id": session['user_id']}, {"$push": {"saved_pages": page}})
-            # ?
-            # user.update_one({'$push': {'notes': note['url']}})
-            db.users.find_one_and_update(
-                user, {'$push': {'notes': note['url']}})
-            return render_template('page.html', url=url, note=note, public=public)
-        else:
-            print('does exists already')
-            # unhashable type 'dict'
-            # db.activities.find_one_and_update({"_id": ObjectId(activity_id)}, {"$set": {"published": True}})
-            db.notes.update_one(
-                alreadyExists, {'$set': {'body': body, 'public': public}})
-            public = str(public)
-            return render_template('page.html', url=url, note=note, public=public)
-            '''  response = jsonify(data)'''
-            # print('note:' + note)
-
-        # print(note)
-        # print(url)
-
-
 @app.route('/page2/<note_url>', methods=["GET", "POST"])
 @login_required
 def page2(note_url):
@@ -670,7 +545,6 @@ def page2(note_url):
     if request.method == "GET":
 
         url = note_url
-        # title = request.args.get('title')
         note = db.notes.find_one(
             {'$and': [{'url': url}, {'author': user['username']}]})
         if note:
@@ -730,18 +604,12 @@ def page2(note_url):
         # print(url)
         return render_template('page.html', url=url, note=note)
 
-# javascript:location.href='http://127.0.0.1:5000/page/?url='+location.href+'&title='+document.title;
-# javascript:location.href=http://127.0.0.1:5000/page/'+location.href
-# encodeURIComponent(args)
-# javascript:location.href=http://127.0.0.1:5000/page/'+encodeURIComponent(location.href)
-# <iframe src="https://fr.wikipedia.org/wiki/Main_Page" width="640" height="480">
-
 
 @app.route('/skincare', methods=["GET", "POST"])
 def skincare():
-    # POST route
-    ingredientSearch = False
-    brandSearch = False
+     # POST route
+    ingredientSearch=False
+    brandSearch=False
     if request.method == "POST":
         SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
         json_url = os.path.join(SITE_ROOT, "data", "products.json")
@@ -758,31 +626,23 @@ def skincare():
         il = []
         bl = []
         if ingredientSearchTerm:
-            ingredientSearch = True
+            ingredientSearch=True
             for i in data:
                 if ingredientSearchTerm in i['ingredient_list']:
                  # print(i)
-                    il.append(i)
+                      il.append(i)
         if brandSearchTerm:
-            brandSearch = True
+            brandSearch=True
             for i in data:
                 if brandSearchTerm in i['brand']:
-                    bl.append(i)
+                     bl.append(i)
         # render list
-        # print(l)
-        return render_template('skincare.html', il=il, bl=bl, ingredientSearch=ingredientSearch, brandSearch=brandSearch)
+        #print(l)
+        return render_template('skincare.html', il=il, bl=bl,ingredientSearch=ingredientSearch, brandSearch=brandSearch)
     # GET route
     else:
         return render_template('search_skincare.html')
 
-    # GET /product?q=rose+water
-    # https://skincare-api.herokuapp.com/product?q=rose&limit=25&page=1
-    '''
-    filename = os.path.join(app, 'data', 'products.json')
-    with open(filename) as f:
-             d= json.load(f)
-             '''
-    # https://stackoverflow.com/questions/21133976/flask-load-local-json
 
 
 @app.route('/searchwiki', methods=["GET", "POST"])
