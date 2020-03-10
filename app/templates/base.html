@@ -32,9 +32,9 @@
       {% if userLoggedIn %}
       <a href="{{ url_for('user', username = session['username']) }}">Profile</a>
       {% endif %}
-      <a href="{{ url_for('search_wiki') }}">Search wikipedia</a>
+
       <a href="{{ url_for('search_notes') }}">Search notes</a>
-      <a href="{{ url_for('skincare') }}">Search skincare</a>
+
     </nav>
 {% endblock %}
 

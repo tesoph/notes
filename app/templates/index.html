@@ -6,9 +6,7 @@
 <h4>How to use:</h4>
 <p>Drag this bookmarklet to your bookmarks toolbar and click it when you are on a wikipedia page you would like to take notes on:</p>
 <p><a href="javascript:location.href='http://wiki-note.herokuapp.com/page/?url='+location.href+'&title='+document.title;">Note1</a>: note opens on new page</p>
-<p>
-    <a href='javascript:(function()%7Bconsole.log(%22bookmarklet%20starting%22)%3Bvar%20url%3Dlocation.href%3Bvar%20title%3Ddocument.title%3Bh%3D'wiki-note.herokuapp.com%2Fpage3%2F%3Furl%3D'%3Bvar%20element%20%3D%20document.getElementById('bodyContent')%3Bvar%20parent%20%3D%20element.parentNode%3Bvar%20wrapper%20%3D%20document.createElement('div')%3Bvar%20c%20%3D%20document.createElement('FORM')%3Bvar%20note%20%3D%20document.createElement('textarea')%3Bc.setAttribute('action'%2C%20h%2Burl)%3Bc.setAttribute('method'%2C%20'POST')%3Bwrapper.setAttribute(%22id%22%2C%20%22w%22)%3Bnote.setAttribute(%22id%22%2C%20%22n%22)%3Bnote.setAttribute('name'%2C%20'n')%3Bif(typeof%20nbody%20!%3D%3D%20'undefined')%7Bnote.innerHTML%20%3D%20nbody%3B%20%20%20%20%7Dc.setAttribute(%22id%22%2C%20%22c%22)%3Bc.appendChild(note)%3Bparent.replaceChild(wrapper%2C%20element)%3Bwrapper.appendChild(element)%3Bwrapper.appendChild(c)%3Bvar%20btn%20%3D%20document.createElement(%22BUTTON%22)%3Bbtn.setAttribute('type'%2C%20'submit')%3Bbtn.innerHTML%20%3D%20%22CLICK%20ME%22%3Bc.appendChild(btn)%3Bvar%20style%20%3D%20document.createElement('style')%3Bstyle.innerHTML%20%3D%20%60%23w%20%7B%7D%23bodyContent%7Bwidth%3A60%25%3B%7D%23c%7Btop%3A%2015%25%3Bwidth%3A%2035%25%3Bheight%3A%2080vh%3Bbackground-color%3A%20blue%3Bposition%3A%20fixed%3Bright%3A%200%3B%7D%23note%7Bwidth%3A100%25%3Bmin-height%3A90%25%3Boverflow-y%3Ascroll%3B%7D%60%3Bdocument.head.appendChild(style)%7D)()'>Note2</a>
-    : note on wiki page</p>
+
 <p>(You must be signed into the app for the bookmarklet to work. If you are not signed in then clicking it will take you to the login page)</p>
 {% if not userLoggedIn %}
 {% elif userLoggedIn %}
