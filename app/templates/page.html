@@ -40,13 +40,13 @@
                 <button class="btn btn-info" id='submitNote' type="submit">Save Note</button>
             </p>
             </div>
-            {% endif %}
+           
 
 
             <div id="textContainer">
                 <textarea name="note" id='note' placeholder="">{{note.body}}</textarea>
             </div>
-
+            {% endif %}
             {% if not note %}
           <!--  <a type='button' data-toggle="collapse" data-target="#noteInfoContainer" aria-expanded="true" aria-controls="noteInfoContainer">
                 <i class="material-icons">expand_more</i>  Note metadata
