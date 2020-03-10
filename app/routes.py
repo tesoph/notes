@@ -61,12 +61,13 @@ Clicking the bookmarklet returns the wiki page in an iframe on the app site
 def page():
 
     user = db.users.find_one(({"_id": session['user_id']}))
-
+    #Database is searched for a note by the logged in user from the same wikipedia page
     if request.method == "GET":
         url = request.args.get('url')
         title = request.args.get('title')
         note = db.notes.find_one(
             {'$and': [{'url': url}, {'author': user['username']}]})
+        #If the note exists already it is returned to the user on the note taking page
         if note:
             public = note['public']
             public = str(public)
@@ -76,6 +77,7 @@ def page():
                                    note=note,
                                    title=title,
                                    public=public)
+        #Else if the note does not exist, the note is automatically set to private and the notetaking page is returned
         else:
             public = False
             public = str(public)
@@ -189,7 +191,7 @@ def note(note_id):
                            note=note,
                            public=public)
 
-                           
+
 '''
 Search notes
 '''
@@ -362,77 +364,6 @@ def add():
     '''
     url = request.args.get('url')
     return redirect(url)
-
-
-
-@app.route('/page2/<note_url>', methods=["GET", "POST"])
-@login_required
-def page2(note_url):
-
-    user = db.users.find_one(({"_id": session['user_id']}))
-
-    if request.method == "GET":
-
-        url = note_url
-        note = db.notes.find_one(
-            {'$and': [{'url': url}, {'author': user['username']}]})
-        if note:
-            return render_template('page.html', url=url, note=note)
-        else:
-            return render_template('page.html', url=url)
-
-    if request.method == 'POST':
-
-        # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
-        # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
-        url = request.values.get('url')
-        response = requests.post(url)
-        resp = response.text
-        html_doc = resp
-        soup = BeautifulSoup(html_doc, 'html.parser')
-        print('soup title:' + soup.title.string)
-
-        note = {}
-
-        print('asdsad' + url)
-        # print('title' + request.values.get('title'))
-        note['url'] = request.values.get('url')
-        note['title'] = soup.title.string
-        # note['title']=request.values.get('title')
-        # note['url'] = request.args.get('url')
-       # note['title']=request.args.get('title')
-        body = note['body'] = request.form['note']
-        # title = note['title'] = request.form['title']
-        note['author'] = user['username']
-        author = user['username']
-        # note['author'] =
-        # db.notes.find_one_and_update({'url':note['url']}, {'$set': {'body':note['body']}})
-        # https://docs.mongodb.com/manual/reference/operator/query/and/
-        # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
-        # db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
-        alreadyExists = db.notes.find_one(
-            {'$and': [{'url': url}, {'author': author}]})
-        if not alreadyExists:
-            print('not alreadyexists')
-            print('note:' + note['body'])
-            db.notes.insert(note)
-            #  db.users.find_one_and_update({"_id": session['user_id']}, {"$push": {"saved_pages": page}})
-            # ?
-            # user.update_one({'$push': {'notes': note['url']}})
-            db.users.find_one_and_update(
-                user, {'$push': {'notes': note['url']}})
-        else:
-            print('does exists already')
-            # unhashable type 'dict'
-            # db.activities.find_one_and_update({"_id": ObjectId(activity_id)}, {"$set": {"published": True}})
-            db.notes.update_one(alreadyExists, {'$set': {'body': body}})
-            '''  response = jsonify(data)'''
-            # print('note:' + note)
-
-        # print(note)
-        # print(url)
-        return render_template('page.html', url=url, note=note)
-
 
 
 if __name__ == '__main__':
