@@ -71,9 +71,10 @@ color:black;
   margin-bottom:0;
 }
 
-.btn{
-  padding:0;
+.submitBtn{
+padding:1.5px 3px;
 }
+
 /*
 
 input[type="text"], textarea {
