@@ -1,7 +1,7 @@
 {% extends 'bootstrap/base.html' %}
 
 {% block title %}
-    {% if title %}{{ title }} - Notes{% else %}Welcome to Notes{% endif %}
+{% if title %}{{ title }} - Notes{% else %}Welcome to Notes{% endif %}
 {% endblock %}
 {% block styles %}
 {{super()}}
@@ -14,41 +14,59 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
-   
-      $( ".resizable" ).resizable();
-      $(".draggable").draggable();
 
-    </script>
+    $(".resizable").resizable();
+    $(".draggable").draggable();
+
+</script>
 {{super()}}
 {% endblock %}
-{% block navbar %}
-    <nav class="navbar navbar-default">
-      <a href="{{ url_for('index') }}">Home</a>
-      <a href="{{ url_for('register') }}">Register</a>
-  
-      <a href="{{ url_for('login') }}">Login</a>
-  
-      <a href="{{ url_for('logout') }}">Logout</a>
-      {% if userLoggedIn %}
-      <a href="{{ url_for('user', username = session['username']) }}">Profile</a>
-      {% endif %}
 
-      <a href="{{ url_for('search_notes') }}">Search notes</a>
+
+{% block body %}
+<div id='page-container'>
+    {% block navbar %}
+    <nav class="navbar navbar-default">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('register') }}">Register</a>
+
+        <a href="{{ url_for('login') }}">Login</a>
+
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% if userLoggedIn %}
+        <a href="{{ url_for('user', username = session['username']) }}">Profile</a>
+        {% endif %}
+
+        <a href="{{ url_for('search_notes') }}">Search notes</a>
 
     </nav>
-{% endblock %}
+    {% endblock navbar %}
 
-{% block content %}
-    <div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
+
+    {% block content %}
+
+    <div id='content-wrapper'>
+
+        <div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
             {% for message in messages %}
             <div class="alert alert-info" role="alert">{{ message }}</div>
             {% endfor %}
-        {% endif %}
-        {% endwith %}
+            {% endif %}
+            {% endwith %}
 
-        {# application content needs to be provided in the app_content block #}
-        {% block app_content %}{% endblock %}
+            {# application content needs to be provided in the app_content block #}
+            {% block app_content %}{% endblock %}
+        </div>
     </div>
-{% endblock %}
+
+
+    {% block footer %}
+    <footer class='footer'>&copy; 2020 ray</footer>
+
+    {% endblock footer %}
+    {% endblock %}
+</div>
+
+{% endblock body %}
