@@ -1,79 +1,16 @@
 {% extends "base.html" %}
 
+{% block title%}
+<title>Rich Text Editor</title>
+{% endblock title %}
+{% block moreScripts %}
+{%endblock moreScripts%}
+{% block moreStyle %}
+{% endblock moreStyle %}
+<!--<body onload="initDoc();">-->
+
 {% block app_content %}
-<div id=pageContainer>
-    <div class='resizable draggable' id='frameContainer'>
-        <!--https://stackoverflow.com/questions/8117761/how-can-i-make-an-iframe-resizable-->
-        <!--<iframe class='resizable draggable' id='pageFrame' srcdoc="{{ content }}"></iframe>-->
-        <!--<iframe class='resizable draggable' id='pageFrame' src="{{ url }}" name="" onLoad="alert(this.contentWindow.location);"> </iframe>-->>
-        <object type="text/html" data="{{ url }}" id="pageFrame" name="">
-</object>
-    </div>
-    <div id='noteContainer'>
-        <form action='/page/?url={{ url }}' method='POST' id='noteForm'>
-
-            {% if note %}
-          <!--  <a type='button' data-toggle="collapse" data-target="#noteInfoContainer" aria-expanded="true" aria-controls="noteInfoContainer">
-                <i class="material-icons">expand_more</i>  Note metadata
-            </a>-->
-            <div id="noteInfoContainer" class="collapse in">
-                <p>note already existed</p>
-                <!-- Note Title -->
-                <label for="icon_prefix">Title:</label>
-                <input id="note_title" name="note_title" type="text" class="validate" value="{{note.title}}">
-                <!-- Public or private note -->
-                <!-- https://stackoverflow.com/questions/55296164/jinja2-if-ignores-boolean-value -->
-                <p>is note public: {{ note.public }}</p>
-                {% if public == 'True' %}
-                <input type="radio" id="private" value="False" name="publicOption">
-                <label for="private">Private</label>
-                <input type="radio" id="public" value="True" name="publicOption" checked>
-                <label for="public">Public</label>
-
-                {% elif public == 'False' %}
-                <input type="radio" id="private" value="False" name="publicOption" checked>
-                <label for="private">Private</label>
-                <input type="radio" id="public" value="True" name="publicOption">
-                <label for="public">Public</label>
-                {% endif%}
-
-                <!-- Submit Button -->
-                <p>
-                <button class="btn btn-info submitBtn" id='submitNote' type="submit">Save Note</button>
-            </p>
-            </div>
-           
-
-
-            <div id="textContainer">
-                <textarea name="note" id='note' placeholder="">{{note.body}}</textarea>
-            </div>
-            {% endif %}
-            {% if not note %}
-          <!--  <a type='button' data-toggle="collapse" data-target="#noteInfoContainer" aria-expanded="true" aria-controls="noteInfoContainer">
-                <i class="material-icons">expand_more</i>  Note metadata
-            </a>-->
-            <div id="noteInfoContainer" class="collapse in">
-                <p>note didn't already exist</p>
-                <label for="icon_prefix">Title: </label>
-                <input id="note_title" name="note_title" type="text" class="validate" value="{{title}}">
-                <input type="radio" id="private" value="False" name="publicOption" checked>
-                <label for="private">Private</label>
-                <input type="radio" id="public" value="True" name="publicOption">
-                <label for="public">Public</label>
-
-                <!-- Submit Button -->
-                <p>
-                    <button class="btn btn-info submitBtn" id='submitNote' type="submit">Save Note</button>
-                </p>
-
-            </div>
-            <div id="textContainer">
-                <textarea name="note" id='note' placeholder="Note"></textarea>
-            </div>
-            {% endif %}
-
-        </form>
-    </div>
-</div>
-{% endblock %}
+<form method="post">
+    <textarea id="mytextarea">Hello, World! {{ note.body }}</textarea>
+  </form>
+{% endblock app_content %}

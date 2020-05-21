@@ -34,8 +34,11 @@ function getURL(){
 
 
 $(document).click(function(e) {
-    console.log('clicked');
+  /*  console.log('clicked');
     var heading = document.getElementById("firstHeading");
     document.getElementById("pageFrame").name = heading;
-    console.log('h: ' + heading);
+    console.log('h: ' + heading);*/
+    var t = document.getElementById("note_timestamp");
+    console.log('hi');
+    console.log(t);
  });

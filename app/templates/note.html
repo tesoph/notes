@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title%}
+<title>Rich Text Editor</title>
+{% endblock title %}
+{% block moreScripts %}
+{%endblock moreScripts%}
+{% block moreStyle %}
+{% endblock moreStyle %}
+<!--<body onload="initDoc();">-->
+
+{% block app_content %}
+<div id='noteContainer'>
+  <form action="/page/" method='POST' id='noteForm'>
+    <!--{% if exists %}
+    <input id="exists" name="exists" type='checkbox' checked>
+    {% elif not exists %}
+    <input id="exists" name="exists" type='checkbox'>
+    {% endif %}-->
+    <p>
+      <button class="btn btn-info submitBtn" id='submitNote' type="submit">Save Note</button>
+    </p>
+    <label for="icon_prefix">Title: </label>
+    <input id="note_title" name="note_title" type="text" class="validate" value="{{note.title}}">
+    <!--<label for="note_timestamp">Created on: </label>-->
+    <!-- formatting a date in jinja from https://stackoverflow.com/questions/4830535/how-do-i-format-a-date-in-jinja2-->
+    <input id="note_timestamp" name="note_timestamp" type="hidden" visibility='hidden' value="{{ timestamp }}" readonly>
+    <!--<input id="notetimestamp" name="notetimestamp"  value="{{ displayedTime }}" readonly>-->
+    <p>Created on: {{displayedTime}}</p>
+    <textarea id="note_body" name="note_body"> {% if note %}{{note.body}}{% elif not note %}{% endif %}</textarea>
+    <p>
+      <button class="btn btn-info submitBtn" id='submitNote' type="submit">Save Note</button>
+    </p>
+  </form>
+</div>
+{% endblock app_content %}
