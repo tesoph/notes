@@ -27,16 +27,14 @@ from app.forms import NoteForm
 from .helpers import login_required, before_request
 
 
-
-
 @app.route('/')
 @app.route('/index')
 def index():
-    #note = db.notes.find_one(
+    # note = db.notes.find_one(
     #        {'$and': [{'url': url}, {'author': user['username']}]})
     notes = db.notes
-    #Get the 10 most recent 'public' notes 
-    #-1 means sorted from newest to oldest
+    # Get the 10 most recent 'public' notes
+    # -1 means sorted from newest to oldest
     recentNotes = notes.find({"public": "True"}).limit(10).sort([('_id', -1)])
 
     if 'user_id' in session:
@@ -147,27 +145,27 @@ Clicking the bookmarklet returns the wiki page in an iframe on the app site
 def page():
 
     user = db.users.find_one(({"_id": session['user_id']}))
-    #Database is searched for a note by the logged in user from the same wikipedia page
+    # Database is searched for a note by the logged in user from the same wikipedia page
     if request.method == "GET":
         url = request.args.get('url')
         title = request.args.get('title')
         note = db.notes.find_one(
             {'$and': [{'url': url}, {'author': user['username']}]})
-        #If the note exists already it is returned to the user on the note taking page
+        # If the note exists already it is returned to the user on the note taking page
         if note:
             public = note['public']
             public = str(public)
             print('note exists, is it public or private?' + str(public))
         if not note:
             note = {}
-            public=False
-        #Else if the note does not exist, the note is automatically set to private and the notetaking page is returned
-    
+            public = False
+        # Else if the note does not exist, the note is automatically set to private and the notetaking page is returned
+
         return render_template('page.html',
-                                   url=url,
-                                   note=note,
-                                   title=title,
-                                   public=public)
+                               url=url,
+                               note=note,
+                               title=title,
+                               public=public)
 
     if request.method == 'POST':
 
@@ -201,7 +199,8 @@ def page():
                                    url=url,
                                    note=note,
                                    public=public,
-                                   title=title)
+                                   title=title,
+                                   userLoggedIn=True)
         else:
             # unhashable type 'dict'
             db.notes.update_one(
@@ -210,7 +209,85 @@ def page():
             return render_template('page.html',
                                    url=url,
                                    note=note,
-                                   public=public)
+                                   public=public,
+                                   userLoggedIn=True)
+
+
+'''
+Bookmarklet #1
+Clicking the bookmarklet returns the wiki page in an iframe on the app site
+'''
+@app.route('/page/', methods=["GET", "POST"])
+@login_required
+def note_page():
+
+    user = db.users.find_one(({"_id": session['user_id']}))
+    # Database is searched for a note by the logged in user from the same wikipedia page
+    if request.method == "GET":
+        url = request.args.get('url')
+        title = request.args.get('title')
+        note = db.notes.find_one(
+            {'$and': [{'url': url}, {'author': user['username']}]})
+        # If the note exists already it is returned to the user on the note taking page
+        if note:
+            public = note['public']
+            public = str(public)
+            print('note exists, is it public or private?' + str(public))
+        if not note:
+            note = {}
+            public = False
+        # Else if the note does not exist, the note is automatically set to private and the notetaking page is returned
+
+        return render_template('page.html',
+                               url=url,
+                               note=note,
+                               title=title,
+                               public=public)
+
+    if request.method == 'POST':
+
+        # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
+        # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
+        url = request.values.get('url')
+        response = requests.post(url)
+        resp = response.text
+        html_doc = resp
+        soup = BeautifulSoup(html_doc, 'html.parser')
+        print('soup title:' + soup.title.string)
+
+        note = {}
+        note['url'] = request.values.get('url')
+        body = note['body'] = request.form['note']
+        title = note['title'] = request.form['note_title']
+        public = note['public'] = request.form['publicOption']
+        public = str(public)
+        author = note['author'] = user['username']
+
+        # https://docs.mongodb.com/manual/reference/operator/query/and/
+        # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
+        # db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
+        alreadyExists = db.notes.find_one(
+            {'$and': [{'url': url}, {'author': author}]})
+        if not alreadyExists:
+            db.notes.insert(note)
+            db.users.find_one_and_update(
+                user, {'$push': {'notes': note['url']}})
+            return render_template('page.html',
+                                   url=url,
+                                   note=note,
+                                   public=public,
+                                   title=title,
+                                   userLoggedIn=True)
+        else:
+            # unhashable type 'dict'
+            db.notes.update_one(
+                alreadyExists, {'$set': {'body': body, 'public': public}})
+            public = str(public)
+            return render_template('page.html',
+                                   url=url,
+                                   note=note,
+                                   public=public,
+                                   userLoggedIn=True)
 
 '''
 Delete note
@@ -234,6 +311,7 @@ def edit_note_title(note_id):
     return render_template('edit_note.html',
                            note=note)
 
+
 '''
 Edit note #2
 '''
@@ -248,6 +326,46 @@ def update_note(note_id):
                      }
                      })
     return redirect(url_for('index'))
+
+
+'''
+Clicking create a new note on the index page
+'''
+@app.route('/new_note', methods=["GET", "POST"])
+@login_required
+def new_note():
+    print('making a new note')
+    #note = db.notes.find_one({'_id': ObjectId(note_id)})
+    #url = note['url']
+    '''
+    #https://stackoverflow.com/questions/12030487/mongo-conditional-for-key-doesnt-exist
+    cursor =note.find({'public': { '$exists': True }})
+    '''
+    # https://stackoverflow.com/questions/1602934/check-if-a-given-key-already-exists-in-a-dictionary
+    # if 'public' in note:
+    #    public = note['public']
+    '''else:
+        public = False
+    public = str(public)
+    '''
+    user = db.users.find_one(({"_id": session['user_id']}))
+    if request.method == "GET":
+        #create a new note
+        note = {}
+        return render_template('page.html',
+                               url='https://en.wikipedia.org/wiki/Main_Page',
+                               note=note,
+                               public=False,
+                               userLoggedIn=True)
+    if request.method == "POST":
+        url2= request.values.get('name')
+        print('posted')
+        print(url2)
+        return render_template('page.html',
+                               url=url2,
+                               note=note,
+                               public=False,
+                               userLoggedIn=True)
 
 
 '''
@@ -272,7 +390,9 @@ def note(note_id):
     return render_template('page.html',
                            url=url,
                            note=note,
-                           public=public)
+                           public=public,
+                           userLoggedIn=True)
+
 
 """
 '''
@@ -300,10 +420,13 @@ def note(note_id):
                            public=public)
 """
 
+
 @app.route('/notLoggedIn/', methods=["GET", "POST"])
 def notLoggedIn():
-   
+
     return render_template('notLoggedIn.html')
+
+
 '''
 Search notes
 '''
@@ -446,8 +569,6 @@ def user(username):
     else:
         return render_template('index.html',
                                user='anonymous user')
-
-
 
 
 '''

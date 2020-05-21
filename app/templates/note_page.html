@@ -5,9 +5,7 @@
     <div class='resizable draggable' id='frameContainer'>
         <!--https://stackoverflow.com/questions/8117761/how-can-i-make-an-iframe-resizable-->
         <!--<iframe class='resizable draggable' id='pageFrame' srcdoc="{{ content }}"></iframe>-->
-        <!--<iframe class='resizable draggable' id='pageFrame' src="{{ url }}" name="" onLoad="alert(this.contentWindow.location);"> </iframe>-->>
-        <object type="text/html" data="{{ url }}" id="pageFrame" name="">
-</object>
+        <iframe class='resizable draggable' id='pageFrame' src="{{ url }}" name=""></iframe>
     </div>
     <div id='noteContainer'>
         <form action='/page/?url={{ url }}' method='POST' id='noteForm'>

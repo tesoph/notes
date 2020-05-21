@@ -3,45 +3,43 @@
 {% block app_content %}
 
 <h1>Welcome to notes app.</h1>
-<h4>How to use:</h4>
+<!--<h4>How to use:</h4>
 <p>Drag this bookmarklet to your bookmarks toolbar and click it when you are on a wikipedia page you would like to take notes on:</p>
 <p><a href="javascript:location.href='http://wiki-note.herokuapp.com/page/?url='+location.href+'&title='+document.title;">Note1</a>: note opens on new page</p>
 
-<p>(You must be signed into the app for the bookmarklet to work. If you are not signed in then clicking it will take you to the login page)</p>
+<p>(You must be signed into the app for the bookmarklet to work. If you are not signed in then clicking it will take you to the login page)</p>-->
+<a href="{{ url_for('new_note')}}" class='editNoteTitleButton'>Create a new note</a> 
+{% if userLoggedIn %}
+<h3>Your Notes2:</h3>
+<div class="row">
+    <ul class="collapsible" data-collapsible="accordion">
+        {% for note in notes %}
+        <li>
+            <div class="collapsible-header">
+                <div class="col s3">
+                    <i class="material-icons">expand_more</i>
+                    <strong> {{ note['title'] }}</strong> -{{ loop.index }}
+                   
+                </div>
+                <div class=" task_header col s9">
+                    <a href="{{ url_for('note', note_id=note._id )}}" class='editNoteTitleButton'>Edit</a> |
+                    <a href="{{url_for('delete_note', note_id=note._id)}}" class='deleteNoteButton'>Delete</a>
+                   
+                </div>
+            </div>
+            <div class="collapsible-body">
+                <span>
 
+                    
+                {{note.body}} 
+            </span>
+            </div>
+        </li>
+        {% endfor %}
 
-
-{% if not userLoggedIn %}
-<h3>Most recent public notes:</h3>
-{% for note in recentNotes %}
-<p> <a href="{{ url_for('notLoggedIn' )}}">{{ note['title'] }}</a></p>
-{% endfor %}
-
-
-{% elif userLoggedIn %}
-<h1>Hi {{ user.username }}.</h1>
-<h3>Most recent public notes:</h3>
-{% for note in recentNotes %}
-<p> <a href="{{ url_for('note', note_id=note._id )}}">{{ note['title'] }}</a></p>
-{% endfor %}
-
-<h3>Saved pages:</h3>
-{% for page in user.saved_pages %}
-<p><a href="{{ page['url'] }}">{{page['title']}}</a></p>
-{% endfor %}
-
-
-<h3>Your Notes:</h3>
-{% for note in notes %}
-<div>
-    <i class="material-icons">expand_more</i>
-    <a href="{{ url_for('note', note_id=note._id )}}">{{ note['title'] }}</a>
-    <!--<a href="{{ note['url'] }}">{{ note['title'] }}</a>-->
-    <a href="{{url_for('delete_note', note_id=note._id)}}" class='deleteNoteButton'>Delete</a>
-    <a href="{{url_for('edit_note_title', note_id=note._id)}}" class='editNoteTitleButton'>Edit Note</a>
-
+    </ul>
 </div>
-{% endfor %}
+
 {% endif %}
 
 {% endblock %}

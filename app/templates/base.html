@@ -1,72 +1,88 @@
-{% extends 'bootstrap/base.html' %}
+<!DOCTYPE html>
+<html>
 
-{% block title %}
-{% if title %}{{ title }} - Notes{% else %}Welcome to Notes{% endif %}
-{% endblock %}
-{% block styles %}
-{{super()}}
-<link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" type="text/css">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-{% endblock %}
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
+<head>
+    {% block title %}
+    {% if title %}{{ title }} - Notes{% else %}Welcome to Notes{% endif %}
+    {% endblock %}
+    
 
-    $(".resizable").resizable();
-    $(".draggable").draggable();
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/wiki.css')}}" type="text/css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+ 
+ 
+</head>
 
-</script>
-{{super()}}
-{% endblock %}
+<body>
 
 
-{% block body %}
-<div id='page-container'>
-    {% block navbar %}
-    <nav class="navbar navbar-default">
-        <a href="{{ url_for('index') }}">Home</a>
-        <a href="{{ url_for('register') }}">Register</a>
+    {% block body %}
+    <div id='page-container'>
+        {% block navbar %}
+        <nav class="navbar navbar-default">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('register') }}">Register</a>
 
-        <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('login') }}">Login</a>
 
-        <a href="{{ url_for('logout') }}">Logout</a>
-        {% if userLoggedIn %}
-        <a href="{{ url_for('user', username = session['username']) }}">Profile</a>
-        {% endif %}
-
-        <a href="{{ url_for('search_notes') }}">Search notes</a>
-
-    </nav>
-    {% endblock navbar %}
-
-
-    {% block content %}
-
-    <div id='content-wrapper'>
-
-        <div>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-info" role="alert">{{ message }}</div>
-            {% endfor %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+            {% if userLoggedIn %}
+            <a href="{{ url_for('user', username = session['username']) }}">Profile</a>
             {% endif %}
-            {% endwith %}
 
-            {# application content needs to be provided in the app_content block #}
-            {% block app_content %}{% endblock %}
+            <a href="{{ url_for('search_notes') }}">Search notes</a>
+
+        </nav>
+        {% endblock navbar %}
+
+
+        {% block content %}
+
+        <div id='content-wrapper'>
+
+            <div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-info" role="alert">{{ message }}</div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                {# application content needs to be provided in the app_content block #}
+                {% block app_content %}{% endblock %}
+            </div>
         </div>
+
+
+        {% block footer %}
+        <footer class='footer'>&copy; 2020 ray</footer>
+
+        {% endblock footer %}
+        {% endblock %}
     </div>
 
+    {% endblock body %}
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.collapsible').collapsible();
+        })
+    </script>
+    <script>
 
-    {% block footer %}
-    <footer class='footer'>&copy; 2020 ray</footer>
+        $(".resizable").resizable();
+        $(".draggable").draggable();
 
-    {% endblock footer %}
-    {% endblock %}
-</div>
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
 
-{% endblock body %}
+</html>
