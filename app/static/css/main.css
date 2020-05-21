@@ -4,10 +4,55 @@
     outline: solid #f00 1px !important;
   } 
 
+  
 
 */
+.toolbarButtons{
+  text-align:right;
+}
+
+#subBar{
+ /* width:20%;*/
+  /*background-color:white;
+  color:black;
+  font-weight: bold;
+  text-align: left;*/
+  background-color: #fff;
+    display: flex;
+    flex: 0 0 auto;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    padding: 0 4px 0 4px;
+    outline: solid lightgrey 0.5px;
+   
+}
+#subBtn,
+.informationElement {
+  align-items: center;
+    background: 0 0;
+    border: 0;
+    border-radius: 3px;
+    box-shadow: none;
+    color: #222f3e;
+    display: flex;
+    flex: 0 0 auto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    height: 34px;
+    justify-content: center;
+    margin: 2px 4px 3px 4px;
+    outline: 0;
+    overflow: hidden;
+    padding: 0 4px;
+    text-transform: none;
+    width: auto;
+}
+#subBtn:hover{
+background-color:lightgrey;
+}
 .row {
-  margin: 50px;
+  margin: 10px;
 }
 
 html,
@@ -45,7 +90,7 @@ body {
 }
 #content-wrapper {
 flex:1 0 auto;
-padding:4%;
+padding:2%;
 }
 .footer {
   /*position: absolute;
@@ -91,13 +136,17 @@ padding:1%;
 height:100%;
 display:flex;
 flex-direction:column;
+padding-right: 15px;
+padding-left: 15px;
+margin-right: auto;
+margin-left: auto;
 
 }
 
 @media (min-width: 768px) {
   #noteContainer{
-    padding-left: 3.5%;
-    padding-right:3.5%;
+    padding-left: 7.5%;
+    padding-right:7.5%;
   }
   }
 
@@ -248,3 +297,73 @@ form{
   }
 }
 */
+
+.contact-info {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.center-form {
+  margin-top: 25px;
+  padding-bottom: 25px;
+}
+
+.contact {
+  background: 0 0;
+  background-color: white;
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, .1);
+  margin-bottom: 1rem;
+  padding: 15px 20px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font: 300 16px "Inconsolata", sans-serif;
+  -webkit-transition: ease-out .2s;
+  -o-transition: ease-out .2s;
+  transition: ease-out .2s;
+}
+
+input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.custom-file-upload {
+  /* HTML and CSS only file upload button from https://stackoverflow.com/questions/572768/styling-an-input-type-file-button */
+  background-color: white;
+  border: solid;
+  color: black;
+  margin-bottom: 1rem;
+  padding: .375rem .75rem;
+  text-align: center;
+  font-size: 16px;
+  opacity: 0.6;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: .25rem;
+  -webkit-transition: border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
+  transition: border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
+  -o-transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
+}
+
+label {
+  margin-bottom: 0px;
+}
+
+.custom-file-upload:hover {
+  -webkit-box-shadow: 0px 0px 10px grey;
+  box-shadow: 0px 0px 10px grey;
+  opacity: 1;
+}
+
+@media (min-width: 576px) {
+  .custom-file-upload {
+      display: inline-block;
+      text-align: left;
+  }
+}
