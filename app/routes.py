@@ -138,8 +138,11 @@ def page():
         timestamp = request.form['note_timestamp']
         note['timestamp'] = timestamp
         note['category'] = request.form['note_category']
-        #public = note['public'] = request.form['publicOption']
-        #public = str(public)
+        isPublicChecked=request.form.get('public')
+        if isPublicChecked:
+              note['public'] = True
+        else:
+            note['public']=False
         author = note['author'] = user['username']
         displayedTime = datetime.strptime(
             timestamp, '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y')

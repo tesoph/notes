@@ -63,7 +63,21 @@
             </div>
           </div>
           <div class="bar">
-            <fieldset class="form-group">
+            <div class="form-group">
+              <div class="custom-control custom-switch">
+                {% if note.public is sameas true %}
+                <input type="checkbox" class="custom-control-input" id="public" name="public" checked>
+                {% else %}
+
+                <input type="checkbox" class="custom-control-input" id="public" name="public">
+                {% endif %}
+
+                <label class="custom-control-label" for="public">Make note public</label>
+
+              </div>
+            </div>
+          </div>
+          <!--  <fieldset class="form-group">
               <div class="row">
                 <legend class="col-form-label col-sm-1 pt-0">Visibility:</legend>
                 <div class="col-sm-6">
@@ -79,9 +93,9 @@
 
                 </div>
               </div>
-            </fieldset>
+            </fieldset>-->
 
-          </div>
+
 
           <div class="form-row bar">
             <div class="form-group col-md-6">
@@ -106,8 +120,8 @@
       <button class="" id='subBtn' type="submit">Save Note</button>
     </div>
     <textarea id="note_body" name="note_body"> {% if note %}{{note.body}}{% elif not note %}{% endif %}</textarea>
-   
-    
+
+
   </form>
 
 </div>
