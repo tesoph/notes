@@ -32,13 +32,20 @@ function getURL(){
     return url2;
 }
 
-
+/*
 $(document).click(function(e) {
-  /*  console.log('clicked');
-    var heading = document.getElementById("firstHeading");
-    document.getElementById("pageFrame").name = heading;
-    console.log('h: ' + heading);*/
+  
     var t = document.getElementById("note_timestamp");
     console.log('hi');
     console.log(t);
- });
+ });*/
+
+ ///////new from base.html
+
+ $(document).ready(function () {
+    $('.collapsible').collapsible();
+})
+
+$(document).ready(function () {
+    $('.sidenav').sidenav();
+});

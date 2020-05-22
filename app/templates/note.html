@@ -75,3 +75,9 @@
 </div>
 <!--end form container-->
 {% endblock app_content %}
+
+{% block moreScripts %}
+<script src="https://cdn.tiny.cloud/1/ckycyfqwml2uv87kz8af3n6vc22p02k2phge19237f5rfny8/tinymce/5/tinymce.min.js"
+referrerpolicy="origin"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/tinymce.js')}}"></script>
+{% endblock moreScripts %}
