@@ -6,127 +6,72 @@
 {% endblock moreStyle %}
 
 {% block app_content %}
+<!--form container-->
 <div id='noteContainer'>
-
-
+  <!--form-->
   <form action="/page/" method='POST' id='noteForm' class='browser-default'>
-
-
-
-    <div id='subBar'>
-      <!-- <div class="form-group">
-      <label for="exampleInputEmail1">Email address</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-        placeholder="Enter email">
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-    </div>-->
+    <!--title bar-->
+    <div class="titleBar" id='subBar'>
+      <button class="form-group  btn btn-light" type="button" data-toggle="collapse" data-target="#collapseExample"
+        aria-expanded="false" aria-controls="collapseExample">
+        <i class="material-icons">more_vert</i>
+      </button>
+      <div class="form-group col-md-6">
+        <label class='sr-only' for="note_title">Title: </label>
+        <input id="note_title" name="note_title" type="text" class="validate form-control" value="{{note.title}}"
+          placeholder=" {% if note %}{{note.title}}{% elif not note %}Title{% endif %}">
+      </div>
     </div>
-    <ul class="collapsible">
-      <li>
-        <div class="collapsible-header" id='subBar'>
 
-          <!--  <i class="material-icons">more_vert</i> <label for="note_title">Title: </label>-->
-          <!--  <div class='input-field'>-->
-
-          <div class="form-group">
-            <div class='row'>
-              <div class="col-sm-1 col-form-label">
-                <i class="material-icons">more_vert</i>
-              </div>
-
-            </div>
+    <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+        <input id="note_timestamp" name="note_timestamp" type="hidden" visibility='hidden' value="{{ timestamp }}"
+          readonly>
+        <!--timestamp-->
+        <div class='bar'>
+          <div class="form-group col-md-6">
+            <p>Date created: {{displayedTime}}</p>
           </div>
-          <!--
-            </div>-->
-
         </div>
-
-
-        <div class="titleBody">
-          <div class="form-row bar">
-            <div class="form-group col-md-6">
-              <label for="note_title">Title: </label>
-              <input id="note_title" name="note_title" type="text" class="validate form-control" value="{{note.title}}"
-                placeholder=" {% if note %}{{note.title}}{% elif not note %}Title{% endif %}">
+        <!--public setting-->
+        <div class="bar">
+          <div class="form-group col-md-6">
+            <div class="custom-control custom-switch">
+              {% if note.public is sameas true %}
+              <input type="checkbox" class="custom-control-input" id="public" name="public" checked>
+              {% else %}
+              <input type="checkbox" class="custom-control-input" id="public" name="public">
+              {% endif %}
+              <label class="custom-control-label" for="public">Make note public</label>
             </div>
           </div>
         </div>
-
-        <div class="collapsible-body">
-          <!-- Grey navigation panel -->
-          <input id="note_timestamp" name="note_timestamp" type="hidden" visibility='hidden' value="{{ timestamp }}"
-            readonly>
-          <!--<input id="notetimestamp" name="notetimestamp"  value="{{ displayedTime }}" readonly>-->
-          <div class='bar'>
-            <div class="form-group">
-              <p>Date created: {{displayedTime}}</p>
-            </div>
+        <!--category setting-->
+        <div class="bar">
+          <div class="form-group col-md-6">
+            <label for="note_category">Category:</label>
+            <input class="form-control" type="text" list="categories" name="note_category"
+              placeholder="Select from list" />
+            <datalist id="categories">
+              <option>Volvo</option>
+              <option>Saab</option>
+              <option>Mercedes</option>
+              <option>Audi</option>
+              <option>Enter new category</option>
+            </datalist>
           </div>
-          <div class="bar">
-            <div class="form-group">
-              <div class="custom-control custom-switch">
-                {% if note.public is sameas true %}
-                <input type="checkbox" class="custom-control-input" id="public" name="public" checked>
-                {% else %}
-
-                <input type="checkbox" class="custom-control-input" id="public" name="public">
-                {% endif %}
-
-                <label class="custom-control-label" for="public">Make note public</label>
-
-              </div>
-            </div>
-          </div>
-          <!--  <fieldset class="form-group">
-              <div class="row">
-                <legend class="col-form-label col-sm-1 pt-0">Visibility:</legend>
-                <div class="col-sm-6">
-                  <div class="form-group form-check">
-                    <input type="radio" id="private" value="False" name="publicOption" class="form-check-input">
-                    <label for="private" class="form-check-label">Private</label>
-
-                  </div>
-                  <div class="form-check">
-                    <input type="radio" id="public" value="True" name="publicOption" class="form-check-input">
-                    <label for="public" class="form-check-label">Public</label>
-                  </div>
-
-                </div>
-              </div>
-            </fieldset>-->
-
-
-
-          <div class="form-row bar">
-            <div class="form-group col-md-6">
-              <label for="note_category">Category:</label>
-              <input class="form-control" type="text" list="categories" name="note_category"
-                placeholder="Select from list" />
-              <datalist id="categories">
-                <option>Volvo</option>
-                <option>Saab</option>
-                <option>Mercedes</option>
-                <option>Audi</option>
-                <option>Enter new category</option>
-              </datalist>
-            </div>
-          </div>
-
         </div>
-
-      </li>
-    </ul>
+      </div>
+    </div>
+    <!--save note-->
     <div id='subBar'>
       <button class="" id='subBtn' type="submit">Save Note</button>
     </div>
+    <!--note body-->
     <textarea id="note_body" name="note_body"> {% if note %}{{note.body}}{% elif not note %}{% endif %}</textarea>
 
-
   </form>
-
+  <!--end form-->
 </div>
-
-
-
-
+<!--end form container-->
 {% endblock app_content %}

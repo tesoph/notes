@@ -6,7 +6,7 @@
     {% if title %}{{ title }} - Notes{% else %}Welcome to Notes{% endif %}
     {% endblock %}
 
- 
+
 
     <!-- <link rel="stylesheet" href="{{url_for('static', filename='css/wiki.css')}}" type="text/css">-->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -14,12 +14,13 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">-->
     <!-- Bootstrap core CSS -->
-   - <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    -
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">-->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="{{url_for('static', filename='css/materialize.css')}}" type="text/css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/materialize.css')}}" type="text/css">
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" type="text/css">
-    
+
     {% block moreStyle %}{% endblock moreStyle %}
     {% block moreScripts %}{% endblock moreScripts %}
 
@@ -148,7 +149,9 @@
         {% endblock footer %}
     </div>
     <!-- End page container-->
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- Compiled and minified CSS -->
@@ -230,13 +233,13 @@
 
     </script>
     <script>
-    
 
-    $(document).ready(function(){
-    $('select').formSelect();
-  });
-  
- </script>
+
+        $(document).ready(function () {
+            $('select').formSelect();
+        });
+
+    </script>
 </body>
 {% endblock body %}
 
