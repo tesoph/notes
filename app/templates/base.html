@@ -6,7 +6,7 @@
     {% if title %}{{ title }} - Notes{% else %}Welcome to Notes{% endif %}
     {% endblock %}
 
-
+ 
 
     <!-- <link rel="stylesheet" href="{{url_for('static', filename='css/wiki.css')}}" type="text/css">-->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -14,8 +14,12 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">-->
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+   - <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{url_for('static', filename='css/materialize.css')}}" type="text/css">
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" type="text/css">
+    
     {% block moreStyle %}{% endblock moreStyle %}
     {% block moreScripts %}{% endblock moreScripts %}
 
@@ -29,7 +33,78 @@
     <div id='page-container'>
 
         {% block navbar %}
-        <nav class="navbar navbar-default">
+        <!-- Header -->
+        <header>
+
+
+            <!-- Dropdown Structure -->
+            <ul id='dropdown1' class='dropdown-content'>
+                <li><a href="#!">one</a></li>
+                <li><a href="#!">two</a></li>
+                <li class="divider" tabindex="-1"></li>
+                <li><a href="#!">three</a></li>
+                <li><a href="#!"><i class="material-icons">view_module</i>four</a></li>
+                <li><a href="#!"><i class="material-icons">cloud</i>five</a></li>
+            </ul>
+
+            <nav id="navBar">
+                <div class="nav-wrapper">
+                    <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i
+                            class="material-icons">menu</i></a>
+                    <a href="#!" class="brand-logo">Logo</a>
+                    <ul class="right">
+                        {% if not userLoggedIn %}
+                        <li><a href="{{ url_for('register') }}">Sign up</a></li>
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        {% elif userLoggedIn %}
+                        <li><a href="{{ url_for('user', username = session['username']) }}">{{ user.username }}</a></li>
+                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+
+            <ul id="slide-out" class="sidenav">
+                <li>
+                    <div class="user-view">
+                        <div class="background">
+                            <img src="images/office.jpg">
+                        </div>
+                        <ul>
+                            {% if not userLoggedIn %}
+                            <li><a href="{{ url_for('register') }}">Sign up</a></li>
+                            <li><a href="{{ url_for('login') }}">Login</a></li>
+                            {% elif userLoggedIn %}
+                            <li><a href="{{ url_for('user', username = session['username']) }}">{{user.username}}</a>
+                            </li>
+
+                            {% endif %}
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('new_note') }}">Create a new note</a></li>
+                <li><a href="{{ url_for('search_notes') }}">Search notes</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+
+            </ul>
+
+
+            <ul class="sidenav" id="slide-out">
+
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('new_note') }}">Create a new note</a></li>
+                <li><a href="{{ url_for('search_notes') }}">Search notes</a></li>
+                <li><a href="mobile.html">Mobile</a></li>
+            </ul>
+
+
+            <!-- End navigation -->
+        </header>
+        <!-- End header -->
+        {% endblock navbar %}
+
+        <!--        <nav class="navbar navbar-default">
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('register') }}">Register</a>
 
@@ -43,10 +118,7 @@
             <a href="{{ url_for('search_notes') }}">Search notes</a>
             <a href="{{ url_for('new_note') }}">New note</a>
 
-        </nav>
-        {% endblock navbar %}
-
-
+        </nav>-->
         {% block content %}
         <div id='content-wrapper'>
 
@@ -77,11 +149,14 @@
     </div>
     <!-- End page container-->
 
-
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <!-- Compiled and minified CSS -->
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('.collapsible').collapsible();
@@ -136,7 +211,32 @@
             var richText = tinymce.get('note_body').getContent();
             console.log('h: ' + richText);
         });
+
+
     </script>
+    <script> $(document).ready(function () {
+            $('.sidenav').sidenav();
+        });
+        /*  document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems, {edge:'right'});
+      });*/
+        /* $('.button-collapse').sideNav({
+         edge: 'right' // <--- CHECK THIS OUT
+       }
+     );*/
+
+        $(".dropdown-trigger").dropdown();
+
+    </script>
+    <script>
+    
+
+    $(document).ready(function(){
+    $('select').formSelect();
+  });
+  
+ </script>
 </body>
 {% endblock body %}
 
