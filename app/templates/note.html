@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title%}
+<!--{% block title%}
 <title>Note {% if note.title %}-{{ note.title }}{% endif %}</title>
-{% endblock title %}
-{% block moreScripts %}
+{% endblock title %}-->
+<!--{% block moreScripts %}
 {%endblock moreScripts%}
 {% block moreStyle %}
 
 
-{% endblock moreStyle %}
+{% endblock moreStyle %}-->
 <!--<body onload="initDoc();">-->
 
 {% block app_content %}
@@ -27,32 +27,32 @@
     <input id="note_timestamp" name="note_timestamp" type="hidden" visibility='hidden' value="{{ timestamp }}" readonly>
     <!--<input id="notetimestamp" name="notetimestamp"  value="{{ displayedTime }}" readonly>-->
     <div id='subBar'>
-        <div class="informationElement">
+      <div class="informationElement">
         <p>Date created: {{displayedTime}}</p>
-    </div>
+      </div>
     </div>
     <div id="subBar">
-       <div class="informationElement">
-           <p>Note visibility:   </p>
+      <div class="informationElement">
+        <p>Note visibility: </p>
         <input type="radio" id="private" value="False" name="publicOption">
         <label for="private">Private</label>
         <input type="radio" id="public" value="True" name="publicOption" checked>
         <label for="public">Public</label>
-       </div>
+      </div>
     </div>
-  
-        
+
+
     <div id='subBar'>
 
-        <label for="note_title">Title: </label>
-        <input id="note_title" name="note_title" type="text" class="validate" value="{{note.title}}">
-  
+      <label for="note_title">Title: </label>
+      <input id="note_title" name="note_title" type="text" class="validate" value="{{note.title}}">
+
     </div>
     <div id='subBar'>
-        <button class="" id='subBtn' type="submit">Save Note</button>
+      <button class="" id='subBtn' type="submit">Save Note</button>
     </div>
     <textarea id="note_body" name="note_body"> {% if note %}{{note.body}}{% elif not note %}{% endif %}</textarea>
-  
-  </form>
 
-{% endblock app_content %}
+  </form>
+</div>
+  {% endblock app_content %}

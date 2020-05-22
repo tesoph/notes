@@ -22,12 +22,12 @@
 
 
 </head>
+{% block body %}
 
 <body>
 
-
-    {% block body %}
     <div id='page-container'>
+
         {% block navbar %}
         <nav class="navbar navbar-default">
             <a href="{{ url_for('index') }}">Home</a>
@@ -48,7 +48,6 @@
 
 
         {% block content %}
-
         <div id='content-wrapper'>
 
             <div>
@@ -63,19 +62,22 @@
             </div>
 
             {# application content needs to be provided in the app_content block #}
-            {% block app_content %}{% endblock %}
+            {% block app_content %}{% endblock app_content %}
+
+
         </div>
+        {% endblock content %}
 
-
+        <!--end content-->
         {% block footer %}
         <!-- Footer -->
         <footer class='footer'>&copy; 2020 ray</footer>
         <!--End footer-->
         {% endblock footer %}
-        {% endblock %}
     </div>
+    <!-- End page container-->
 
-    {% endblock body %}
+
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -87,7 +89,7 @@
     </script>
     <script src="https://cdn.tiny.cloud/1/ckycyfqwml2uv87kz8af3n6vc22p02k2phge19237f5rfny8/tinymce/5/tinymce.min.js"
         referrerpolicy="origin"></script>
-    <script> 
+    <script>
         tinymce.init({
             selector: '#note_body',
             /*setup: function (editor) {
@@ -136,5 +138,6 @@
         });
     </script>
 </body>
+{% endblock body %}
 
 </html>
