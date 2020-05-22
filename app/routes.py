@@ -33,6 +33,7 @@ def index():
     # note = db.notes.find_one(
     #        {'$and': [{'url': url}, {'author': user['username']}]})
     notes = db.notes
+    categories = db.categories
     # Get the 10 most recent 'public' notes
     # -1 means sorted from newest to oldest
     recentNotes = notes.find({"public": "True"}).limit(10).sort([('_id', -1)])
@@ -41,8 +42,9 @@ def index():
         users = db.users
         userid = session['user_id']
         user = users.find_one({'_id': userid})
-        author = user['username']
-        userNotes = notes.find({'author': author})
+        username = user['username']
+        userNotes = notes.find({'author': username})
+        userCategories = categories.find({'user': username})
         return render_template('index.html',
                                title='Home Page',
                                user=user,
@@ -73,7 +75,7 @@ def new_note():
    # else:
     #    public = False
     #public = str(public)
-    #user = db.users.find_one(({"_id": session['user_id']}))
+    user = db.users.find_one(({"_id": session['user_id']}))
     note = {}
     timestamp = datetime.now()
     displayedTime = timestamp.strftime('%m/%d/%Y')
@@ -94,8 +96,9 @@ Clicking a note on the index page
 def note(note_id):
     note = db.notes.find_one({'_id': ObjectId(note_id)})
     #url = note['url']
-    timestamp=note['timestamp']
-    displayedTime = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y')
+    timestamp = note['timestamp']
+    displayedTime = datetime.strptime(
+        timestamp, '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y')
     # https://stackoverflow.com/questions/12030487/mongo-conditional-for-key-doesnt-exist
     #cursor =note.find({'public': { '$exists': True }})
 
@@ -108,6 +111,7 @@ def note(note_id):
     user = db.users.find_one(({"_id": session['user_id']}))
     return render_template('note.html',
                            note=note,
+                           user=user,
                            timestamp=note['timestamp'],
                            displayedTime=displayedTime,
                            public=public,
@@ -144,10 +148,12 @@ def page():
         title = note['title'] = request.form['note_title']
         timestamp = request.form['note_timestamp']
         note['timestamp'] = timestamp
+        note['category'] = request.form['note_category']
         #public = note['public'] = request.form['publicOption']
         #public = str(public)
         author = note['author'] = user['username']
-        displayedTime = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y')
+        displayedTime = datetime.strptime(
+            timestamp, '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y')
         # https://docs.mongodb.com/manual/reference/operator/query/and/
         # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
         # db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
@@ -159,6 +165,7 @@ def page():
             db.users.find_one_and_update(
                 user, {'$push': {'notes': note['timestamp']}})
             return render_template('note.html',
+                                   user=user,
                                    displayedTime=displayedTime,
                                    note=note,
                                    title=title,
@@ -171,6 +178,7 @@ def page():
             #public = str(public)
             return render_template('note.html',
                                    note=note,
+                                   user=user,
                                    displayedTime=displayedTime,
                                    timestamp=timestamp,
                                    userLoggedIn=True)

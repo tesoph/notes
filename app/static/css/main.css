@@ -2,10 +2,23 @@
     background: #000 !important;
     color: #0f0 !important;
     outline: solid #f00 1px !important;
-  } 
-*/
-  
+  } */
 
+#navBar{
+  background-color:grey;
+}
+.nav{
+  background-color:lightgrey;
+}
+
+  .brand-logo{
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
+.sidenav{
+ /* top:auto;*/
+}
 
 
 /*
@@ -93,21 +106,38 @@ padding:2%;
 .note_class {
   background-color: red;
 }
-#subBar{
-  /* width:20%;*/
-   /*background-color:white;
-   color:black;
-   font-weight: bold;
-   text-align: left;*/
-   background-color: #fff;
-     display: flex;
-     flex: 0 0 auto;
-     flex-shrink: 0;
-     flex-wrap: wrap;
-     padding: 0 4px 0 4px;
-     outline: solid lightgrey 0.5px;
-    
+
+ .form-group{
+  /* min-width:50%;*/
+  min-width:50%;
  }
+ .titleBody{
+ /* display: none;*/
+  border-bottom: 1px solid #ddd;
+  box-sizing: border-box;
+  padding: 2rem; }
+
+ 
+ .bar{
+  padding: 0 4px 0 4px;
+  outline: solid lightgrey 0.5px; 
+ }
+ #subBar{
+  min-width:100%;
+    /* width:20%;*/
+     /*background-color:white;
+     color:black;
+     font-weight: bold;
+     text-align: left;*/
+     background-color: #fff;
+      /* display: flex;
+       flex: 0 0 auto;
+       flex-shrink: 0;
+       flex-wrap: wrap;*/
+       padding: 0 4px 0 4px;
+       outline: solid lightgrey 0.5px;
+      
+   }
  #subBtn,
  .informationElement {
    align-items: center;
@@ -138,6 +168,7 @@ padding:2%;
   /*height:100%;*/
 padding:1%;
 /*flex: 1 0 auto;*/
+/*
 height:100%;
 display:flex;
 flex-direction:column;
@@ -145,7 +176,7 @@ padding-right: 15px;
 padding-left: 15px;
 margin-right: auto;
 margin-left: auto;
-
+*/
 }
 #noteContainer input,
 textarea {
@@ -162,13 +193,13 @@ textarea {
   align-items: center;*/
 }
 .submitBtn {
-  padding: 1.5px 3px;
+  padding: 3px 3px;
 }
 @media (min-width: 768px) {
-  #noteContainer{
+/*  #noteContainer{
     padding-left: 7.5%;
     padding-right:7.5%;
-  }
+  }*/
   }
 /*----------Index page---------*/
 
@@ -425,4 +456,59 @@ label {
       display: inline-block;
       text-align: left;
   }
+}
+/*
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}*/
+.collapsible{
+border-top: 0;
+    border-right: 0;
+    border-left: 0;
+    margin: 0;
+}
+
+.collapsible-body{
+  /*padding:10px;*/
+}
+
+input::-webkit-calendar-picker-indicator {
+
+  opacity: 100;
+}
+/*
+label{
+  line-height:21px;
+  font-size:1rem;
+  display:block;
+  color:red;
+  margin-bottom:0;
+  position:relative;
+}
+*/
+
+.input-field{
+      /* width: 20%; */
+      background-color: #fff;
+      display: flex;
+      flex: 0 0 auto;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      padding: 0 4px 0 4px;
+    
+}
+
+label.active{
+  margin:0;
+  padding: 1px 0px;
 }

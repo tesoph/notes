@@ -2,48 +2,52 @@
 
 {% block app_content %}
 <div class="container">
-<h3>Welcome to notes app.</h3>
-<!--<h4>How to use:</h4>
+    <h3>Welcome to notes app.</h3>
+    <!--<h4>How to use:</h4>
 <p>Drag this bookmarklet to your bookmarks toolbar and click it when you are on a wikipedia page you would like to take notes on:</p>
 <p><a href="javascript:location.href='http://wiki-note.herokuapp.com/page/?url='+location.href+'&title='+document.title;">Note1</a>: note opens on new page</p>
 
 <p>(You must be signed into the app for the bookmarklet to work. If you are not signed in then clicking it will take you to the login page)</p>-->
-<a href="{{ url_for('new_note')}}" class='editNoteTitleButton'>Create a new note</a>
-<br>
-<br>
-<br>
-<br>
+    <a href="{{ url_for('new_note')}}" class='editNoteTitleButton'>Create a new note</a>
+    <br>
+    <a href="" class='editNoteTitleButton'>Browse public notes</a>
+    <br>
+    <a href="" class='editNoteTitleButton'>Browse your feed</a>
+    <br>
+    <br>
+    <br>
+</div>
+
 {% if userLoggedIn %}
-</div>
 <div class="container">
-<h5>Your Notes:</h5>
-<div class="row">
-    <ul class="collapsible" data-collapsible="accordion">
-        {% for note in notes %}
-        <li>
-            <div class="collapsible-header">
-                <div class="col s9">
-                    <i class="material-icons">expand_more</i>
-                    <strong> {{ note['title'] }}</strong> -{{ loop.index }}
+    <h5>Your Notes:</h5>
+    <div class="row">
+        <ul class="collapsible" data-collapsible="accordion">
+            {% for note in notes %}
+            <li>
+                <div class="collapsible-header">
+                    <div class="col s9">
+                        <i class="material-icons">expand_more</i>
+                        <strong> {{ note['title'] }}</strong> -{{ loop.index }}
 
+                    </div>
+                    <div class=" toolbarButtons col s3">
+                        <a href="{{ url_for('note', note_id=note._id )}}" class='editNoteTitleButton'>Edit</a> |
+                        <a href="{{url_for('delete_note', note_id=note._id)}}" class='deleteNoteButton'>Delete</a>
+
+                    </div>
                 </div>
-                <div class=" toolbarButtons col s3">
-                    <a href="{{ url_for('note', note_id=note._id )}}" class='editNoteTitleButton'>Edit</a> |
-                    <a href="{{url_for('delete_note', note_id=note._id)}}" class='deleteNoteButton'>Delete</a>
-
+                <div class="collapsible-body">
+                    <span>
+                        <!--striptags gets rid of the rich text formatting of the note-->
+                        {{note.body|striptags}}
+                    </span>
                 </div>
-            </div>
-            <div class="collapsible-body">
-                <span>
-                    <!--striptags gets rid of the rich text formatting of the note-->
-                    {{note.body|striptags}}
-                </span>
-            </div>
-        </li>
-        {% endfor %}
+            </li>
+            {% endfor %}
 
-    </ul>
-</div>
+        </ul>
+    </div>
 </div>
 {% endif %}
 
