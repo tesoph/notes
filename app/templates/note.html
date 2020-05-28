@@ -18,12 +18,15 @@
   <!--form-->
   <form action="/page/" method='POST' id='noteForm' class='browser-default'>
     <!--title bar-->
-    <div class="titleBar" id='subBar'>
-      <button class="form-group  btn btn-light" type="button" data-toggle="collapse" data-target="#collapseExample"
+    <div class="titleBar " id='subBar'>
+      
+    
+      <button class=" btn btn-light" type="button" data-toggle="collapse" data-target="#collapseExample"
         aria-expanded="false" aria-controls="collapseExample">
         <i class="material-icons">more_vert</i>
       </button>
-      <div class="form-group col-md-6">
+   
+      <div class="col">
         <label class='sr-only' for="note_title">Title: </label>
         <input id="note_title" name="note_title" type="text" class="validate form-control" value="{{note.title}}"
           placeholder=" {% if note %}{{note.title}}{% elif not note %}Title{% endif %}">
@@ -37,7 +40,7 @@
         <!--timestamp-->
         <div class='bar'>
           <div class="form-group col-md-6">
-            <p>Date created: {{displayedTime}}</p>
+          Note created on {{displayedTime}}
           </div>
         </div>
         <!--public setting-->
@@ -49,7 +52,7 @@
               {% else %}
               <input type="checkbox" class="custom-control-input" id="public" name="public">
               {% endif %}
-              <label class="custom-control-label" for="public">Make note public</label>
+              <label class="custom-control-label" for="public">Publicly visible</label>
             </div>
           </div>
         </div>

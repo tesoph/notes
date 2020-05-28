@@ -6,6 +6,8 @@
     <title>
         {% block title %}Notes: {% endblock title %}
     </title>
+
+
     <!--needed ???????-->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- Bootstrap core CSS -->
@@ -16,6 +18,7 @@
     <!--Custom CSS-->
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" type="text/css">
 
+  
     {% block moreStyle %}{% endblock moreStyle %}
 
 
@@ -34,7 +37,8 @@
                 <div class="nav-wrapper">
                     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i
                             class="material-icons">menu</i></a>
-                    <a href="#!" class="brand-logo">Logo</a>
+                           <!-- <a href="{{ url_for('index') }}" class='brand-logo'><img class="logo" src="{{url_for('static', filename='img/logo.png')}}" alt="logo">-->
+                    <a href="{{ url_for('index') }}" class="brand-logo logo">Notes</a>
                     <ul class="right">
                         {% if not userLoggedIn %}
                         <li><a href="{{ url_for('register') }}">Sign up</a></li>

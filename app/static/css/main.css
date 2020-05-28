@@ -5,13 +5,31 @@
   } */
 
 #navBar{
-  background-color:grey;
+  color:black;
+  background-color:#C4C2BF;
 }
 .nav{
   background-color:lightgrey;
+  color:black  !important;
 }
-
+nav > * {
+  color:black;
+}
+.#navBar * {
+  color:black  !important;
+}
+nav ul a {
+  color:black;
+}
+.logo {
+  border-radius: 50%;
+  /*margin: 10px auto;*/
+  width:45px;
+  height:45px;
+}
   .brand-logo{
+    color:black!important;
+    max-height:100%;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
@@ -20,7 +38,19 @@
  /* top:auto;*/
 }
 
+.form-group{
+  margin-top:0.5rem;
+  margin-bottom:0.5rem !important;
+}
+.card{
+  box-shadow:none !important;
+  margin:0  !important;
+  /*border:none  !important;*/
+}
 
+.card-body{
+  padding:0.5rem  !important;
+}
 /*
  * CONTENTS
  * (Media queries at the end of each relevant section)
@@ -89,6 +119,7 @@
 #content-wrapper {
 flex:1 0 auto;
 padding:2%;
+background-color:#F5F5F4;
 }
  
 
@@ -96,15 +127,15 @@ padding:2%;
 
 #note_body {
   height: 100%;
-  background-color: red;
+ /* background-color: red;*/
 }
 #my_id {
-  background-color: red;
+ /* background-color: red;*/
   height: 100%;
 }
 
 .note_class {
-  background-color: red;
+  /*background-color: red;*/
 }
 
  .form-group{
@@ -123,24 +154,32 @@ padding:2%;
  }
  .bar{
   padding: 0 4px 0 4px;
+  
   outline: solid lightgrey 0.5px; 
  }
  #subBar{
    display:flex;
   min-width:100%;
+  max-width:100%;
+  background-color:#FBFBF2;
     /* width:20%;*/
      /*background-color:white;
      color:black;
      font-weight: bold;
      text-align: left;*/
-     background-color: #fff;
+    /* background-color: lightgray;*/
       /* display: flex;
        flex: 0 0 auto;
        flex-shrink: 0;
        flex-wrap: wrap;*/
-       padding: 0 4px 0 4px;
+       /*padding: 0 4px 0 4px;*/
+       padding: 0.5rem;
        outline: solid lightgrey 0.5px;
-      
+      background-color:white;
+   }
+   .card{
+     /*background-color:lightgrey;*/
+    
    }
  #subBtn,
  .informationElement {
@@ -184,7 +223,9 @@ margin-left: auto;
 }
 #noteContainer input,
 textarea {
-  background-color: #fffef2;
+  /*background-color: #fffef2;*/
+ /* background-color:#FBFBF2;*/
+ background-color:white;
   color: black;
 }
 #noteForm {
@@ -199,6 +240,10 @@ textarea {
 .submitBtn {
   padding: 3px 3px;
 }
+.btn {
+ /* background-color: #C4C2BF !important;*/
+}
+
 @media (min-width: 768px) {
 /*  #noteContainer{
     padding-left: 7.5%;
@@ -223,7 +268,7 @@ textarea {
 /*----------FOOTER---------*/
 
 .footer {
-  background-color: grey;
+  background-color:#C4C2BF;
   color:black;
   padding: 5%;
   font-size: 1rem;
@@ -511,8 +556,8 @@ label{
       padding: 0 4px 0 4px;
     
 }
-
 label.active{
   margin:0;
   padding: 1px 0px;
 }
+
