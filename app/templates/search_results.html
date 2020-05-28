@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ super() }}
+Search results
+{% endblock title %}
+
+{% block app_content %}
+<h2>Your notes:</h2>
+{% if not userLogggedIn %}
+<p>Sign in to search your own notes</p>
+{% endif %}
+{% for note in user_notes %}
+<h3><a href="{{note['url']}}">{{note['title']}}</a></h3>
+<h4>author: {{note['author']}}</h4>
+<h6>Note:</h6>
+<p>{{note['body']}}</p></div>
+<hr>
+{% endfor %}
+<h2>Public notes:</h2> 
+{% for note in public_notes %}
+<h3><a href="{{note['url']}}">{{note['title']}}</a></h3>
+<h4>author: {{note['author']}}</h4>
+<h6>Note:</h6>
+<p>{{note['body']}}</p></div>
+<hr>
+{% endfor %}
+{% endblock %}

@@ -23,6 +23,7 @@ notes = db.notes
 categories = db.categories
 users = db.users
 
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -34,25 +35,31 @@ def index():
     recentNotes = notes.find({"public": "True"}).limit(10).sort([('_id', -1)])
 
     if 'user_id' in session:
+        userLoggedIn = True
         userid = session['user_id']
         user = users.find_one({'_id': userid})
         username = user['username']
         userNotes = notes.find({'author': username})
         userCategories = categories.find({'user': username})
-        return render_template('index.html',
-                               title='Home Page',
-                               user=user,
-                               userLoggedIn=True,
-                               notes=userNotes,
-                               recentNotes=recentNotes)
+    else:
+        userLoggedIn = False
+        user = 'anonymous user'
+        userNotes = []
+
+    return render_template('index.html',
+                           title='Home Page',
+                           user=user,
+                           userLoggedIn=userLoggedIn,
+                           notes=userNotes,
+                           recentNotes=recentNotes)
 
     # if no user is logged in call them anonymous user
-    return render_template('index.html',
+    '''return render_template('index.html',
                            title='Home Page',
                            user='anonymous user',
                            userLoggedIn=False,
                            recentNotes=recentNotes,
-                           )
+                           )'''
 
 
 @app.route('/note/', methods=["GET", "POST"])
@@ -76,7 +83,9 @@ def new_note():
                            note=note,
                            displayedTime=datetime.now().strftime('%m/%d/%Y'),
                            exists=False,
-                           timestamp=datetime.now())
+                           timestamp=datetime.now(),
+                           user=user,
+                           userLoggedIn=True)
 
 
 '''
@@ -91,7 +100,7 @@ def note(note_id):
     #cursor =note.find({'public': { '$exists': True }})
 
     # https://stackoverflow.com/questions/1602934/check-if-a-given-key-already-exists-in-a-dictionary
-    
+
     if 'public' in note:
         public = note['public']
     else:
@@ -100,7 +109,8 @@ def note(note_id):
 
     return render_template('note.html',
                            note=note,
-                           user=db.users.find_one(({"_id": session['user_id']})),
+                           user=db.users.find_one(
+                               ({"_id": session['user_id']})),
                            timestamp=note['timestamp'],
                            displayedTime=datetime.strptime(
                                note['timestamp'], '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y'),
@@ -138,11 +148,11 @@ def page():
         timestamp = request.form['note_timestamp']
         note['timestamp'] = timestamp
         note['category'] = request.form['note_category']
-        isPublicChecked=request.form.get('public')
+        isPublicChecked = request.form.get('public')
         if isPublicChecked:
-              note['public'] = True
+            note['public'] = True
         else:
-            note['public']=False
+            note['public'] = False
         author = note['author'] = user['username']
         displayedTime = datetime.strptime(
             timestamp, '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y')
@@ -157,7 +167,8 @@ def page():
             db.users.find_one_and_update(
                 user, {'$push': {'notes': note['timestamp']}})
             return render_template('note.html',
-                                   user=user,
+                                   user=db.users.find_one(
+                                       ({"_id": session['user_id']})),
                                    displayedTime=displayedTime,
                                    note=note,
                                    title=title,
@@ -170,7 +181,8 @@ def page():
             #public = str(public)
             return render_template('note.html',
                                    note=note,
-                                   user=user,
+                                   user=db.users.find_one(
+                                       ({"_id": session['user_id']})),
                                    displayedTime=displayedTime,
                                    timestamp=timestamp,
                                    userLoggedIn=True)
@@ -205,7 +217,8 @@ def note_page():
                                url=url,
                                note=note,
                                title=title,
-                               public=public)
+                               public=public,
+                               userLoggedIn=True)
 
     if request.method == 'POST':
 
@@ -301,13 +314,13 @@ def notLoggedIn():
 '''
 Search notes
 '''
-@app.route('/search_notes', methods=["GET", "POST"])
-# @login_required
-def search_notes():
-    loggedIn = False
+@app.route('/search', methods=["GET", "POST"])
+@login_required
+def search():
+    #loggedIn = False
 
     if 'user_id' in session:
-        loggedIn = True
+        userLoggedIn = True
         user = db.users.find_one(({"_id": session['user_id']}))
         author = user['username']
         user_notes = user['notes']
@@ -317,7 +330,7 @@ def search_notes():
 
     if request.method == "POST":
         searchTerm = request.form.get('searchTerm')
-        if loggedIn == True:
+        if userLoggedIn == True:
             user_notes = db.notes.aggregate([
                 {'$match': {'$text': {'$search': searchTerm}}},
                 {'$match': {'author': author}}
@@ -333,13 +346,14 @@ def search_notes():
         You have to iterate the results, or alternatively turn them into a list with list(res).
         '''
 
-        return render_template('notes.html',
+        return render_template('search_results.html',
+                               user=user,
                                user_notes=user_notes,
                                public_notes=public_notes,
-                               loggedIn=loggedIn)
+                               userLoggedIn=userLoggedIn)
     # GET route
     else:
-        return render_template('search_notes.html')
+        return render_template('search.html')
 
 
 @app.route('/logout')

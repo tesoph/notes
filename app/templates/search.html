@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
 {% block title %}
+{{ super() }}
     Search
-{% endblock %}
+{% endblock title %}
 
 {% block app_content %}
-    <form action="/search_notes" method="post">
+    <form action="/search" method="post">
         <div class="form-group">
         <p>Search:</p>
             <input autocomplete="off" autofocus class="form-control" name="searchTerm" placeholder="Search Notes" type="text">

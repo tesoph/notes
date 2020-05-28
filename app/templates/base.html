@@ -4,7 +4,7 @@
 <head>
     {% block head %}
     <title>
-        {% block title %}{% if title %}{{ title }} - Notes{% else %}Welcome to Notes{% endif %}{% endblock title %}
+        {% block title %}Notes: {% endblock title %}
     </title>
     <!--needed ???????-->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -66,14 +66,14 @@
                 </li>
                 <li><a href="{{ url_for('index') }}">Home</a></li>
                 <li><a href="{{ url_for('new_note') }}">Create a new note</a></li>
-                <li><a href="{{ url_for('search_notes') }}">Search notes</a></li>
+                <li><a href="{{ url_for('search') }}">Search notes</a></li>
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
 
             <ul class="sidenav" id="slide-out">
                 <li><a href="{{ url_for('index') }}">Home</a></li>
                 <li><a href="{{ url_for('new_note') }}">Create a new note</a></li>
-                <li><a href="{{ url_for('search_notes') }}">Search notes</a></li>
+                <li><a href="{{ url_for('search') }}">Search notes</a></li>
                 <li><a href="mobile.html">Mobile</a></li>
             </ul>
             {% endblock navbar %}

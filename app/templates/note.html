@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
+{% block title %}
+{{ super() }}
+{% if note %}
+-{{note.title}}
+{% elif not note %}
+-Untitled {% endif %}
+{% endblock title %}
 
 {% block moreStyle %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
