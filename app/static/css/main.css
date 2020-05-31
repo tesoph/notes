@@ -4,53 +4,7 @@
     outline: solid #f00 1px !important;
   } */
 
-#navBar{
-  color:black;
-  background-color:#C4C2BF;
-}
-.nav{
-  background-color:lightgrey;
-  color:black  !important;
-}
-nav > * {
-  color:black;
-}
-.#navBar * {
-  color:black  !important;
-}
-nav ul a {
-  color:black;
-}
-.logo {
-  border-radius: 50%;
-  /*margin: 10px auto;*/
-  width:45px;
-  height:45px;
-}
-  .brand-logo{
-    color:black!important;
-    max-height:100%;
-    left: 50%;
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
-  }
-.sidenav{
- /* top:auto;*/
-}
 
-.form-group{
-  margin-top:0.5rem;
-  margin-bottom:0.5rem !important;
-}
-.card{
-  box-shadow:none !important;
-  margin:0  !important;
-  /*border:none  !important;*/
-}
-
-.card-body{
-  padding:0.5rem  !important;
-}
 /*
  * CONTENTS
  * (Media queries at the end of each relevant section)
@@ -63,8 +17,6 @@ nav ul a {
  * ------Buttons
  * Navbar
  * Footer
-
- * Note page
  * Index page
 
  * INDEX
@@ -123,133 +75,6 @@ background-color:#F5F5F4;
 }
  
 
-/*----------Note page---------*/
-
-#note_body {
-  height: 100%;
- /* background-color: red;*/
-}
-#my_id {
- /* background-color: red;*/
-  height: 100%;
-}
-
-.note_class {
-  /*background-color: red;*/
-}
-
- .form-group{
-  /* min-width:50%;*/
-
- }
- .titleBody{
- /* display: none;*/
-  border-bottom: 1px solid #ddd;
-  box-sizing: border-box;
-  padding: 2rem; }
-
- .titleBar{
-   display:flex;
-   align-items:center;
- }
- .bar{
-  padding: 0 4px 0 4px;
-  
-  outline: solid lightgrey 0.5px; 
- }
- #subBar{
-   display:flex;
-  min-width:100%;
-  max-width:100%;
-  background-color:#FBFBF2;
-    /* width:20%;*/
-     /*background-color:white;
-     color:black;
-     font-weight: bold;
-     text-align: left;*/
-    /* background-color: lightgray;*/
-      /* display: flex;
-       flex: 0 0 auto;
-       flex-shrink: 0;
-       flex-wrap: wrap;*/
-       /*padding: 0 4px 0 4px;*/
-       padding: 0.5rem;
-       outline: solid lightgrey 0.5px;
-      background-color:white;
-   }
-   .card{
-     /*background-color:lightgrey;*/
-    
-   }
- #subBtn,
- .informationElement {
-   align-items: center;
-     background: 0 0;
-     border: 0;
-     border-radius: 3px;
-     box-shadow: none;
-     color: #222f3e;
-     display: flex;
-     flex: 0 0 auto;
-     font-size: 14px;
-     font-style: normal;
-     font-weight: 400;
-     height: 34px;
-     justify-content: center;
-     margin: 2px 4px 3px 4px;
-     outline: 0;
-     overflow: hidden;
-     padding: 0 4px;
-     text-transform: none;
-     width: auto;
- }
- #subBtn:hover{
- background-color:lightgrey;
- }
- #noteContainer {
-  /*background-color: #eeebcf;*/
-  height:100%;
-padding:1%;
-/*flex: 1 0 auto;*/
-/*
-height:100%;
-display:flex;
-flex-direction:column;
-padding-right: 15px;
-padding-left: 15px;
-margin-right: auto;
-margin-left: auto;
-*/
-}
-#noteContainer input,
-textarea {
-  /*background-color: #fffef2;*/
- /* background-color:#FBFBF2;*/
- background-color:white;
-  color: black;
-}
-#noteForm {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  /*display: flex;
-  justify-content: center;
-  align-items: center;*/
-}
-.submitBtn {
-  padding: 3px 3px;
-}
-.btn {
- /* background-color: #C4C2BF !important;*/
-}
-
-@media (min-width: 768px) {
-/*  #noteContainer{
-    padding-left: 7.5%;
-    padding-right:7.5%;
-  }*/
-  }
 /*----------Index page---------*/
 
 .toolbarButtons{
@@ -264,6 +89,40 @@ textarea {
 .navbar {
   margin-bottom: 0;
 }
+#navBar{
+  color:black;
+  background-color:#C4C2BF;
+}
+.nav{
+  background-color:lightgrey;
+  color:black  !important;
+}
+nav > * {
+  color:black;
+}
+.#navBar * {
+  color:black  !important;
+}
+nav ul a {
+  color:black;
+}
+.logo {
+  border-radius: 50%;
+  /*margin: 10px auto;*/
+  width:45px;
+  height:45px;
+}
+  .brand-logo{
+    color:black!important;
+    max-height:100%;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
+.sidenav{
+ /* top:auto;*/
+}
+
 
 /*----------FOOTER---------*/
 
@@ -279,6 +138,9 @@ textarea {
       padding: 5px;
       font-size: 1rem;
   }
+
+
+
 
 
 
@@ -462,50 +324,7 @@ form{
   transition: ease-out .2s;
 }
 
-input[type="file"] {
-  margin-bottom: 10px;
-}
 
-.custom-file-upload {
-  /* HTML and CSS only file upload button from https://stackoverflow.com/questions/572768/styling-an-input-type-file-button */
-  background-color: white;
-  border: solid;
-  color: black;
-  margin-bottom: 1rem;
-  padding: .375rem .75rem;
-  text-align: center;
-  font-size: 16px;
-  opacity: 0.6;
-  -webkit-transition: 0.3s;
-  -o-transition: 0.3s;
-  transition: 0.3s;
-  display: block;
-  text-decoration: none;
-  cursor: pointer;
-  border-radius: .25rem;
-  -webkit-transition: border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-  transition: border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-  -o-transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-}
-
-label {
-  margin-bottom: 0px;
-}
-
-.custom-file-upload:hover {
-  -webkit-box-shadow: 0px 0px 10px grey;
-  box-shadow: 0px 0px 10px grey;
-  opacity: 1;
-}
-
-@media (min-width: 576px) {
-  .custom-file-upload {
-      display: inline-block;
-      text-align: left;
-  }
-}
 /*
 .row {
   display: flex;
@@ -519,7 +338,7 @@ label {
   flex-direction: column;
   flex-basis: 100%;
   flex: 1;
-}*/
+}*//*
 .collapsible{
 border-top: 0;
     border-right: 0;
@@ -531,10 +350,7 @@ border-top: 0;
   /*padding:10px;*/
 }
 
-input::-webkit-calendar-picker-indicator {
 
-  opacity: 100;
-}
 /*
 label{
   line-height:21px;
@@ -548,7 +364,7 @@ label{
 
 .input-field{
       /* width: 20%; */
-      background-color: #fff;
+    /*  background-color: #fff;
       display: flex;
       flex: 0 0 auto;
       flex-shrink: 0;
@@ -556,8 +372,10 @@ label{
       padding: 0 4px 0 4px;
     
 }
+}*/
+/*
 label.active{
   margin:0;
   padding: 1px 0px;
 }
-
+*/

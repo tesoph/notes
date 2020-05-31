@@ -1,0 +1,172 @@
+#content-wrapper{
+    margin:0;
+    padding:0;
+   background-color:#C4C2BF;
+}
+
+
+/*----------Note page---------*/
+
+#note_body {
+    height: 100%;
+   /* background-color: red;*/
+  }
+  #my_id {
+   /* background-color: red;*/
+    height: 100%;
+  }
+  
+  .note_class {
+    /*background-color: red;*/
+  }
+  
+   .form-group{
+    /* min-width:50%;*/
+  
+   }
+   .titleBody{
+   /* display: none;*/
+    border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
+    padding: 2rem; }
+  
+   .titleBar{
+     display:flex;
+     flex-flow: row nowrap;
+     align-items: stretch;
+   }
+   .bar{
+    display:flex;
+    min-width:100%;
+    max-width:100%;
+    background-color:#FBFBF2;
+      /* width:20%;*/
+       /*background-color:white;
+       color:black;
+       font-weight: bold;
+       text-align: left;*/
+      /* background-color: lightgray;*/
+        /* display: flex;
+         flex: 0 0 auto;
+         flex-shrink: 0;
+         flex-wrap: wrap;*/
+         /*padding: 0 4px 0 4px;*/
+         /*padding: 0.5rem;*/
+         outline: solid lightgrey 0.5px;
+        background-color:white;
+    
+    outline: solid lightgrey 0.5px; 
+   }
+   #subBar{
+     display:flex;
+    min-width:100%;
+    max-width:100%;
+    background-color:#FBFBF2;
+      /* width:20%;*/
+       /*background-color:white;
+       color:black;
+       font-weight: bold;
+       text-align: left;*/
+      /* background-color: lightgray;*/
+        /* display: flex;
+         flex: 0 0 auto;
+         flex-shrink: 0;
+         flex-wrap: wrap;*/
+         /*padding: 0 4px 0 4px;*/
+         /*padding: 0.5rem;*/
+         outline: solid lightgrey 0.5px;
+        background-color:white;
+     }
+     .card{
+       /*background-color:lightgrey;*/
+      
+     }
+   #subBtn,
+   .informationElement {
+     align-items: center;
+       background: 0 0;
+       border: 0;
+       border-radius: 3px;
+       box-shadow: none;
+       color: #222f3e;
+       display: flex;
+       flex: 0 0 auto;
+       font-size: 14px;
+       font-style: normal;
+       font-weight: 400;
+       height: 34px;
+       justify-content: center;
+       margin: 2px 4px 3px 4px;
+       outline: 0;
+       overflow: hidden;
+       padding: 0 4px;
+       text-transform: none;
+       width: auto;
+   }
+   #subBtn:hover{
+   background-color:lightgrey;
+   }
+   #noteContainer {
+    /*background-color: #eeebcf;*/
+    height:100%;
+    padding: 0 0.5% 0 0.5%;
+  /*padding:1%;*/
+  /*flex: 1 0 auto;*/
+  /*
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  */
+  }
+  #noteContainer input,
+  textarea {
+    /*background-color: #fffef2;*/
+   /* background-color:#FBFBF2;*/
+   background-color:white;
+    color: black;
+  }
+  #noteForm {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /*display: flex;
+    justify-content: center;
+    align-items: center;*/
+  }
+  .submitBtn {
+    padding: 3px 3px;
+  }
+  .btn {
+   /* background-color: #C4C2BF !important;*/
+  }
+  
+  @media (min-width: 768px) {
+  /*  #noteContainer{
+      padding-left: 7.5%;
+      padding-right:7.5%;
+    }*/
+    }
+
+    .form-group{
+        margin-top:0.5rem;
+        margin-bottom:0.5rem !important;
+      }
+      .card{
+        box-shadow:none !important;
+        margin:0  !important;
+        /*border:none  !important;*/
+      }
+      
+      .card-body{
+        padding:0.5rem  !important;
+       /* background-color:#C4C2BF !important;*/
+      }
+      input::-webkit-calendar-picker-indicator {
+
+        opacity: 100;
+      }

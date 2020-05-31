@@ -10,6 +10,9 @@
 
 {% block moreStyle %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <!--Custom CSS-->
+  <link rel="stylesheet" href="{{url_for('static', filename='css/notepage.css')}}" type="text/css">
+
 {% endblock moreStyle %}
 
 {% block app_content %}
@@ -26,11 +29,11 @@
         <i class="material-icons">more_vert</i>
       </button>
    
-      <div class="col">
+   
         <label class='sr-only' for="note_title">Title: </label>
         <input id="note_title" name="note_title" type="text" class="validate form-control" value="{{note.title}}"
           placeholder=" {% if note %}{{note.title}}{% elif not note %}Title{% endif %}">
-      </div>
+     
     </div>
 
     <div class="collapse" id="collapseExample">
