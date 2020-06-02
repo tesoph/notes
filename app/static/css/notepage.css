@@ -170,3 +170,8 @@
 
         opacity: 100;
       }
+
+      .footer{
+        text-align: right;
+        height:10px;
+      }

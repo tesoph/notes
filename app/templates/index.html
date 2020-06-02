@@ -4,8 +4,10 @@
 Homepage
 {% endblock title %}
 {% block app_content %}
-<div class="container">
+<div class="cont">
     <h3>Welcome to notes app.</h3>
+    <div class="col">
+   
     <!--<h4>How to use:</h4>
 <p>Drag this bookmarklet to your bookmarks toolbar and click it when you are on a wikipedia page you would like to take notes on:</p>
 <p><a href="javascript:location.href='http://wiki-note.herokuapp.com/page/?url='+location.href+'&title='+document.title;">Note1</a>: note opens on new page</p>
@@ -20,9 +22,10 @@ Homepage
     <br>
     <br>
 </div>
+</div>
 
 {% if userLoggedIn %}
-<div class="container">
+<div class="cont">
     <h5>Your Notes:</h5>
     <div class="row">
         <ul class="collapsible" data-collapsible="accordion">

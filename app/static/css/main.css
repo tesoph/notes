@@ -3,8 +3,12 @@
     color: #0f0 !important;
     outline: solid #f00 1px !important;
   } */
-
-
+.collapsible{
+  width:100%;
+}
+.r{
+  margin:10px;
+}
 /*
  * CONTENTS
  * (Media queries at the end of each relevant section)
@@ -18,7 +22,7 @@
  * Navbar
  * Footer
  * Index page
-
+ * User forms register login 
  * INDEX
  *
  * ABOUT
@@ -128,9 +132,10 @@ nav ul a {
 
 .footer {
   background-color:#C4C2BF;
-  color:black;
+  color:#808080;
   padding: 5%;
   font-size: 1rem;
+  height:31px !important;
 }
 
 @media (min-width: 390px) {

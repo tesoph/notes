@@ -6,7 +6,10 @@
 {% endblock %}
 
 {% block app_content %}
+
     <form action="/register" method="post">
+        <div class="col-sm-12 col-md-6 col-lg-3">
+            <h3>Register</h3>
         <div class="form-group">
         <p>Username:</p>
             <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
@@ -20,5 +23,6 @@
             <input class="form-control" name="confirmation" placeholder="Password" type="password">
         </div>
         <button class="btn btn-primary" type="submit">Register</button>
+    </div>
     </form>
 {% endblock %}
