@@ -32,6 +32,7 @@ def index():
 
     # Get the 10 most recent 'public' notes
     # -1 means sorted from newest to oldest
+
     recentNotes = notes.find({"public": "True"}).limit(10).sort([('_id', -1)])
 
     if 'user_id' in session:

@@ -50,6 +50,8 @@ Homepage
                     </span>
                 </div>
             </li>
+            {% else %}
+            You don't have any notes yet!<a href="{{ url_for('new_note')}}" class='editNoteTitleButton'> Create a new note</a>
             {% endfor %}
 
         </ul>
