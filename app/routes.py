@@ -462,6 +462,8 @@ def register():
         del form['confirmation']
         form['password'] = generate_password_hash(form['password'])
 
+        form['categories'] = ["Home", "Work"]
+
         if not alreadyExists:
             users.insert_one(form)
 
