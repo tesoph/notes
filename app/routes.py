@@ -46,13 +46,15 @@ def index():
         userLoggedIn = False
         user = 'anonymous user'
         userNotes = []
+        userCategories = []
 
     return render_template('index.html',
                            title='Home Page',
                            user=user,
                            userLoggedIn=userLoggedIn,
                            notes=userNotes,
-                           recentNotes=recentNotes)
+                           recentNotes=recentNotes,
+                           categories=userCategories)
 
     # if no user is logged in call them anonymous user
     '''return render_template('index.html',
@@ -80,13 +82,18 @@ def new_note():
     #public = str(public)
     user = db.users.find_one(({"_id": session['user_id']}))
     note = {}
+    username = user['username']
+    #userCategories = categories.find({'user': username})
+    userCategories = user['categories']
+
     return render_template('note.html',
                            note=note,
                            displayedTime=datetime.now().strftime('%m/%d/%Y'),
                            exists=False,
                            timestamp=datetime.now(),
                            user=user,
-                           userLoggedIn=True)
+                           userLoggedIn=True,
+                           categories=userCategories)
 
 
 '''
@@ -129,7 +136,9 @@ Clicking the bookmarklet returns the wiki page in an iframe on the app site
 def page():
 
     user = db.users.find_one(({"_id": session['user_id']}))
-
+    username = user['username']
+    #userCategories = categories.find({'user': username})
+    userCategories = user['categories']
     if request.method == 'POST':
 
         # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
@@ -142,19 +151,27 @@ def page():
         #print('soup title:' + soup.title.string)
 
         note = {}
+
+        category = {}
+
         #note['url'] = request.values.get('url')
         # exists=note['exists']=request.form['exists']
         body = note['body'] = request.form['note_body']
         title = note['title'] = request.form['note_title']
         timestamp = request.form['note_timestamp']
         note['timestamp'] = timestamp
-        note['category'] = request.form['note_category']
+        # category=note['category']=request.form['note_category']
+
+        #categoryName = category['name'] = note['category'] = request.form['note_category']
+        categoryName = category['name'] = note['category'] = request.form['note_category']
+
         isPublicChecked = request.form.get('public')
         if isPublicChecked:
             note['public'] = True
         else:
             note['public'] = False
-        author = note['author'] = user['username']
+
+        category['user'] = author = note['author'] = user['username']
         displayedTime = datetime.strptime(
             timestamp, '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y')
         # https://docs.mongodb.com/manual/reference/operator/query/and/
@@ -163,10 +180,31 @@ def page():
 
         alreadyExists = db.notes.find_one(
             {'$and': [{'timestamp': timestamp}, {'author': author}]})
+
+        # categoryAlreadyExists = categories.find_one(
+        #    {'$and': [{"_id": session['user_id']}, {'name': categoryName}]})
+
+        categoryAlreadyExists = db.users.find_one({'$and': [
+            {"username": username},
+            {"categories": categoryName }
+        ]
+        })
+
         if not alreadyExists:
             db.notes.insert(note)
             db.users.find_one_and_update(
                 user, {'$push': {'notes': note['timestamp']}})
+
+        """
+        if not categoryAlreadyExists:
+            db.categories.insert(category)
+            db.users.find_one_and_update(user, {'$push': {'categories': note['category']}})"""
+        if not categoryAlreadyExists:
+
+            db.users.find_one_and_update(
+                user, {'$push': {'categories': categoryName}})
+
+        if not alreadyExists:
             return render_template('note.html',
                                    user=db.users.find_one(
                                        ({"_id": session['user_id']})),
@@ -174,11 +212,13 @@ def page():
                                    note=note,
                                    title=title,
                                    timestamp=timestamp,
-                                   userLoggedIn=True)
+                                   userLoggedIn=True,
+                                   category=categoryName,
+                                   categories=userCategories)
         else:
             # unhashable type 'dict'
             db.notes.update_one(
-                alreadyExists, {'$set': {'body': body, 'title': title}})
+                alreadyExists, {'$set': {'body': body, 'title': title, 'category': category}})
             #public = str(public)
             return render_template('note.html',
                                    note=note,
@@ -186,7 +226,8 @@ def page():
                                        ({"_id": session['user_id']})),
                                    displayedTime=displayedTime,
                                    timestamp=timestamp,
-                                   userLoggedIn=True)
+                                   userLoggedIn=True,
+                                   categories = userCategories)
 
 
 '''

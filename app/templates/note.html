@@ -10,8 +10,8 @@
 
 {% block moreStyle %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  <!--Custom CSS-->
-  <link rel="stylesheet" href="{{url_for('static', filename='css/notepage.css')}}" type="text/css">
+<!--Custom CSS-->
+<link rel="stylesheet" href="{{url_for('static', filename='css/notepage.css')}}" type="text/css">
 
 {% endblock moreStyle %}
 
@@ -19,21 +19,21 @@
 <!--form container-->
 <div id='noteContainer'>
   <!--form-->
-  <form action="/page/" method='POST' id='noteForm' class='browser-default'>
+  <form action="/page/" method='POST' id='noteForm' class='browser-default' autocomplete="off">
     <!--title bar-->
     <div class="titleBar " id='subBar'>
-      
-    
+
+
       <button class=" btn btn-light" type="button" data-toggle="collapse" data-target="#collapseExample"
         aria-expanded="false" aria-controls="collapseExample">
         <i class="material-icons">more_vert</i>
       </button>
-   
-   
-        <label class='sr-only' for="note_title">Title: </label>
-        <input id="note_title" name="note_title" type="text" class="validate form-control" value="{{note.title}}"
-          placeholder=" {% if note %}{{note.title}}{% elif not note %}Title{% endif %}">
-     
+
+
+      <label class='sr-only' for="note_title">Title: </label>
+      <input id="note_title" name="note_title" type="text" class="validate form-control" value="{{note.title}}"
+        placeholder=" {% if note %}{{note.title}}{% elif not note %}Title{% endif %}">
+
     </div>
 
     <div class="collapse" id="collapseExample">
@@ -43,7 +43,7 @@
         <!--timestamp-->
         <div class='bar'>
           <div class="form-group col-md-6">
-          Note created on {{displayedTime}}
+            Note created on {{displayedTime}}
           </div>
         </div>
         <!--public setting-->
@@ -63,13 +63,26 @@
         <div class="bar">
           <div class="form-group col-md-6">
             <label for="note_category">Category:</label>
-            <input class="form-control" type="text" list="categories" name="note_category"
+            
+              {% if note['category'] %}
+              <input class="form-control" type="text" list="categories" name="note_category"
+              placeholder="{{note['category']}}" />
+            <datalist id="categories">
+              <option>{{note['category']}}</option>
+             
+              {% elif not note['category'] %}
+
+              <input class="form-control" type="text" list="categories" name="note_category"
               placeholder="Select from list" />
             <datalist id="categories">
-              <option>Volvo</option>
-              <option>Saab</option>
-              <option>Mercedes</option>
-              <option>Audi</option>
+
+              {% endif %}
+
+              {% for category in categories %}
+              
+              <option>{{ category }}</option>
+              {% endfor %}
+           
               <option>Enter new category</option>
             </datalist>
           </div>
@@ -91,6 +104,6 @@
 
 {% block moreScripts %}
 <script src="https://cdn.tiny.cloud/1/ckycyfqwml2uv87kz8af3n6vc22p02k2phge19237f5rfny8/tinymce/5/tinymce.min.js"
-referrerpolicy="origin"></script>
+  referrerpolicy="origin"></script>
 <script type="text/javascript" src="{{url_for('static', filename='js/tinymce.js')}}"></script>
 {% endblock moreScripts %}
