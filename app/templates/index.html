@@ -7,26 +7,37 @@ Homepage
 <div class="cont">
     <h3>Welcome to notes app.</h3>
     <div class="col">
-   
-    <!--<h4>How to use:</h4>
+
+        <!--<h4>How to use:</h4>
 <p>Drag this bookmarklet to your bookmarks toolbar and click it when you are on a wikipedia page you would like to take notes on:</p>
 <p><a href="javascript:location.href='http://wiki-note.herokuapp.com/page/?url='+location.href+'&title='+document.title;">Note1</a>: note opens on new page</p>
 
 <p>(You must be signed into the app for the bookmarklet to work. If you are not signed in then clicking it will take you to the login page)</p>-->
-    <a href="{{ url_for('new_note')}}" class='editNoteTitleButton'>Create a new note</a>
-    <br>
-    <a href="" class='editNoteTitleButton'>Browse public notes</a>
-    <br>
-    <a href="" class='editNoteTitleButton'>Browse your feed</a>
-    <br>
-    <br>
-    <br>
-</div>
+        <a href="{{ url_for('new_note')}}" class='editNoteTitleButton'>Create a new note</a>
+        <br>
+        <a href="" class='editNoteTitleButton'>Browse public notes</a>
+        <br>
+        <a href="" class='editNoteTitleButton'>Browse your feed</a>
+        <br>
+        <br>
+        <br>
+    </div>
+   
 </div>
 
 {% if userLoggedIn %}
 <div class="cont">
+
     <h5>Your Notes:</h5>
+  
+        <div class="row">
+            <p>View by category: </p>
+            <a href="{{ url_for('index')}}" class='editNoteTitleButton'> All</a> |
+            {% for cat in categories %}
+            <a href="{{ url_for('category', cat=cat )}}" class='editNoteTitleButton'>{{cat}}</a>, <a href="{{url_for('delete_category', cat=cat)}}" class='deleteCategoryButton'>Delete</a> |
+            {% endfor %}
+   
+        </div>
     <div class="row">
         <ul class="collapsible" data-collapsible="accordion">
             {% for note in notes %}
@@ -35,6 +46,7 @@ Homepage
                     <div class="col s9">
                         <i class="material-icons">expand_more</i>
                         <strong> {{ note['title'] }}</strong> -{{ loop.index }}
+                        <p>{{ note['category'] }}</p>
 
                     </div>
                     <div class=" toolbarButtons col s3">
@@ -51,7 +63,8 @@ Homepage
                 </div>
             </li>
             {% else %}
-            You don't have any notes yet!<a href="{{ url_for('new_note')}}" class='editNoteTitleButton'> Create a new note</a>
+            You don't have any notes yet!<a href="{{ url_for('new_note')}}" class='editNoteTitleButton'>Create a new
+                note</a>
             {% endfor %}
 
         </ul>

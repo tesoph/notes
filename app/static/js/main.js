@@ -16,6 +16,22 @@ for (let i = 0; i < btns.length; i++) {
 
     }
 }
+let categoryBtns = document.getElementsByClassName("deleteCategoryButton");
+for (let i = 0; i < categoryBtns.length; i++) {
+    categoryBtns[i].onclick = function () {
+        console.log('clickt button');
+        if (confirmCategoryDelete()) {
+            console.log('clicked yes');
+            window.location.href=this.href;
+
+        }
+        else {
+            console.log('cliocked no');
+            return false;
+        }
+
+    }
+}
 
 function confirmDelete() {
     if (confirm("Do you want to permanently delete this note?")) {
@@ -26,6 +42,14 @@ function confirmDelete() {
     }
 }  
 
+function confirmCategoryDelete() {
+    if (confirm("Do you want to permanently delete this category? Notes belonging to this category will still be kept")) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}  
 //var url2 = document.getElementById('pageFrame').contentDocument.location;  // All good browsers
 
 function getURL(){
