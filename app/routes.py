@@ -441,10 +441,12 @@ def search():
                                user=user,
                                user_notes=user_notes,
                                public_notes=public_notes,
-                               userLoggedIn=userLoggedIn)
+                               userLoggedIn=True)
     # GET route
     else:
-        return render_template('search.html')
+        return render_template('search.html',
+        userLoggedIn=True,
+        user=user)
 
 
 @app.route('/logout')
@@ -543,7 +545,8 @@ def user(username):
         return render_template('user.html',
                                title='Profile page',
                                user=user,
-                               username=uname)
+                               username=uname,
+                               userLoggedIn=True)
     else:
         return render_template('index.html',
                                user='anonymous user')

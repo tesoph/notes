@@ -116,12 +116,14 @@ nav ul a {
   width:45px;
   height:45px;
 }
-  .brand-logo{
+  nav .brand-logo{
     color:black!important;
     max-height:100%;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
+    font-size:14px;
+    font-weight:bold;
   }
 .sidenav{
  /* top:auto;*/
