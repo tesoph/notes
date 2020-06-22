@@ -43,7 +43,7 @@
                             class="material-icons">menu</i></a>
                            <!-- <a href="{{ url_for('index') }}" class='brand-logo'><img class="logo" src="{{url_for('static', filename='img/logo.png')}}" alt="logo">-->
                     <a href="{{ url_for('index') }}" class="brand-logo logo">Notes</a>
-                    <ul class="right">
+                    <ul class="right hide-on-small-only">
                         {% if not userLoggedIn %}
                         <li><a href="{{ url_for('register') }}">Sign up</a></li>
                         <li><a href="{{ url_for('login') }}">Login</a></li>
@@ -63,6 +63,7 @@
                             <img class="nav-background-img" src="{{url_for('static', filename='img/c4c2bf.png')}}">
                         </div>
                         <ul>
+                            
                             {% if not userLoggedIn %}
                             <li><a href="{{ url_for('register') }}">Sign up</a></li>
                             <li><a href="{{ url_for('login') }}">Login</a></li>
@@ -70,6 +71,7 @@
                             <li><a href="{{ url_for('user', username = session['username']) }}">{{user.username}}</a>
                             </li>
                             {% endif %}
+                        
                         </ul>
                     </div>
                 </li>
@@ -111,7 +113,15 @@
 
         {% block footer %}
         <!-- Footer -->
-        <footer class='footer'>&copy; 2020 ray</footer>
+        <footer class='footer'>
+            <div class="container-fluid">
+               
+                    <div class="footer-div">
+                        © 2020 Ray
+                    </div>
+                
+            </div>
+        </footer>
         {% endblock footer %}
     </div>
     <!-- JQuery JS-->

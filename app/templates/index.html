@@ -4,7 +4,8 @@
 Homepage
 {% endblock title %}
 {% block app_content %}
-<div class="cont">
+<div class="container-fluid">
+<div>
     <h3>Welcome to notes app.</h3>
     <div class="col">
 
@@ -26,7 +27,7 @@ Homepage
 </div>
 
 {% if userLoggedIn %}
-<div class="cont">
+<div>
 
     <h5>Your Notes:</h5>
   
@@ -71,5 +72,5 @@ Homepage
     </div>
 </div>
 {% endif %}
-
+</div>
 {% endblock app_content %}
