@@ -4,6 +4,7 @@
 {{ user.username }}
 {% endblock title %}
 {% block app_content %}
+<div class="container-fluid">
 <h1>User: {{ user.username }}</h1>
 
 {% if user.about_me %}
@@ -21,4 +22,5 @@
     {{ post.author.username }} says: <b>{{ post.body }}</b>
 </p>
 {% endfor %}
-{% endblock %}
+</div>
+{% endblock app_content %}

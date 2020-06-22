@@ -122,7 +122,7 @@ nav ul a {
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
-    font-size:14px;
+    font-size:14px !important;
     font-weight:bold;
   }
 .sidenav{

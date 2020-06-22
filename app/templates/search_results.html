@@ -11,22 +11,70 @@ Search results
 {% if userLogggedIn == False %}
 <p>Sign in to search your own notes</p>
 {% endif %}-->
-<h2>Your notes:</h2> 
-{% for note in user_notes %}
-<h3><a href="{{note['url']}}">{{note['title']}}</a></h3>
-<h4>author: {{note['author']}}</h4>
-<h6>Note:</h6>
-<p>{{note['body']}}</p>
-<hr>
-{% endfor %}
+<div class="container-fluid">
+<h2>Search results: </h2>
+<h3>Your notes:</h3> 
+<div class="row">
+    <ul class="collapsible" data-collapsible="accordion">
+        {% for note in user_notes %}
+        <li>
+            <div class="collapsible-header">
+                <div class="col s9">
+                    <i class="material-icons">expand_more</i>
+                    <strong> {{ note['title'] }}</strong> -{{ loop.index }}
+                    <p>{{ note['category'] }}</p>
 
-<h2>Public notes:</h2> 
-{% for note in public_notes %}
-<h3><a href="{{note['url']}}">{{note['title']}}</a></h3>
-<h4>author: {{note['author']}}</h4>
-<h6>Note:</h6>
-<p>{{note['body']}}</p>
-<hr>
-{% endfor %}
+                </div>
+                <div class=" toolbarButtons col s3">
+                    <a href="{{ url_for('note', note_id=note._id )}}" class='editNoteTitleButton'>Edit</a> |
+                    <a href="{{url_for('delete_note', note_id=note._id)}}" class='deleteNoteButton'>Delete</a>
 
+                </div>
+            </div>
+            <div class="collapsible-body">
+                <span>
+                    <!--striptags gets rid of the rich text formatting of the note-->
+                    {{note.body|striptags}}
+                </span>
+            </div>
+        </li>
+        {% else %}
+      No matching notes found!
+        {% endfor %}
+
+    </ul>
+</div>
+
+<h3>Public notes:</h3> 
+<div class="row">
+    <ul class="collapsible" data-collapsible="accordion">
+        {% for note in public_notes %}
+        <li>
+            <div class="collapsible-header">
+                <div class="col s9">
+                    <i class="material-icons">expand_more</i>
+                    <strong> {{ note['title'] }}</strong> -{{ loop.index }}
+                    <p>{{ note['category'] }}</p>
+
+                </div>
+                <div class=" toolbarButtons col s3">
+                    <a href="{{ url_for('note', note_id=note._id )}}" class='editNoteTitleButton'>Edit</a> |
+                    <a href="{{url_for('delete_note', note_id=note._id)}}" class='deleteNoteButton'>Delete</a>
+
+                </div>
+            </div>
+            <div class="collapsible-body">
+                <span>
+                    <!--striptags gets rid of the rich text formatting of the note-->
+                    {{note.body|striptags}}
+                </span>
+            </div>
+        </li>
+        {% else %}
+      No matching notes found!
+        {% endfor %}
+
+    </ul>
+</div>
+</div>
 {% endblock app_content%}
