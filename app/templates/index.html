@@ -32,7 +32,7 @@ Homepage
     <h5>Your Notes:</h5>
   
         <div class="row">
-            <p>View by category: </p>
+            <p>View by tag: </p>
             <a href="{{ url_for('index')}}" class='editNoteTitleButton'> All</a> |
             {% for cat in categories %}
             <a href="{{ url_for('category', cat=cat )}}" class='editNoteTitleButton'>{{cat}}</a>, <a href="{{url_for('delete_category', cat=cat)}}" class='deleteCategoryButton'>Delete</a> |

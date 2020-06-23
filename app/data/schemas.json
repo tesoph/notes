@@ -10,7 +10,11 @@ User [{
     "following": array of user _ids,
 
 }]
-
+Article[
+    id
+    saved by
+    
+]
 Note [{
     "_id": {
         "$oid": "<objectId>"

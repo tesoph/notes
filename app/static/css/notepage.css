@@ -81,6 +81,11 @@
        /*background-color:lightgrey;*/
       
      }
+     #subBtn{
+      color: #fff;
+      border-color: #007bff;
+      background-color: #007bff;
+     }
    #subBtn,
    .informationElement {
      align-items: center;
@@ -102,6 +107,10 @@
        padding: 0 4px;
        text-transform: none;
        width: auto;
+       color: #fff;
+       border-color: #007bff;
+       background-color: #007bff;
+       
    }
    #subBtn:hover{
    background-color:lightgrey;

@@ -62,7 +62,7 @@
         <!--category setting-->
         <div class="bar">
           <div class="form-group col-md-6">
-            <label for="note_category">Category:</label>
+            <label for="note_category">Tag:</label>
             
               {% if note['category'] %}
               <input class="form-control" type="text" list="categories" name="note_category"
@@ -83,7 +83,7 @@
               <option>{{ category }}</option>
               {% endfor %}
            
-              <option>Enter new category</option>
+              <option>Enter new tag</option>
             </datalist>
           </div>
         </div>
