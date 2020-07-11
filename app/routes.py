@@ -23,6 +23,14 @@ notes = db.notes
 categories = db.categories
 users = db.users
 
+@app.route('/test/', methods=['GET','POST'])
+def test():
+     nb=None
+     if request.method == "POST":
+         nb=request.json['data']
+         print(nb)
+     return render_template('note.html')
+
 
 @app.route('/')
 @app.route('/index')
@@ -237,6 +245,36 @@ def page():
                                    userLoggedIn=True,
                                    categories=userCategories)
 
+'''
+Auto SAve
+'''
+
+'''
+Bookmarklet #1
+Clicking the bookmarklet returns the wiki page in an iframe on the app site
+'''
+@app.route('/autosave/', methods=["GET", "POST"])
+@login_required
+def autosave():
+    user = db.users.find_one(({"_id": session['user_id']}))
+    username = user['username']
+    # userCategories = categories.find({'user': username})
+    userCategories = user['categories']
+    if request.method == 'POST':
+        note = {}
+        category = {}
+        data=request.get_json('data')
+        if data['public']=='true':
+                note['public'] = True
+        else:
+                note['public'] = False
+        note['body']=data['body']
+        note['title']=data['title']
+    #print('data', data)
+    #print('is it checkd: ')
+    #print(note['public'])
+    #flask-to-return-nothing-but-only-run-script
+    return('',204)
 
 @app.route('/category/<cat>')
 def category(cat):
@@ -315,16 +353,17 @@ def note_page():
 
         # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
         # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
-        url=request.values.get('url')
-        response=requests.post(url)
-        resp=response.text
-        html_doc=resp
-        soup=BeautifulSoup(html_doc, 'html.parser')
-        print('soup title:' + soup.title.string)
+        #url=request.values.get('url')
+        #response=requests.post(url)
+        #resp=response.text
+        #html_doc=resp
+        #soup=BeautifulSoup(html_doc, 'html.parser')
+        #print('soup title:' + soup.title.string)
 
         note={}
-        note['url']=request.values.get('url')
+        #note['url']=request.values.get('url')
         body=note['body']=request.form['note']
+        #body=note['body']=request.form['note_body']
         title=note['title']=request.form['note_title']
         public=note['public']=request.form['publicOption']
         public=str(public)
