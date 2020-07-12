@@ -47,7 +47,7 @@ tinymce.init({
     body_class: 'note_class',
     body_id: 'my_id',
     plugins: [
-        'advlist autolink autosave link lists charmap print preview hr anchor pagebreak save spellchecker',
+        'advlist autolink link lists charmap print preview hr anchor pagebreak save spellchecker',
         'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
         'table emoticons template paste help',
     ],

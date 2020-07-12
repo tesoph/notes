@@ -23,13 +23,14 @@ notes = db.notes
 categories = db.categories
 users = db.users
 
-@app.route('/test/', methods=['GET','POST'])
+
+@app.route('/test/', methods=['GET', 'POST'])
 def test():
-     nb=None
-     if request.method == "POST":
-         nb=request.json['data']
-         print(nb)
-     return render_template('note.html')
+    nb = None
+    if request.method == "POST":
+        nb = request.json['data']
+        print(nb)
+    return render_template('note.html')
 
 
 @app.route('/')
@@ -114,7 +115,7 @@ def note(note_id):
     note = db.notes.find_one({'_id': ObjectId(note_id)})
     user = db.users.find_one(
         {"_id": session['user_id']}
-        )
+    )
 
     username = user['username']
     # userCategories = categories.find({'user': username})
@@ -245,6 +246,7 @@ def page():
                                    userLoggedIn=True,
                                    categories=userCategories)
 
+
 '''
 Auto SAve
 '''
@@ -257,32 +259,48 @@ Clicking the bookmarklet returns the wiki page in an iframe on the app site
 @login_required
 def autosave():
     user = db.users.find_one(({"_id": session['user_id']}))
-    author= username = user['username']
+    author = username = user['username']
     # userCategories = categories.find({'user': username})
     userCategories = user['categories']
     if request.method == 'POST':
         note = {}
         category = {}
-        data=request.get_json('data')
-        body=note['body']=data['body']
-        title=note['title']=data['title']
-        if data['public']=='true':
-               public= note['public'] = True
+        data = request.get_json('data')
+        body = note['body'] = data['body']
+        title = note['title'] = data['title']
+        author = note['author'] = user['username']
+        if data['public'] == 'true':
+            public = note['public'] = True
         else:
-                public=note['public'] = False
+            public = note['public'] = False
         timestamp = note['timestamp'] = data['timestamp']
-        category=note['category']=data['category']
-    
+        category = note['category'] = data['category']
+
     noteAlreadyExists = db.notes.find_one(
-            {'$and': [{'timestamp': timestamp}, {'author': author}]})
+        {'$and': [{'timestamp': timestamp}, {'author': author}]})
+
+    categoryAlreadyExists = db.users.find_one({'$and': [
+        {"username": username},
+        {"categories": category}
+    ]
+    })
+
+    if not categoryAlreadyExists:
+        db.users.find_one_and_update(
+            user, {'$push': {'categories': category}})
+
     if noteAlreadyExists:
-        db.notes.update_one(
-                noteAlreadyExists, {'$set': {'body': body, 'title': title, 'category': category}})
-    #print('data', data)
-    #print('is it checkd: ')
-    #print(note['public'])
-    #flask-to-return-nothing-but-only-run-script
-    return('',204)
+        db.notes.update_one(noteAlreadyExists, {'$set': {'body': body, 'title': title, 'category': category}})
+    if not noteAlreadyExists:
+        db.notes.insert(note)
+        db.users.find_one_and_update(user, {'$push': {'notes': note['timestamp']}})
+
+    # print('data', data)
+    # print('is it checkd: ')
+    # print(note['public'])
+    # flask-to-return-nothing-but-only-run-script
+    return('', 204)
+
 
 @app.route('/category/<cat>')
 def category(cat):
@@ -292,7 +310,7 @@ def category(cat):
     # userNotes = notes.find({'author': username})
     userCategories = user['categories']
     notes = db.notes.find(
-            {'$and': [{'author': username}, {'category': cat}]})
+        {'$and': [{'author': username}, {'category': cat}]})
     return render_template('index.html',
                            title='Home Page',
                            user=user,
@@ -313,12 +331,12 @@ def delete_category(cat):
     db.notes.update(
         {'$and': [{'author': username}, {'category': cat}]},
         {'$unset': {"category": ""}}
-        )
+    )
 
     db.users.update(
         {"_id": session['user_id']},
         {'$pull': {"categories": {'$in': [cat]}}}
-        )
+    )
 
     # notes = db.notes
     # notes.remove({'_id': ObjectId(note_id)})
@@ -329,79 +347,79 @@ def delete_category(cat):
 Bookmarklet #1
 Clicking the bookmarklet returns the wiki page in an iframe on the app site
 '''
-@app.route('/page/', methods = ["GET", "POST"])
+@app.route('/page/', methods=["GET", "POST"])
 @login_required
 def note_page():
 
-    user=db.users.find_one(({"_id": session['user_id']}))
+    user = db.users.find_one(({"_id": session['user_id']}))
     # Database is searched for a note by the logged in user from the same wikipedia page
     if request.method == "GET":
-        url=request.args.get('url')
-        title=request.args.get('title')
-        note=db.notes.find_one(
+        url = request.args.get('url')
+        title = request.args.get('title')
+        note = db.notes.find_one(
             {'$and': [{'url': url}, {'author': user['username']}]})
         # If the note exists already it is returned to the user on the note taking page
         if note:
-            public=note['public']
-            public=str(public)
+            public = note['public']
+            public = str(public)
             print('note exists, is it public or private?' + str(public))
         if not note:
-            note={}
-            public=False
+            note = {}
+            public = False
         # Else if the note does not exist, the note is automatically set to private and the notetaking page is returned
 
         return render_template('page.html',
-                               url = url,
-                               note = note,
-                               title = title,
-                               public = public,
-                               userLoggedIn = True)
+                               url=url,
+                               note=note,
+                               title=title,
+                               public=public,
+                               userLoggedIn=True)
 
     if request.method == 'POST':
 
         # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
         # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
-        #url=request.values.get('url')
-        #response=requests.post(url)
-        #resp=response.text
-        #html_doc=resp
-        #soup=BeautifulSoup(html_doc, 'html.parser')
-        #print('soup title:' + soup.title.string)
+        # url=request.values.get('url')
+        # response=requests.post(url)
+        # resp=response.text
+        # html_doc=resp
+        # soup=BeautifulSoup(html_doc, 'html.parser')
+        # print('soup title:' + soup.title.string)
 
-        note={}
-        #note['url']=request.values.get('url')
-        body=note['body']=request.form['note']
-        #body=note['body']=request.form['note_body']
-        title=note['title']=request.form['note_title']
-        public=note['public']=request.form['publicOption']
-        public=str(public)
-        author=note['author']=user['username']
+        note = {}
+        # note['url']=request.values.get('url')
+        body = note['body'] = request.form['note']
+        # body=note['body']=request.form['note_body']
+        title = note['title'] = request.form['note_title']
+        public = note['public'] = request.form['publicOption']
+        public = str(public)
+        author = note['author'] = user['username']
 
         # https://docs.mongodb.com/manual/reference/operator/query/and/
         # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
         # db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
-        alreadyExists=db.notes.find_one(
+        alreadyExists = db.notes.find_one(
             {'$and': [{'url': url}, {'author': author}]})
         if not alreadyExists:
             db.notes.insert(note)
             db.users.find_one_and_update(
                 user, {'$push': {'notes': note['url']}})
             return render_template('page.html',
-                                   url = url,
-                                   note = note,
-                                   public = public,
-                                   title = title,
-                                   userLoggedIn = True)
+                                   url=url,
+                                   note=note,
+                                   public=public,
+                                   title=title,
+                                   userLoggedIn=True)
         else:
             # unhashable type 'dict'
             db.notes.update_one(
                 alreadyExists, {'$set': {'body': body, 'public': public}})
-            public=str(public)
+            public = str(public)
             return render_template('page.html',
-                                   url = url,
-                                   note = note,
-                                   public = public,
-                                   userLoggedIn = True)
+                                   url=url,
+                                   note=note,
+                                   public=public,
+                                   userLoggedIn=True)
 
 
 '''
@@ -409,7 +427,7 @@ Delete note
 '''
 @app.route('/delete_note/<note_id>')
 def delete_note(note_id):
-    notes=db.notes
+    notes = db.notes
     notes.remove({'_id': ObjectId(note_id)})
     return redirect(url_for('index'))
 
@@ -421,8 +439,8 @@ https://github.com/Code-Institute-Solutions/TaskManager/blob/master/04-EditingAT
 '''
 @app.route('/edit_note_title/<note_id>')
 def edit_note_title(note_id):
-    notes=db.notes
-    note=notes.find_one({'_id': ObjectId(note_id)})
+    notes = db.notes
+    note = notes.find_one({'_id': ObjectId(note_id)})
     return render_template('edit_note.html',
                            note=note)
 
@@ -492,8 +510,8 @@ def search():
     # GET route
     else:
         return render_template('search.html',
-        userLoggedIn=True,
-        user=user)
+                               userLoggedIn=True,
+                               user=user)
 
 
 @app.route('/logout')

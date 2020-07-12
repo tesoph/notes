@@ -33,7 +33,6 @@
       <label class='sr-only' for="note_title">Title: </label>
       <input id="note_title" name="note_title" type="text" class="validate form-control" value="{{note.title}}"
         placeholder=" {% if note %}{{note.title}}{% elif not note %}Title{% endif %}">
-
     </div>
 
     <div class="collapse" id="collapseExample">
@@ -65,14 +64,14 @@
             <label for="note_category">Tag:</label>
             
               {% if note['category'] %}
-              <input class="form-control" type="text" list="categories" name="note_category"
+              <input class="form-control" type="text" list="categories" id="note_category"
               placeholder="{{note['category']}}" />
             <datalist id="categories">
               <option>{{note['category']}}</option>
              
               {% elif not note['category'] %}
 
-              <input class="form-control" type="text" list="categories" name="note_category"
+              <input class="form-control" type="text" list="categories" id="note_category"
               placeholder="Select from list" />
             <datalist id="categories">
 
@@ -94,7 +93,8 @@
       <button class="" id='subBtn' type="submit">Save Note</button>
     </div>
     <!--note body-->
-    <textarea id="note_body" name="note_body"> {% if note %}{{note.body}}{% elif not note %}{% endif %}</textarea>
+    <textarea id="note_body" name="note_body" > {% if note %}{{note.body}}{% elif not note %}{% endif %}</textarea>
+    <div id="tinymce-livepreview"></div>
 
   </form>
   <!--end form-->
@@ -103,7 +103,12 @@
 {% endblock app_content %}
 
 {% block moreScripts %}
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
 <script src="https://cdn.tiny.cloud/1/ckycyfqwml2uv87kz8af3n6vc22p02k2phge19237f5rfny8/tinymce/5/tinymce.min.js"
   referrerpolicy="origin"></script>
+
+<script type="text/javascript" src="{{url_for('static', filename='js/autosave.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='js/tinymce.js')}}"></script>
 {% endblock moreScripts %}

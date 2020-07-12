@@ -150,6 +150,10 @@
   .submitBtn {
     padding: 3px 3px;
   }
+
+  #tinymce-livepreview{
+    visibility: hidden;
+  }
   .btn {
    /* background-color: #C4C2BF !important;*/
   }
