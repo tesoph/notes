@@ -1,5 +1,34 @@
 tinymce.init({
     selector: '#note_body',
+    setup: function(editor) {
+      /* $('#my_id').one('keydown', function(e) {
+            console.log('You will only see this once.');
+            autosave();
+
+        });*/
+        editor.on('keydown', function (e) {
+            console.log('Click or keydown event triggered!');
+            $('#tinymce-livepreview').html(tinymce.activeEditor.getContent());
+            ///autosave();
+          });
+        /*
+        editor.on('keyup', function(){
+               // Get the current editor's content
+               var content = editor.getContent();
+               // Find our "preview" div
+               // Set it's content to be the same as the editor's
+               document.getElementById("tinymce-livepreview").innerHTML = content;
+        })*/
+        /*
+        editor.on('keyup', function () {
+                    //editor.save();
+                   // console.log('inside setup')
+                    //tinyMCE.triggerSave()   <-- also tried
+                  
+                    $('#tinymce-livepreview').html(tinymce.activeEditor.getContent());
+                   
+});*/
+    },
     /*setup: function (editor) {
         editor.ui.registry.addMenuItem('save', {
             icon: 'save',
@@ -18,7 +47,7 @@ tinymce.init({
     body_class: 'note_class',
     body_id: 'my_id',
     plugins: [
-        'advlist autolink link lists charmap print preview hr anchor pagebreak save spellchecker',
+        'advlist autolink autosave link lists charmap print preview hr anchor pagebreak save spellchecker',
         'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
         'table emoticons template paste help',
     ],

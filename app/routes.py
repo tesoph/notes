@@ -257,19 +257,27 @@ Clicking the bookmarklet returns the wiki page in an iframe on the app site
 @login_required
 def autosave():
     user = db.users.find_one(({"_id": session['user_id']}))
-    username = user['username']
+    author= username = user['username']
     # userCategories = categories.find({'user': username})
     userCategories = user['categories']
     if request.method == 'POST':
         note = {}
         category = {}
         data=request.get_json('data')
+        body=note['body']=data['body']
+        title=note['title']=data['title']
         if data['public']=='true':
-                note['public'] = True
+               public= note['public'] = True
         else:
-                note['public'] = False
-        note['body']=data['body']
-        note['title']=data['title']
+                public=note['public'] = False
+        timestamp = note['timestamp'] = data['timestamp']
+        category=note['category']=data['category']
+    
+    noteAlreadyExists = db.notes.find_one(
+            {'$and': [{'timestamp': timestamp}, {'author': author}]})
+    if noteAlreadyExists:
+        db.notes.update_one(
+                noteAlreadyExists, {'$set': {'body': body, 'title': title, 'category': category}})
     #print('data', data)
     #print('is it checkd: ')
     #print(note['public'])

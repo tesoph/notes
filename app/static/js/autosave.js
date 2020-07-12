@@ -6,6 +6,15 @@
   tinymce.get('about').save();
 });
 */
+//changed = tinymce.get('note_body').getContent();
+
+//JQuery to only fire an event once
+//https://stackoverflow.com/questions/3393686/only-fire-an-event-once
+$('body').one("DOMSubtreeModified", '#tinymce-livepreview', function (e) {
+    // use e.whic
+    console.log('tinymce changed');
+//function autosave(){
+    console.log('triggered');
 //https://stackoverflow.com/questions/37073010/checkbox-value-true-false
 $("#public").on('change', function() {
     console.log('help');
@@ -23,9 +32,10 @@ setInterval(function(){
     //console.log("aaa: " + d);
     var body = d;
     var title = document.getElementById('note_title').value;
-    var category = document.getElementsByName('note_category').value;
+    var category = document.getElementById('note_category').value;
     var timestamp = document.getElementById('note_timestamp').value;
     var public = document.getElementById('public').value;
+    console.log('category check:  ' + category);
   /*  if (public=='true'){
         public == True;
     }else{
@@ -55,6 +65,10 @@ setInterval(function(){
         
       });
 }, 3000);
+
+//};
+});
+
 
 
 /*$(document).ready(function(){
