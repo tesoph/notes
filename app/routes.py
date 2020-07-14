@@ -316,7 +316,8 @@ def category(cat):
                            user=user,
                            userLoggedIn=True,
                            notes=notes,
-                           categories=userCategories)
+                           categories=userCategories,
+                           currentCat=cat)
 
 
 @app.route('/delete_category/<cat>')
