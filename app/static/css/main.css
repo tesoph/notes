@@ -88,6 +88,10 @@ background-color:#F5F5F4;
   margin: 10px;
 }
 
+#tag{
+  margin:0;
+  padding-right:10px;
+}
 /*----------Navbar--------*/
 
 .navbar {
@@ -104,7 +108,7 @@ background-color:#F5F5F4;
 nav > * {
   color:black;
 }
-.#navBar * {
+#navBar * {
   color:black  !important;
 }
 nav ul a {
