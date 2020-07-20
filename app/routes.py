@@ -179,9 +179,9 @@ def page():
         note['timestamp'] = timestamp
         # category=note['category']=request.form['note_category']
 
-        # categoryName = category['name'] = note['category'] = request.form['note_category']
         categoryName = category['name'] = note['category'] = request.form['note_category']
-
+        #category= category['name'] = note['category'] = request.form['note_category']
+        #category = note['category'] = data['category']
         isPublicChecked = request.form.get('public')
         if isPublicChecked:
             note['public'] = True
@@ -207,7 +207,10 @@ def page():
         ]
         })
 
-        if not alreadyExists:
+        if alreadyExists:
+            db.notes.update_one(
+                alreadyExists, {'$set': {'body': body, 'title': title, 'category': categoryName}})
+        else:
             db.notes.insert(note)
             db.users.find_one_and_update(
                 user, {'$push': {'notes': note['timestamp']}})
@@ -217,34 +220,11 @@ def page():
             db.categories.insert(category)
             db.users.find_one_and_update(user, {'$push': {'categories': note['category']}})"""
         if not categoryAlreadyExists:
-
             db.users.find_one_and_update(
                 user, {'$push': {'categories': categoryName}})
 
-        if not alreadyExists:
-            return render_template('note.html',
-                                   user=db.users.find_one(
-                                       ({"_id": session['user_id']})),
-                                   displayedTime=displayedTime,
-                                   note=note,
-                                   title=title,
-                                   timestamp=timestamp,
-                                   userLoggedIn=True,
-                                   category=categoryName,
-                                   categories=userCategories)
-        else:
-            # unhashable type 'dict'
-            db.notes.update_one(
-                alreadyExists, {'$set': {'body': body, 'title': title, 'category': categoryName}})
-            # public = str(public)
-            return render_template('note.html',
-                                   note=note,
-                                   user=db.users.find_one(
-                                       ({"_id": session['user_id']})),
-                                   displayedTime=displayedTime,
-                                   timestamp=timestamp,
-                                   userLoggedIn=True,
-                                   categories=userCategories)
+
+        return('', 204)
 
 
 '''

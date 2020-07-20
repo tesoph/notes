@@ -3,6 +3,9 @@
     color: #0f0 !important;
     outline: solid #f00 1px !important;
   } */
+  select {
+    display:inline;
+  }
 .collapsible{
   width:100%;
 }
@@ -382,13 +385,15 @@ label{
 */
 
 .input-field{
+}
       /* width: 20%; */
     /*  background-color: #fff;
       display: flex;
       flex: 0 0 auto;
       flex-shrink: 0;
-      flex-wrap: wrap;
+      flex-wrap: wrap
       padding: 0 4px 0 4px;
+}
     
 }
 }*/

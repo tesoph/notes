@@ -1,3 +1,17 @@
+//fORCE RELOAD ON BACK PAGE TO SHOW THE MOST RECENT WORK
+//https://stackoverflow.com/questions/43043113/how-to-force-reloading-a-page-when-using-browser-back-button
+/*if(performance.navigation.type == 2){
+    location.reload(true);
+ }*/
+ window.addEventListener( "pageshow", function ( event ) {
+    var historyTraversal = event.persisted || 
+                           ( typeof window.performance != "undefined" && 
+                                window.performance.navigation.type === 2 );
+    if ( historyTraversal ) {
+      // Handle page restore.
+      window.location.reload();
+    }
+  });
 
 //https://stackoverflow.com/questions/13667533/getelementsbyclassname-onclick-issue
 let btns = document.getElementsByClassName("deleteNoteButton");
