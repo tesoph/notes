@@ -85,5 +85,18 @@ $(document).click(function(e) {
 })
 
 $(document).ready(function () {
-    $('.sidenav').sidenav();
+    //Code on how to to initialize the Materialize sidenav from : https://stackoverflow.com/questions/51355020/materialize-css-sidenav-options-not-defined
+   // $('.sidenav').sidenav();
+   var elems = document.querySelectorAll('.sidenav');
+   var instances = M.Sidenav.init(elems, {
+    edge: 'left',
+    draggable: false,
+    inDuration: 250,
+    outDuration: 200,
+    onOpenStart: null,
+    onOpenEnd: null,
+    onCloseStart: null,
+    onCloseEnd: null,
+    preventScrolling: true
+   });
 });
