@@ -3,6 +3,23 @@
     color: #0f0 !important;
     outline: solid #f00 1px !important;
   } */
+  .material-icons{
+    vertical-align:middle;
+  }
+  @media (max-width: 500px) {
+    .titleCol{
+      overflow:auto;
+    }
+  }
+  
+
+  #note_body_display{
+    color:black;
+    background-color:white;
+    height:100%;
+    width:100;
+    padding:10px;
+  }
   select {
     display:inline;
   }

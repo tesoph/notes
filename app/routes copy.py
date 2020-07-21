@@ -100,6 +100,35 @@ def new_note():
 '''
 Clicking a note on the index page
 '''
+@app.route('/read/<note_id>', methods=["GET", "POST"])
+@login_required
+def read(note_id):
+    note = db.notes.find_one({'_id': ObjectId(note_id)})
+
+    # https://stackoverflow.com/questions/12030487/mongo-conditional-for-key-doesnt-exist
+    #cursor =note.find({'public': { '$exists': True }})
+
+    # https://stackoverflow.com/questions/1602934/check-if-a-given-key-already-exists-in-a-dictionary
+
+    if 'public' in note:
+        public = note['public']
+    else:
+        public = False
+    public = str(public)
+
+    return render_template('read.html',
+                           note=note,
+                           user=db.users.find_one(
+                               ({"_id": session['user_id']})),
+                           timestamp=note['timestamp'],
+                           displayedTime=datetime.strptime(
+                               note['timestamp'], '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y'),
+                           public=public,
+                           userLoggedIn=True,
+                           exists=True)
+'''
+Clicking a note on the index page
+'''
 @app.route('/note/<note_id>', methods=["GET", "POST"])
 @login_required
 def note(note_id):

@@ -4,6 +4,10 @@
    background-color:#C4C2BF;
 }
 
+#readTitle{
+  max-width:100%;
+  overflow:auto;
+}
 
 /*----------Note page---------*/
 

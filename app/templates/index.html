@@ -5,10 +5,16 @@ Homepage
 {% endblock title %}
 {% block app_content %}
 <div class="container-fluid">
-    <div class="row">
+    <div >
         <h3>Welcome to notes app.</h3>
     </div>
+     
+    {% if not userLoggedIn %}
+    <div><a href="{{ url_for('register') }}">Sign up </a> or <a href="{{ url_for('login') }}"> Login</a></div>
+    {% elif userLoggedIn %}
+    
     <div class="row"><a href="{{ url_for('new_note')}}" class='editNoteTitleButton'>Create a new note</a></div>
+    {% endif %}
     <div>
 
       <!--  <div class="col">
@@ -55,15 +61,22 @@ Homepage
                 {% for note in notes %}
                 <li>
                     <div class="collapsible-header">
-                        <div class="col s9">
+                        <div class="col s9 titleCol">
                             <i class="material-icons">expand_more</i>
-                            <strong> {{ note['title'] }}</strong> -{{ loop.index }}
+                            <strong> {{ note['title'] }}</strong>
                             <p>{{ note['category'] }}</p>
 
                         </div>
                         <div class=" toolbarButtons col s3">
-                            <a href="{{ url_for('note', note_id=note._id )}}" class='editNoteTitleButton'>Edit</a> |
-                            <a href="{{url_for('delete_note', note_id=note._id)}}" class='deleteNoteButton'>Delete</a>
+                            <a href="{{ url_for('read', note_id=note._id )}}" class='editNoteTitleButton'><span title="Read" class="material-icons">
+                                read_more
+                                </span></a> |
+                            <a href="{{ url_for('note', note_id=note._id )}}" class='editNoteTitleButton'><span title="Edit" class="material-icons">
+                                create
+                                </span></a> |
+                            <a href="{{url_for('delete_note', note_id=note._id)}}" class='deleteNoteButton'><span title="Delete" class="material-icons">
+                                delete
+                                </span></a>
 
                         </div>
                     </div>
