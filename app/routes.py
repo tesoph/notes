@@ -286,10 +286,6 @@ def autosave():
         body = note['body'] = data['body']
         title = note['title'] = data['title']
         author = note['author'] = user['username']
-        if data['public'] == 'true':
-            public = note['public'] = True
-        else:
-            public = note['public'] = False
         timestamp = note['timestamp'] = data['timestamp']
         category = note['category'] = data['category']
 
@@ -311,10 +307,6 @@ def autosave():
     if not noteAlreadyExists:
         db.notes.insert(note)
         db.users.find_one_and_update(user, {'$push': {'notes': note['timestamp']}})
-
-    # print('data', data)
-    # print('is it checkd: ')
-    # print(note['public'])
     # flask-to-return-nothing-but-only-run-script
     return('', 204)
 
