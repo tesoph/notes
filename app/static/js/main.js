@@ -90,7 +90,7 @@ $(document).ready(function () {
    var elems = document.querySelectorAll('.sidenav');
    var instances = M.Sidenav.init(elems, {
     edge: 'left',
-    draggable: false,
+    draggable: true,
     inDuration: 250,
     outDuration: 200,
     onOpenStart: null,
