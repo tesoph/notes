@@ -10,25 +10,21 @@
 
 {% block moreStyle %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-<!--Custom CSS-->
+<!-- Custom CSS -->
 <link rel="stylesheet" href="{{url_for('static', filename='css/notepage.css')}}" type="text/css">
-
 {% endblock moreStyle %}
 
 {% block app_content %}
-<!--form container-->
+<!--Form container-->
 <div id='noteContainer'>
-  <!--form-->
+  <!--Form-->
   <form action="/page/" method='POST' id='noteForm' class='browser-default' autocomplete="off">
-    <!--title bar-->
+    <!--Title bar-->
     <div class="titleBar " id='subBar'>
-
-
       <button class=" btn btn-light" type="button" data-toggle="collapse" data-target="#collapseExample"
         aria-expanded="false" aria-controls="collapseExample" id='moreButton'>
         <i class="material-icons">more_vert</i>
       </button>
-
 
       <label class='sr-only' for="note_title">Title: </label>
       <input id="note_title" name="note_title" type="text" class="validate form-control" value="{{note.title}}"
@@ -39,63 +35,46 @@
       <div class="card card-body">
         <input id="note_timestamp" name="note_timestamp" type="hidden" visibility='hidden' value="{{ timestamp }}"
           readonly>
-        <!--timestamp-->
+        <!--Timestamp-->
         <div class='bar'>
           <div class="form-group col-md-6">
             Note created on {{displayedTime}}
           </div>
         </div>
-        <!--public setting-->
-        <div class="bar">
-          <div class="form-group col-md-6">
-            <div class="custom-control custom-switch">
-              {% if note.public is sameas true %}
-              <input type="checkbox" class="custom-control-input" id="public" name="public" checked>
-              {% else %}
-              <input type="checkbox" class="custom-control-input" id="public" name="public">
-              {% endif %}
-              <label class="custom-control-label" for="public">Publicly visible</label>
-            </div>
-          </div>
-        </div>
-        <!--category setting-->
+        <!--Category setting-->
         <div class="bar">
           <div class="form-group col-md-6">
             <label for="note_category">Tag:</label>
-            
-              {% if note['category'] %}
-              <input class="form-control" type="text" list="categories" id="note_category" name='note_category'
+
+            {% if note['category'] %}
+            <input class="form-control" type="text" list="categories" id="note_category" name='note_category'
               placeholder="{{note['category']}}" />
             <datalist id="categories">
               <option>{{note['category']}}</option>
-             
+
               {% elif not note['category'] %}
 
               <input class="form-control" type="text" list="categories" id="note_category" name='note_category'
-              placeholder="Select from list" />
-            <datalist id="categories">
+                placeholder="Select from list" />
+              <datalist id="categories">
 
-              {% endif %}
+                {% endif %}
 
-              {% for category in categories %}
-              
-              <option>{{ category }}</option>
-              {% endfor %}
-           
-              <option>Enter new tag</option>
-            </datalist>
+                {% for category in categories %}
+
+                <option>{{ category }}</option>
+                {% endfor %}
+
+                <option>Enter new tag</option>
+              </datalist>
           </div>
         </div>
       </div>
     </div>
-    <!--save note-->
-   <!--<div id='subBar'>
-      <button class="" id='subBtn' type="submit">Save Note</button>
-    </div>--> 
-    <!--note body-->
-    <textarea id="note_body" name="note_body" > {% if note %}{{note.body}}{% elif not note %}{% endif %}</textarea>
+    <!--Note body-->
+    <textarea id="note_body" name="note_body"> {% if note %}{{note.body}}{% elif not note %}{% endif %}</textarea>
+    <!--Hidden div for noting a change in the tinymce editor-->
     <div id="tinymce-livepreview"></div>
-
   </form>
   <!--end form-->
 </div>
@@ -106,9 +85,10 @@
 <script type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 </script>
+<!--TinyMCE JS-->
 <script src="https://cdn.tiny.cloud/1/ckycyfqwml2uv87kz8af3n6vc22p02k2phge19237f5rfny8/tinymce/5/tinymce.min.js"
   referrerpolicy="origin"></script>
-
+<!--Custom JS-->
 <script type="text/javascript" src="{{url_for('static', filename='js/autosave.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='js/tinymce.js')}}"></script>
 {% endblock moreScripts %}

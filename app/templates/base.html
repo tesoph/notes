@@ -11,21 +11,14 @@
         {% block title %}Notes: {% endblock title %}
     </title>
 
-
-    <!--needed ???????-->
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <!--Materialize CSS-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-   <!-- <link rel="stylesheet" href="{{url_for('static', filename='css/materialize.css')}}" type="text/css">-->
-  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <!--Custom CSS-->
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" type="text/css">
 
-  
     {% block moreStyle %}{% endblock moreStyle %}
 
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
@@ -44,8 +37,7 @@
                 <div class="nav-wrapper">
                     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i
                             class="material-icons">menu</i></a>
-                           <!-- <a href="{{ url_for('index') }}" class='brand-logo'><img class="logo" src="{{url_for('static', filename='img/logo.png')}}" alt="logo">-->
-                    <a href="{{ url_for('index') }}" class="brand-logo logo">Notes</a>
+                    <a href="{{ url_for('index') }}" class="brand-logo logo">Note</a>
                     <ul class="right hide-on-small-only">
                         {% if not userLoggedIn %}
                         <li><a href="{{ url_for('register') }}">Sign up</a></li>
@@ -62,11 +54,9 @@
                 <li>
                     <div class="user-view">
                         <div class="background">
-                            <!--<img class="nav-background-img" src="static/img/c4c2bf.png">-->
                             <img class="nav-background-img" src="{{url_for('static', filename='img/c4c2bf.png')}}">
                         </div>
                         <ul>
-                            
                             {% if not userLoggedIn %}
                             <li><a href="{{ url_for('register') }}">Sign up</a></li>
                             <li><a href="{{ url_for('login') }}">Login</a></li>
@@ -74,7 +64,6 @@
                             <li><a href="{{ url_for('user', username = session['username']) }}">{{user.username}}</a>
                             </li>
                             {% endif %}
-                        
                         </ul>
                     </div>
                 </li>
@@ -83,16 +72,8 @@
                 <li><a href="{{ url_for('search') }}">Search notes</a></li>
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-
-            <ul class="sidenav" id="slide-out">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('new_note') }}">Create a new note</a></li>
-                <li><a href="{{ url_for('search') }}">Search notes</a></li>
-                <li><a href="mobile.html">Mobile</a></li>
-            </ul>
             {% endblock navbar %}
         </header>
-
 
         {% block content %}
         <!--Content wrapper-->
@@ -118,24 +99,16 @@
         <!-- Footer -->
         <footer class='footer'>
             <div class="container-fluid">
-               
-                    <div class="footer-div">
-                        © 2020 Ray
-                    </div>
-                
+                <div class="footer-div">
+                    © 2020 Ray
+                </div>
             </div>
         </footer>
         {% endblock footer %}
     </div>
     <!-- JQuery JS-->
-   <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-   -->
-        <script
-  src="https://code.jquery.com/jquery-3.5.1.js"
-  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-  crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <!--Popper JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -144,14 +117,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
-
-
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>-->
-
-
     <!-- Materialize JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <!--Custom-->
+    <!--Custom JS-->
     <script type="text/javascript" src="{{url_for('static', filename='js/main.js')}}"></script>
     {% block moreScripts %}{% endblock moreScripts %}
     {% endblock body %}

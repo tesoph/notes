@@ -9,50 +9,29 @@
 {% endblock title %}
 
 {% block moreStyle %}
+<!--Bootstrap CSS-->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <!--Custom CSS-->
 <link rel="stylesheet" href="{{url_for('static', filename='css/notepage.css')}}" type="text/css">
-
 {% endblock moreStyle %}
 
 {% block app_content %}
-
-<!--form container-->
+<!--Note container-->
 <div id='noteContainer'>
-    <!--form-->
-    <!--<form action="/page/" method='POST' id='noteForm' class='browser-default' autocomplete="off">-->
-    <!--title bar-->
-    <div class="titleBar " id='subBar'>
-     <div class="col"> <b>Note created on: </b> {{displayedTime}} | <b>Tag:</b>  {% if note['category'] %}  {{note['category']}} {% elif not note['category'] %}Untagged {% endif %} </div>
-    </div>
-   
-    <!--save note-->
-    <!--<div id='subBar'>
-      <button class="" id='subBtn' type="submit">Save Note</button>
-    </div>-->
-    <!--note body-->
-    <div id="note_body_display" name="note_body">
-        <h3 id="readTitle">{% if note %}{{note.title}}{% elif not note %}Title{% endif %}</h3>
-        <pre>
-            <!--Remove HTML tags from displayed text from :https://stackoverflow.com/questions/58922922/flask-reading-text-file-and-view-it-in-html-page-as-lines-->
+  <!--title bar-->
+  <div class="titleBar " id='subBar'>
+    <div class="col"> <b>Note created on: </b> {{displayedTime}} | <b>Tag:</b> {% if note['category'] %}
+      {{note['category']}} {% elif not note['category'] %}Untagged {% endif %} </div>
+  </div>
+  <!--note body-->
+  <div id="note_body_display" name="note_body">
+    <h3 id="readTitle">{% if note %}{{note.title}}{% elif not note %}Title{% endif %}</h3>
+    <pre>
+        <!--Remove HTML tags from displayed text from :https://stackoverflow.com/questions/58922922/flask-reading-text-file-and-view-it-in-html-page-as-lines-->
         {% if note %}{{note.body|safe}}{% elif not note %}{% endif %}
-        </pre>
-    </div>
-    <!-- <div id="tinymce-livepreview"></div>-->
-
-    <!-- </form>-->
-    <!--end form-->
+    </pre>
+  </div>
+  <!--end note-->
 </div>
-<!--end form container-->
+<!--end note container-->
 {% endblock app_content %}
-
-{% block moreScripts %}
-<!--<script type=text/javascript>
-  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-</script>
-<script src="https://cdn.tiny.cloud/1/ckycyfqwml2uv87kz8af3n6vc22p02k2phge19237f5rfny8/tinymce/5/tinymce.min.js"
-  referrerpolicy="origin"></script>
-
-<script type="text/javascript" src="{{url_for('static', filename='js/autosave.js')}}"></script>
-<script type="text/javascript" src="{{url_for('static', filename='js/tinymce.js')}}"></script>-->
-{% endblock moreScripts %}

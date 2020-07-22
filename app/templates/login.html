@@ -3,24 +3,21 @@
 {{ super() }}
 Login
 {% endblock title %}
-<!-- The method attribute specifies the HTTP request method that should be used when submitting the form 
-    to the server. The default is to send it with a GET request, but in almost all cases, 
-    using a POST request makes for a better user experience because requests of this type can 
-    submit the form data in the body of the request, 
-    while GET requests add the form fields to the URL, cluttering the browser address bar-->
-    {% block app_content %}
-    <div class="container-fluid">
-<div class="col-sm-12 col-md-6 col-lg-3">
-    <h2>Login</h2>
-    <form action="/login" method="post">
-        <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
-        </div>
-        <div class="form-group">
-            <input class="form-control" name="password" placeholder="Password" type="password">
-        </div>
-        <button class="btn btn-primary" type="submit">Log In</button>
-    </form>
-</div>
+
+{% block app_content %}
+<div class="container-fluid">
+    <div class="col-sm-12 col-md-6 col-lg-3">
+        <h2>Login</h2>
+        <form action="/login" method="post">
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username"
+                    type="text">
+            </div>
+            <div class="form-group">
+                <input class="form-control" name="password" placeholder="Password" type="password">
+            </div>
+            <button class="btn btn-primary" type="submit">Log In</button>
+        </form>
+    </div>
 </div>
 {% endblock %}
