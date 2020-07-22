@@ -7,38 +7,26 @@ var autoSave = (function () {
     return function () {
         if (!executed) {
             executed = true;
-            console.log('adljfldfjlskjdflfkjsldf');
             setInterval(function () {
-                console.log("timer x");
                 let ed = tinyMCE.get('note_body');
-                var d = ed.getContent();
-                //console.log("aaa: " + d);
-                var body = d;
+                var body = ed.getContent();
                 var title = document.getElementById('note_title').value;
                 var category = document.getElementById('note_category').value;
                 var timestamp = document.getElementById('note_timestamp').value;
-                var public = document.getElementById('public').value;
-                console.log('category check:  ' + category);
                 
                 var post = {
                     "body": body,
                     "title": title,
                     "category": category,
                     "timestamp": timestamp,
-                    "public": public,
                 }
-                console.log("post: " + post['body'] + "x:" + post['public']);
-                //let nb = $('my_id').html($(this).text());
-                //console.log("aaa:" + nb);
+                
                 //https://stackoverflow.com/questions/52459953/passing-variable-from-javascript-to-flask-using-ajax
                 $.ajax({
                     type: 'POST',
                     url: "/autosave/",
                     contentType: 'application/json;charset=UTF-8',
                     dataType: "json",
-                    //data : {'data':d}
-                    //data: JSON.stringify(data, null, '\t')
-                    //data: {body: bod}
                     data: JSON.stringify(post, null, '\t')
                 });
             }, 3000);
