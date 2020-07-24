@@ -1,34 +1,9 @@
- /**{
+/**{
     background: #000 !important;
     color: #0f0 !important;
     outline: solid #f00 1px !important;
   } */
-  .material-icons{
-    vertical-align:middle;
-  }
-  @media (max-width: 500px) {
-    .titleCol{
-      overflow:auto;
-    }
-  }
-  
 
-  #note_body_display{
-    color:black;
-    background-color:white;
-    height:100%;
-    width:100;
-    padding:10px;
-  }
-  select {
-    display:inline;
-  }
-.collapsible{
-  width:100%;
-}
-.r{
-  margin:10px;
-}
 /*
  * CONTENTS
  * (Media queries at the end of each relevant section)
@@ -38,7 +13,6 @@
  * Html, Body
  * -----Headings
  * Wrappers
- * ------Buttons
  * Navbar
  * Footer
  * Index page
@@ -54,369 +28,126 @@
  * Debugging
  */
 
- /*----------HTML, body---------*/
 
- html,
- body {
-  display:flex;
-  flex-direction: column;
-  height:100%;
- }
 
- /*----------Wrappers---------*/
+/*----------HTML, body---------*/
 
- /*page-container, content-wrapper, and footer from https://www.freecodecamp.org/news/how-to-keep-your-footer-where-it-belongs-59c6aa05c59c/*/
-#page-container {
-  /* display: -webkit-box;
-  display: -ms-flexbox;
+html,
+body {
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  width: 100%;
   height: 100%;
-  margin: 0px;
-  padding: 0px;
-  overflow-x: hidden;*/
-  display:flex;
-  flex-direction:column;
-  height:100%;
 }
-#pageContainer {
+
+/*----------Wrappers---------*/
+
+/*Code for page-container from https://www.freecodecamp.org/news/how-to-keep-your-footer-where-it-belongs-59c6aa05c59c/*/
+#page-container {
   display: flex;
-  flex-direction: row;
-  height: 100vw;
-  height: 100vh;
+  flex-direction: column;
+  height: 100%;
 }
+
 #content-wrapper {
-flex:1 0 auto;
-padding:2%;
-background-color:#F5F5F4;
+  flex: 1 0 auto;
+  padding: 2%;
+  background-color: #f5f5f4;
 }
- 
 
 /*----------Index page---------*/
+.collapsible {
+  width: 100%;
+}
 
-.toolbarButtons{
-  text-align:right;
+.toolbarButtons {
+  text-align: right;
 }
 .row {
   margin: 10px;
 }
 
-#tag{
-  margin:0;
-  padding-right:10px;
+#tag {
+  margin: 0;
+  padding-right: 10px;
 }
-/*----------Navbar--------*/
+
+.material-icons {
+  vertical-align: middle;
+}
+
+@media (max-width: 500px) {
+  .titleCol {
+    overflow: auto;
+  }
+}
+
+/*----------NAVBAR-------*/
 
 .navbar {
   margin-bottom: 0;
 }
-#navBar{
-  color:black;
-  background-color:#C4C2BF;
-}
-.nav{
-  background-color:lightgrey;
-  color:black  !important;
-}
-nav > * {
-  color:black;
-}
-#navBar * {
-  color:black  !important;
-}
-nav ul a {
-  color:black;
-}
-.logo {
-  border-radius: 50%;
-  /*margin: 10px auto;*/
-  width:45px;
-  height:45px;
-}
-  nav .brand-logo{
-    color:black!important;
-    max-height:100%;
-    left: 50%;
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
-    font-size:14px !important;
-    font-weight:bold;
-  }
-  
-.sidenav{
- /* top:auto;*/
+
+#navBar {
+  color: black;
+  background-color: #c4c2bf;
 }
 
-.nav-background-img{
-  width:100%;
-  height:100%;
+.nav {
+  background-color: lightgrey;
+  color: black !important;
+}
+
+nav > * {
+  color: black;
+}
+
+#navBar * {
+  color: black !important;
+}
+
+nav ul a {
+  color: black;
+}
+
+.logo {
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+}
+
+nav .brand-logo {
+  color: black !important;
+  max-height: 100%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  font-size: 14px !important;
+  font-weight: bold;
+}
+
+.nav-background-img {
+  width: 100%;
+  height: 100%;
 }
 
 /*----------FOOTER---------*/
 
 .footer {
-  background-color:#C4C2BF;
-  color:#808080;
-  padding: 5%;
+  background-color: #c4c2bf;
+  color: #808080;
+  padding: 5px;
   font-size: 1rem;
- /* height:31px !important;*/
 }
-.footer-div{
-  margin-left:auto; margin-right:0; 
+
+.footer-div {
+  margin-left: auto;
+  margin-right: 0;
   float: right;
 }
-@media (min-width: 390px) {
+
+@media (max-width: 390px) {
   .footer {
-      padding: 5px;
-      font-size: 1rem;
-  }
-
-
-
-
-
-
-
-/*
-#exists {
-  visibility: hidden;
-}*/
-
-
-/*page-container, content-wrapper, and footer from https://www.freecodecamp.org/news/how-to-keep-your-footer-where-it-belongs-59c6aa05c59c/*/
-
-.footer {
-  /*position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 2.5rem;
-  background-color: #f5f5f5;*/
-  /*padding:15px;*/
-  /*margin:15px;
-  font-size:1rem;*/
-}
-/*
-#cont {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-}*/
-/*
-#frameContainer {
-  width: 100%;
-  height: 100%;
-}
-*/
-/*
-#pageFrame {
-  width: 100%;
-  height: 100%;
-}*/
-
-/*
-#textContainer {
-  height: 75%;
-}
-
-*/
-
-
-/*
-#noteInfoContainer {
-}
-#textContainer {
-  height: 90%;
-}
-#note {
-  margin: auto;
-  height: 100%;
-
-  width: 100%;
-}*/
-
-
-
-
-/*
-
-input[type="text"], textarea {
-    width: 100%;
-    height:100%;
-    border: none;
-    background: #ccc;
-    font-family: arial;
-    padding: 10px;
-    box-sizing: border-box;
-    display: block;
-}
-*/
-/*
-form{
-    width:100%;
-    height:100%;
-}*/
-
-/*
-#frameContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 99vw;
-  height: 50vh;
-}
-
-#pageFrame {
-  margin:auto;
-  width: 98%;
-  height: 98%;
-}
-
-#noteContainer {
-
-  margin:1.5%;
-  color:black;
-  width: 100vw;
-  height: 50vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-}
-*/
-
-
-/*
-.footer i.fa, i.fab {
-  color: #8E8D8A;
-}
-
-.footer i.fa:hover, i.fab:hover {
-  color: black;
-}
-
-.footer {
-  background-color: white;
-  color: #8E8D8A;
-  padding: 5%;
-  font-size: 1rem;
-}
-
-.footer .container-fluid {
-  padding: 0px;
-}
-
-.footercol {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.fa, .fab {
-  font-size: 1.5rem;
-}
-
-@media (min-width: 390px) {
-  .footer {
-      padding: 5px;
-      font-size: 1rem;
-  }
-  .fa, .fab {
-      font-size: 2rem;
+    padding: 5px;
+    font-size: 1rem;
   }
 }
-*/
-
-.contact-info {
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.center-form {
-  margin-top: 25px;
-  padding-bottom: 25px;
-}
-
-.contact {
-  background: 0 0;
-  background-color: white;
-  width: 100%;
-  border: 1px solid rgba(0, 0, 0, .1);
-  margin-bottom: 1rem;
-  padding: 15px 20px;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  font: 300 16px "Inconsolata", sans-serif;
-  -webkit-transition: ease-out .2s;
-  -o-transition: ease-out .2s;
-  transition: ease-out .2s;
-}
-
-
-/*
-.row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-  flex-basis: 100%;
-  flex: 1;
-}*//*
-.collapsible{
-border-top: 0;
-    border-right: 0;
-    border-left: 0;
-    margin: 0;
-}
-
-.collapsible-body{
-  /*padding:10px;*/
-}
-
-
-/*
-label{
-  line-height:21px;
-  font-size:1rem;
-  display:block;
-  color:red;
-  margin-bottom:0;
-  position:relative;
-}
-*/
-
-.input-field{
-}
-      /* width: 20%; */
-    /*  background-color: #fff;
-      display: flex;
-      flex: 0 0 auto;
-      flex-shrink: 0;
-      flex-wrap: wrap
-      padding: 0 4px 0 4px;
-}
-    
-}
-}*/
-/*
-label.active{
-  margin:0;
-  padding: 1px 0px;
-}
-*/
