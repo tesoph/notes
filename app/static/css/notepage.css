@@ -13,6 +13,7 @@
   background-color: #c4c2bf;
 }
 
+
 #note_body {
   height: 100%;
 }
@@ -124,6 +125,18 @@ textarea {
   flex-direction: column;
 }
 
+#note_body_display{
+  color:black;
+  background-color:white;
+  height:100%;
+  width:100;
+  padding:10px;
+}
+
+select {
+  display:inline;
+}
+
 .submitBtn {
   padding: 3px 3px;
 }
@@ -149,3 +162,9 @@ textarea {
 input::-webkit-calendar-picker-indicator {
   opacity: 100;
 }
+/*
+.footer {
+  text-align: right;
+  height: 10px;
+}
+*/

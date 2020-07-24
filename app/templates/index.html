@@ -32,6 +32,10 @@ Homepage
                 <option value="{{ url_for('category', cat=cat )}}">{{cat}}</option>
                 {% endfor %}
             </select>
+            {% if currentCat %}
+            <a href="{{ url_for('delete_category', cat=currentCat)}}" >Delete this tag</a> (This will remove this tag from all notes and removes it from your list of tags, the notes will remain)
+            {% endif %}
+           
         </div>
         <div class="row">
             <ul class="collapsible" data-collapsible="accordion">
