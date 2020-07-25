@@ -5,7 +5,7 @@ Homepage
 {% endblock title %}
 {% block app_content %}
 <div class="container-fluid">
-    <div>
+    <div class='row'>
         <h3>Welcome to note</h3>
     </div>
 
@@ -33,7 +33,7 @@ Homepage
                 {% endfor %}
             </select>
             {% if currentCat %}
-            <a href="{{ url_for('delete_category', cat=currentCat)}}" >Delete this tag</a> (This will remove this tag from all notes and removes it from your list of tags, the notes will remain)
+            <a class='deleteCategoryButton' id='deleteCategoryButton' href="{{ url_for('delete_category', cat=currentCat)}}" >Delete this tag</a>
             {% endif %}
            
         </div>

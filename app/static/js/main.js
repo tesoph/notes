@@ -31,6 +31,53 @@ for (let i = 0; i < btns.length; i++) {
         }
     }
 }
+//Confirm to delete a note when clicking on the delete button
+function confirmCategoryDelete() {
+    if (confirm("Do you want to delete this tag from your list of tags? The notes under this tag will remain but they will be untagged.")) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}  
+
+let deleteCatButton = document.getElementById("deleteCategoryButton");
+if(deleteCatButton){
+    deleteCatButton.onclick = function () {
+        if (confirmCategoryDelete()) {
+            window.location.href=this.href;
+        }
+        else {
+            return false;
+        }
+    }
+}
+//Confrm to delete a category when clicking on the delete category button
+/*
+function confirmDeleteCategory() {
+    if (confirm("Do you want to delete this tag from your list of tags? The notes under this tag will remain but they will be untagged")) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}  
+
+let deleteCategoryButton = document.getElementsByClassName("deleteCategoryButton");
+
+    deleteCategoryButton.onclick = function () {
+        console.log('clicked');
+        if (confirmDeleteCategory()) {
+            window.location.href=this.href;
+        }
+        else {
+            return false;
+        
+    }
+
+}*/
+
+
 
 /*
 let categoryBtns = document.getElementsByClassName("deleteCategoryButton");

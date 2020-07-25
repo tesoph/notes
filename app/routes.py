@@ -47,7 +47,6 @@ def index():
                            notes=userNotes,
                            categories=userCategories)
 
-
 '''
 Create a new note
 '''
@@ -192,6 +191,7 @@ def delete_category(cat):
         {"_id": session['user_id']},
         {'$pull': {"categories": {'$in': [cat]}}}
     )
+    print('end')
     return redirect(url_for('index'))
 
 '''
