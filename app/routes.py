@@ -1,28 +1,13 @@
 import os
-import sys
-import requests
-import json
-import urllib
-from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for, json
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from app import app, db
-from flask_pymongo import PyMongo
-from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-from functools import wraps
-from bs4 import BeautifulSoup
 from bson.objectid import ObjectId
-from urllib.parse import urlparse
 from .helpers import login_required, before_request
 
-# logi_required fom cs50
-# whats args and kwargs
-# mongo = PyMongo(app)
-
 notes = db.notes
-categories = db.categories
 users = db.users
-
 
 @app.route('/')
 @app.route('/index')
