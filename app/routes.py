@@ -321,7 +321,7 @@ def register():
 
         # Redirect user to home page
         flash("Congratulations, you are now a registered user!")
-        return render_template('index.html', user=user)
+        return redirect('/')
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
