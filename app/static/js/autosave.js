@@ -11,7 +11,11 @@ var autoSave = (function () {
                 let ed = tinyMCE.get('note_body');
                 var body = ed.getContent();
                 var title = document.getElementById('note_title').value;
-                var category = document.getElementById('note_category').value;
+                if(document.getElementById('note_category').value.length==0){
+                    
+                }else{var category = document.getElementById('note_category').value;}
+    
+                
                 var timestamp = document.getElementById('note_timestamp').value;
                 
                 var post = {
