@@ -17,7 +17,7 @@ def index():
         userid = session['user_id']
         user = users.find_one({'_id': userid})
         username = user['username']
-        userNotes = notes.find({'author': username})
+        userNotes = notes.find({'author': username}).sort('_id', -1)
         userCategories = user['categories']
     else:
         userLoggedIn = False
