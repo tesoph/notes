@@ -94,6 +94,88 @@ def autosave():
     return('', 204)
 
 '''
+Bookmarklet #1
+Clicking the bookmarklet returns the wiki page in an iframe on the app site
+'''
+@app.route('/page/', methods=["GET", "POST"])
+@login_required
+def page():
+
+    user = db.users.find_one(({"_id": session['user_id']}))
+    username = user['username']
+    # userCategories = categories.find({'user': username})
+    userCategories = user['categories']
+    if request.method == 'POST':
+
+        # https://stackoverflow.com/questions/25491090/how-to-use-python-to-execute-a-curl-command
+        # https://stackoverflow.com/questions/13921910/python-urllib2-receive-json-response-from-url/13921930#13921930
+        # url = request.values.get('url')
+        # response = requests.post(url)
+        # resp = response.text
+        # html_doc = resp
+        # soup = BeautifulSoup(html_doc, 'html.parser')
+        # print('soup title:' + soup.title.string)
+
+        note = {}
+
+        category = {}
+
+        # note['url'] = request.values.get('url')
+        # exists=note['exists']=request.form['exists']
+        body = note['body'] = request.form['note_body']
+        title = note['title'] = request.form['note_title']
+        timestamp = request.form['note_timestamp']
+        note['timestamp'] = timestamp
+        # category=note['category']=request.form['note_category']
+
+        categoryName = category['name'] = note['category'] = request.form['note_category']
+        #category= category['name'] = note['category'] = request.form['note_category']
+        #category = note['category'] = data['category']
+        isPublicChecked = request.form.get('public')
+        if isPublicChecked:
+            note['public'] = True
+        else:
+            note['public'] = False
+
+        category['user'] = author = note['author'] = user['username']
+        displayedTime = datetime.strptime(
+            timestamp, '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y')
+        # https://docs.mongodb.com/manual/reference/operator/query/and/
+        # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
+        # db_request.append({'$and': [{'indoor': True}, {'outdoor': True}]})
+
+        alreadyExists = db.notes.find_one(
+            {'$and': [{'timestamp': timestamp}, {'author': author}]})
+
+        # categoryAlreadyExists = categories.find_one(
+        #    {'$and': [{"_id": session['user_id']}, {'name': categoryName}]})
+
+        categoryAlreadyExists = db.users.find_one({'$and': [
+            {"username": username},
+            {"categories": categoryName}
+        ]
+        })
+
+        if alreadyExists:
+            db.notes.update_one(
+                alreadyExists, {'$set': {'body': body, 'title': title, 'category': categoryName}})
+        else:
+            db.notes.insert(note)
+            db.users.find_one_and_update(
+                user, {'$push': {'notes': note['timestamp']}})
+
+        """
+        if not categoryAlreadyExists:
+            db.categories.insert(category)
+            db.users.find_one_and_update(user, {'$push': {'categories': note['category']}})"""
+        if not categoryAlreadyExists:
+            db.users.find_one_and_update(
+                user, {'$push': {'categories': categoryName}})
+
+
+        return('', 204)
+
+'''
 View a previously created note in read-only mode
 '''
 @app.route('/read/<note_id>', methods=["GET", "POST"])

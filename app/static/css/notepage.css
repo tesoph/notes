@@ -66,9 +66,9 @@
   max-width: 100%;
   background-color: #fbfbf2;
   align-items: center;
-  justify-content: center;
   outline: solid lightgrey 0.5px;
   background-color: white;
+  justify-content:start;
 }
 
 #subBtn {

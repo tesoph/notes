@@ -71,6 +71,10 @@
         </div>
       </div>
     </div>
+      <!--save note-->
+      <div id='subBar'>
+        <button class="" id='subBtn' type="submit">Save Note</button>
+      </div>
     <!--Note body-->
     <textarea id="note_body" name="note_body"> {% if note %}{{note.body}}{% elif not note %}{% endif %}</textarea>
     <!--Hidden div for noting a change in the tinymce editor-->
