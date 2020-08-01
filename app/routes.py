@@ -100,7 +100,6 @@ Save note through submitting the form
 @app.route('/page/', methods=["GET", "POST"])
 @login_required
 def page():
-
     user = db.users.find_one(({"_id": session['user_id']}))
     username = user['username']
     userCategories = user['categories']
@@ -132,7 +131,16 @@ def page():
         if not categoryAlreadyExists and len(categoryName)!=0:
             db.users.find_one_and_update(
                 user, {'$push': {'categories': categoryName}})
-        return('', 204)
+        flash("Note saved")
+        #return('',204)
+        #return render_template('note.html', note=note)
+        return render_template('note.html',
+                           note=note,
+                           displayedTime=timestamp,
+                           timestamp=timestamp,
+                           user=user,
+                           userLoggedIn=True,
+                           categories=userCategories)
 
 '''
 View a previously created note in read-only mode

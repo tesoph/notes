@@ -78,6 +78,7 @@
         {% block content %}
         <!--Content wrapper-->
         <div id='content-wrapper'>
+            {% block flashed %}
             <!--Flashed messages-->
             <div>
                 {% with messages = get_flashed_messages() %}
@@ -88,7 +89,7 @@
                 {% endif %}
                 {% endwith %}
             </div>
-
+{% endblock flashed %}
             <!--Page content-->
             {# application content needs to be provided in the app_content block #}
             {% block app_content %}{% endblock app_content %}

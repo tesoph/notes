@@ -10,7 +10,8 @@ Homepage
     </div>
 
     {% if not userLoggedIn %}
-    <div class='row'><a href="{{ url_for('register') }}">Sign up </a> or <a href="{{ url_for('login') }}"> Login</a></div>
+    <div class='row'><a href="{{ url_for('register') }}">Sign up </a> &nbsp; or &nbsp;<a href="{{ url_for('login') }}">
+            Login</a></div>
     {% elif userLoggedIn %}
     <div class="row"><a href="{{ url_for('new_note')}}" class='editNoteTitleButton'>Create a new note</a></div>
     {% endif %}
@@ -33,11 +34,14 @@ Homepage
                 {% endfor %}
             </select>
             {% if currentCat %}
-            <a class='deleteCategoryButton' id='deleteCategoryButton' href="{{ url_for('delete_category', cat=currentCat)}}" >Delete this tag</a>
+            <a class='deleteCategoryButton' id='deleteCategoryButton'
+                href="{{ url_for('delete_category', cat=currentCat)}}">Delete this tag</a>
             {% endif %}
         </div>
+     
         <div class="row">
             <ul class="collapsible" data-collapsible="accordion">
+              
                 {% for note in notes %}
                 <li>
                     <div class="collapsible-header">
@@ -69,7 +73,8 @@ Homepage
                     </div>
                 </li>
                 {% else %}
-                You don't have any notes yet!<a href="{{ url_for('new_note')}}" class='editNoteTitleButton'>Create a new note</a>
+                You don't have any notes yet!<a href="{{ url_for('new_note')}}" class='editNoteTitleButton'>Create a new
+                    note</a>
                 {% endfor %}
             </ul>
         </div>

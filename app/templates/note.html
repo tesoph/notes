@@ -13,8 +13,19 @@
 <!-- Custom CSS -->
 <link rel="stylesheet" href="{{url_for('static', filename='css/notepage.css')}}" type="text/css">
 {% endblock moreStyle %}
-
+{% block flashed %}
+<div>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert-saved alert-info" role="alert">{{ message }}</div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+</div>
+{% endblock flashed%}
 {% block app_content %}
+
 <!--Form container-->
 <div id='noteContainer'>
   <!--Form-->
