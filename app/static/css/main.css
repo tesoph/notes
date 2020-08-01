@@ -28,10 +28,9 @@
  * Debugging
  */
 
-#logo-img{
-  max-height:100%;
-  max-width:100%;
-}
+ /*----------Fonts---------*/
+
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
 
 /*----------HTML, body---------*/
 
@@ -40,6 +39,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  font-family: 'Lato', monospace;
 }
 
 /*----------Wrappers---------*/
@@ -130,6 +130,11 @@ nav .brand-logo {
   transform: translateX(-50%);
   font-size: 14px !important;
   font-weight: bold;
+}
+
+#logo-img{
+  max-height:100%;
+  max-width:100%;
 }
 
 .nav-background-img {
