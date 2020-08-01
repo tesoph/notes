@@ -37,7 +37,7 @@
                 <div class="nav-wrapper">
                     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i
                             class="material-icons">menu</i></a>
-                    <a href="{{ url_for('index') }}" class="brand-logo logo">Note</a>
+                    <a href="{{ url_for('index') }}" class="brand-logo logo"> <img id='logo-img' src="{{url_for('static', filename='img/writing.png')}}" alt="logo"> </a>
                     <ul class="right hide-on-small-only">
                         {% if not userLoggedIn %}
                         <li><a href="{{ url_for('register') }}">Sign up</a></li>

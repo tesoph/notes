@@ -65,6 +65,7 @@ $(document).ready(function() {
         $('.alert-saved').fadeOut('slow');
     }, 3000); // <-- time in milliseconds
 });
+
 //Materialize sidenav initialization settings
 $(document).ready(function () {
     //Code on how to to initialize the Materialize sidenav from: 
