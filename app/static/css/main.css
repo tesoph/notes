@@ -2,31 +2,33 @@
     background: #000 !important;
     color: #0f0 !important;
     outline: solid #f00 1px !important;
-  } */
-
+  } 
+*/
 /*
  * CONTENTS
  * (Media queries at the end of each relevant section)
  *
  * COMPONENTS
- * -----Fonts
+ * Colors
+ * Fonts
  * Html, Body
  * -----Headings
  * Wrappers
  * Navbar
  * Footer
  * Index page
- * User forms register login 
- * INDEX
- *
- * ABOUT
- *
- * SHOP
- *
- * CONTACT
- *
- * Debugging
  */
+
+ /*----------Colors---------*/
+ :root{
+   --page-bg-color: #F7F7F7;
+   --nav-bg-color: #BCB8B1;
+   --light-offset:#BCB8B1;
+   --text-color: black;
+   --highlight-color:#D95730;
+   --dark-offset: #403935;
+   --title-bar-color:#E9E8E6;
+ }
 
  /*----------Fonts---------*/
 
@@ -42,6 +44,16 @@ body {
   font-family: 'Lato', monospace;
 }
 
+a{
+  color:var(--highlight-color);
+}
+
+.collapsible-body{
+  background-color: var(--title-bar-color);
+}
+.bar{
+  background-color: var(--title-bar-color);
+}
 /*----------Wrappers---------*/
 
 /*Code for page-container from https://www.freecodecamp.org/news/how-to-keep-your-footer-where-it-belongs-59c6aa05c59c/*/
@@ -54,38 +66,9 @@ body {
 #content-wrapper {
   flex: 1 0 auto;
   padding: 2%;
-  background-color: #f5f5f4;
-}
-
-/*----------Index page---------*/
-.collapsible {
-  width: 100%;
-}
-
-.toolbarButtons {
-  text-align: right;
-}
-.row {
-  margin: 10px;
-}
-
-#tag {
-  margin: 0;
-  padding-right: 10px;
-}
-
-.material-icons {
-  vertical-align: middle;
-}
-
-select {
-  display:inline;
-}
-
-@media (max-width: 500px) {
-  .titleCol {
-    overflow: auto;
-  }
+  // background-color: #f5f5f4;
+  background-color: var(--page-bg-color);
+  color: var(--text-color);
 }
 
 /*----------NAVBAR-------*/
@@ -95,15 +78,20 @@ select {
 }
 
 #navBar {
-  color: black;
-  background-color: #c4c2bf;
+  //color: black;
+  color:var(--text-color)
+  //background-color: #c4c2bf;
+  background-color: var(--nav-bg-color);
 }
 
 .nav {
-  background-color: lightgrey;
-  color: black !important;
+  background-color: var(--light-offset)
+  color: var(--text-color);
 }
-
+#navBar * {
+  color: var(--text-color);
+}
+/*
 nav > * {
   color: black;
 }
@@ -114,7 +102,10 @@ nav > * {
 
 nav ul a {
   color: black;
-}
+}*//*
+nav ul a {
+  color: var(--text-color);
+}*/
 
 .logo {
   border-radius: 50%;
@@ -145,8 +136,8 @@ nav .brand-logo {
 /*----------FOOTER---------*/
 
 .footer {
-  background-color: #c4c2bf;
-  color: #808080;
+  background-color: var(--nav-bg-color);
+  color: var(--dark-offset);
   padding: 5px;
   font-size: 1rem;
 }
@@ -161,5 +152,36 @@ nav .brand-logo {
   .footer {
     padding: 5px;
     font-size: 1rem;
+  }
+}
+
+/*----------Index page---------*/
+.collapsible {
+  width: 100%;
+}
+
+.toolbarButtons {
+  text-align: right;
+}
+.row {
+  margin: 10px;
+}
+
+#tag {
+  margin: 0;
+  padding-right: 10px;
+}
+
+.material-icons {
+  vertical-align: middle;
+}
+
+select {
+  display:inline;
+}
+
+@media (max-width: 500px) {
+  .titleCol {
+    overflow: auto;
   }
 }

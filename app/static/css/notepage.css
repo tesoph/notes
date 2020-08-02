@@ -1,3 +1,13 @@
+ /*----------Colors---------*/
+ :root{
+  --page-bg-color: #F7F7F7;
+  --nav-bg-color: #BCB8B1;
+  --light-offset:#BCB8B1;
+  --text-color: black;
+  --highlight-color:#D95730;
+  --dark-offset: #403935;
+  --title-bar-color:white;
+}
 
 /*----------Read.html---------*/
 #readTitle {
@@ -12,8 +22,41 @@
   padding: 0;
   background-color: #c4c2bf;
 }
+button{
+  background-color:white;
+  align-items: center;
+    background: 0 0;
+    border: 0;
+    border-radius: 3px;
+    box-shadow: none;
+    color: #222f3e;
+    display: flex;
+    flex: 0 0 auto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    height: 34px;
+    justify-content: center;
+    margin: 2px 0 3px 0;
+    outline: 0;
+    overflow: hidden;
+    padding: 0 4px;
+    text-transform: none;
+    width: auto;
+}
+button:hover{
+  background-color: lightgray!important;
+}
+button:focus {
+  background-color:white;
+}
 
-
+#tagButton{
+  width:39.92px;
+}
+#moreButton{
+  width:39.92px;
+}
 #note_body {
   height: 100%;
 }
@@ -32,23 +75,25 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: stretch;
+  height: 39px;
 }
 
 .bar {
   display: flex;
   min-width: 100%;
   max-width: 100%;
-  background-color: #fbfbf2;
+  background-color: var(--title-bar-color);
   outline: solid lightgrey 0.5px;
 }
-
+/*
 #moreButton {
   border: none;
   display: inline-block;
   line-height: 1;
   height: 100%;
+  width:45px;
 }
-
+*/
 #note_title {
   height: 100%;
   margin: 0;
@@ -60,7 +105,6 @@
 }
 
 #subBar {
-  height: 40px;
   display: flex;
   min-width: 100%;
   max-width: 100%;
@@ -69,42 +113,7 @@
   outline: solid lightgrey 0.5px;
   background-color: white;
   justify-content:start;
-}
-
-#subBtn {
-  color: #fff;
-  border-color: #007bff;
-  background-color: #007bff;
-}
-
-#subBtn,
-.informationElement {
-  align-items: center;
-  background: 0 0;
-  border: 0;
-  border-radius: 3px;
-  box-shadow: none;
-  color: #222f3e;
-  display: flex;
-  flex: 0 0 auto;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  height: 34px;
-  justify-content: center;
-  margin: 2px 4px 3px 4px;
-  outline: 0;
-  overflow: hidden;
-  padding: 0 4px;
-  text-transform: none;
-  width: auto;
-  color: #fff;
-  border-color: #007bff;
-  background-color: #007bff;
-}
-
-#subBtn:hover {
-  background-color: lightgrey;
+  padding: 0 4px 0 4px;
 }
 
 #noteContainer {

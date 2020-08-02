@@ -18,7 +18,10 @@
   {% with messages = get_flashed_messages() %}
   {% if messages %}
   {% for message in messages %}
-  <div class="alert-saved alert-info" role="alert">{{ message }}</div>
+  <div>
+    <div class="alert alert-saved alert-info" role="alert">{{ message }}</div>
+  </div>
+
   {% endfor %}
   {% endif %}
   {% endwith %}
@@ -32,60 +35,70 @@
   <form action="/page/" method='POST' id='noteForm' class='browser-default' autocomplete="off">
     <!--Title bar-->
     <div class="titleBar " id='subBar'>
-      <button class=" btn btn-light" type="button" data-toggle="collapse" data-target="#collapseExample"
-        aria-expanded="false" aria-controls="collapseExample" id='moreButton'>
-        <i class="material-icons">more_vert</i>
-      </button>
-
       <label class='sr-only' for="note_title">Title: </label>
+      {% if note.title %}
       <input id="note_title" name="note_title" type="text" class="validate form-control" value="{{note.title}}"
         placeholder=" {% if note %}{{note.title}}{% elif not note %}Title{% endif %}">
+      {% else %}
+      <input id="note_title" name="note_title" type="text" class="validate form-control" value="{{note.title}}"
+        placeholder="Title">
+      {% endif %}
     </div>
+    <!--save note-->
+    <div id='subBar'>
+      <button class="" id='subBtn' type="submit"><span>Save</span></button>
+      <button class="" type="button" data-toggle="collapse" data-target="#collapseTag" aria-expanded="false"
+        aria-controls="collapseExample" id='tagButton'>
+        <span>Tag</span>
+      </button>
+      <button class="" type="button" data-toggle="collapse" data-target="#collapseInfo" aria-expanded="false"
+        aria-controls="collapseExample" id='moreButton'>
+        <span>Info</span>
+      </button>
+    </div>
+    <!--Tag collapsible-->
+    <div class="collapse" id="collapseTag">
+      <input id="note_timestamp" name="note_timestamp" type="hidden" visibility='hidden' value="{{ timestamp }}"
+        readonly>
+      <div class="bar">
+        <div class="form-group col-md-6">
+          <label for="note_category">Tag:</label>
 
-    <div class="collapse" id="collapseExample">
-      <div class="card card-body">
-        <input id="note_timestamp" name="note_timestamp" type="hidden" visibility='hidden' value="{{ timestamp }}"
-          readonly>
-        <!--Timestamp-->
-        <div class='bar'>
-          <div class="form-group col-md-6">
-            Note created on {{displayedTime}}
-          </div>
-        </div>
-        <!--Category setting-->
-        <div class="bar">
-          <div class="form-group col-md-6">
-            <label for="note_category">Tag:</label>
+          {% if note['category'] %}
+          <input class="form-control" type="text" list="categories" id="note_category" name='note_category'
+            placeholder="{{note['category']}}" />
+          <datalist id="categories">
+            <option>{{note['category']}}</option>
 
-            {% if note['category'] %}
+            {% elif not note['category'] %}
+
             <input class="form-control" type="text" list="categories" id="note_category" name='note_category'
-              placeholder="{{note['category']}}" />
+              placeholder="Select from list" />
             <datalist id="categories">
-              <option>{{note['category']}}</option>
 
-              {% elif not note['category'] %}
+              {% endif %}
 
-              <input class="form-control" type="text" list="categories" id="note_category" name='note_category'
-                placeholder="Select from list" />
-              <datalist id="categories">
+              {% for category in categories %}
 
-                {% endif %}
+              <option>{{ category }}</option>
+              {% endfor %}
 
-                {% for category in categories %}
-
-                <option>{{ category }}</option>
-                {% endfor %}
-
-                <option>Enter new tag</option>
-              </datalist>
-          </div>
+              <option>Enter new tag</option>
+            </datalist>
         </div>
       </div>
     </div>
-      <!--save note-->
-      <div id='subBar'>
-        <button class="" id='subBtn' type="submit">Save Note</button>
+    <!--More information collapsible-->
+    <div class="collapse" id="collapseInfo">
+      <input id="note_timestamp" name="note_timestamp" type="hidden" visibility='hidden' value="{{ timestamp }}"
+        readonly>
+      <!--Timestamp-->
+      <div class='bar'>
+        <div class="form-group col-md-6">
+          Note created on {{displayedTime}}
+        </div>
       </div>
+    </div>
     <!--Note body-->
     <textarea id="note_body" name="note_body"> {% if note %}{{note.body}}{% elif not note %}{% endif %}</textarea>
     <!--Hidden div for noting a change in the tinymce editor-->
