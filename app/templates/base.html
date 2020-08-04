@@ -90,12 +90,11 @@
                 {% endwith %}
             </div>
 {% endblock flashed %}
-            <!--Page content-->
-            {# application content needs to be provided in the app_content block #}
+            <!--App_content block -->
             {% block app_content %}{% endblock app_content %}
+            <!--End app_content block-->
         </div>
         {% endblock content %}
-
         {% block footer %}
         <!-- Footer -->
         <footer class='footer'>

@@ -13,7 +13,9 @@
 <!-- Custom CSS -->
 <link rel="stylesheet" href="{{url_for('static', filename='css/notepage.css')}}" type="text/css">
 {% endblock moreStyle %}
+
 {% block flashed %}
+<!--Flashed messages-->
 <div>
   {% with messages = get_flashed_messages() %}
   {% if messages %}
@@ -21,20 +23,19 @@
   <div>
     <div class="alert alert-saved alert-info" role="alert">{{ message }}</div>
   </div>
-
   {% endfor %}
   {% endif %}
   {% endwith %}
 </div>
 {% endblock flashed%}
-{% block app_content %}
 
-<!--Form container-->
+{% block app_content %}
+<!--Note form container-->
 <div id='noteContainer'>
   <!--Form-->
   <form action="/page/" method='POST' id='noteForm' class='browser-default' autocomplete="off">
     <!--Title bar-->
-    <div class="titleBar " id='subBar'>
+    <div class="titleBar " class='menuBar'>
       <label class='sr-only' for="note_title">Title: </label>
       {% if note.title %}
       <input id="note_title" name="note_title" type="text" class="validate form-control" value="{{note.title}}"
@@ -44,13 +45,16 @@
         placeholder="Title">
       {% endif %}
     </div>
-    <!--save note-->
-    <div id='subBar'>
+  <!--Menu bar-->
+    <div class='menuBar'>
+        <!--Save note button-->
       <button class="" id='subBtn' type="submit"><span>Save</span></button>
+       <!--Tag button-->
       <button class="" type="button" data-toggle="collapse" data-target="#collapseTag" aria-expanded="false"
         aria-controls="collapseExample" id='tagButton'>
         <span>Tag</span>
       </button>
+       <!--More information button-->
       <button class="" type="button" data-toggle="collapse" data-target="#collapseInfo" aria-expanded="false"
         aria-controls="collapseExample" id='moreButton'>
         <span>Info</span>
@@ -106,7 +110,6 @@
   </form>
   <!--end form-->
 </div>
-<!--end form container-->
 {% endblock app_content %}
 
 {% block moreScripts %}

@@ -19,7 +19,7 @@
 
 #content-wrapper {
   margin: 0;
-  padding: 0;
+  padding: 10px;
   background-color: #c4c2bf;
 }
 button{
@@ -76,6 +76,7 @@ button:focus {
   flex-flow: row nowrap;
   align-items: stretch;
   height: 39px;
+  border-radius: 25px 25px 0px 0px !important;
 }
 
 .bar {
@@ -97,14 +98,15 @@ button:focus {
 #note_title {
   height: 100%;
   margin: 0;
-  padding-left: 15px;
+  padding-left: 20px;
   border-bottom: 0;
+  border-radius: 25px 25px 0px 0px;
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
   -moz-box-sizing: border-box; /* Firefox, other Gecko */
   box-sizing: border-box; /* Opera/IE 8+ */
 }
 
-#subBar {
+.menuBar {
   display: flex;
   min-width: 100%;
   max-width: 100%;
@@ -177,3 +179,7 @@ input::-webkit-calendar-picker-indicator {
   height: 10px;
 }
 */
+
+.with-border{
+  border-radius: 0px 0px 25px 25px !important;
+}

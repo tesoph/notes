@@ -8,6 +8,11 @@ tinymce.init({
         editor.on('keydown', function (e) {
             $('#tinymce-livepreview').html(tinymce.activeEditor.getContent());
           });
+        //"with-border" class name added for custom CSS rules
+        //https://stackoverflow.com/questions/57435948/how-do-i-set-tinymce-border-radius
+        editor.on('init', function() {
+            editor.getContainer().className += ' with-border';
+        });
     },
     body_class: 'note_class',
     body_id: 'my_id',
