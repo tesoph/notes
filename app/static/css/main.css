@@ -17,6 +17,7 @@
  * Navbar
  * Footer
  * Index page
+ * User-profile page
  */
 
  /*----------Colors---------*/
@@ -46,6 +47,15 @@ body {
 
 a{
   color:var(--highlight-color);
+}
+
+.button{
+    color: black;
+    background-color:var(--highlight-color);
+  
+}
+.button:hover{
+  background-color:#E8A794;
 }
 
 .collapsible-body{
@@ -184,4 +194,10 @@ select {
   .titleCol {
     overflow: auto;
   }
+}
+
+/*----------User-profile page---------*/
+.user-profile{
+  background-color: #E9E8E6;
+  border-radius: 25px;
 }

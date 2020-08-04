@@ -7,21 +7,32 @@ Search results
 
 {% block app_content %}
 <div class="container-fluid">
-    <h2>Search results: </h2>
-    <h3>Your notes:</h3>
+    <div class='row'>
+        <h2>Search results: </h2>
+    </div>
     <div class="row">
         <ul class="collapsible" data-collapsible="accordion">
             {% for note in user_notes %}
             <li>
                 <div class="collapsible-header">
-                    <div class="col s9">
+                    <div class="col s9 titleCol">
                         <i class="material-icons">expand_more</i>
-                        <strong> {{ note['title'] }}</strong> -{{ loop.index }}
+                        <strong> {{ note['title'] }}</strong>
                         <p>{{ note['category'] }}</p>
                     </div>
                     <div class=" toolbarButtons col s3">
-                        <a href="{{ url_for('note', note_id=note._id )}}" class='editNoteTitleButton'>Edit</a> |
-                        <a href="{{url_for('delete_note', note_id=note._id)}}" class='deleteNoteButton'>Delete</a>
+                        <a href="{{ url_for('read', note_id=note._id )}}" class='editNoteTitleButton'><span
+                                title="Read" class="material-icons">
+                                read_more
+                            </span></a> |
+                        <a href="{{ url_for('note', note_id=note._id )}}" class='editNoteTitleButton'><span
+                                title="Edit" class="material-icons">
+                                create
+                            </span></a> |
+                        <a href="{{url_for('delete_note', note_id=note._id)}}" class='deleteNoteButton'><span
+                                title="Delete" class="material-icons">
+                                delete
+                            </span></a>
                     </div>
                 </div>
                 <div class="collapsible-body">

@@ -4,23 +4,16 @@
 {{ user.username }}
 {% endblock title %}
 {% block app_content %}
-<div class="container-fluid">
-    <h1>User: {{ user.username }}</h1>
+<div class="container-fluid user-profile">
+    <h1>{{ user.username }}</h1>
 
     {% if user.about_me %}
     <p>{{ user.about_me }}</p>
     {% endif %}
-
     {% if user.last_seen %}
-    <p>Last seen on: {{ user.last_seen }}</p>
+    <p>Last seen on: {{ user.last_seen.strftime('%Y-%m-%d %H:%M')  }}</p>
     {% endif %}
-
+    <p>Number of notes: {{ numberOfNotes }}</p>
     <hr>
-
-    {% for post in posts %}
-    <p>
-        {{ post.author.username }} says: <b>{{ post.body }}</b>
-    </p>
-    {% endfor %}
 </div>
 {% endblock app_content %}

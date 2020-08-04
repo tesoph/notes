@@ -391,11 +391,13 @@ def user(username):
         userid = session['user_id']
         user = users.find_one({'_id': userid})
         uname = user['username']
+        numberOfNotes = len(user['notes'])
         return render_template('user.html',
                                title='Profile page',
                                user=user,
                                username=uname,
-                               userLoggedIn=True)
+                               userLoggedIn=True,
+                               numberOfNotes=numberOfNotes)
     else:
         return render_template('index.html',
                                user='anonymous user')

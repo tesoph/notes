@@ -6,14 +6,18 @@ Search
 {% endblock title %}
 
 {% block app_content %}
-<div class="col-sm-12 col-md-6 col-lg-3">
+<div class="container-fluid">
+    <div class="row">   <h2>Search </h2></div>
+   <div class="row">
     <form action="/search" method="post">
         <div class="form-group">
-            <p>Search:</p>
             <input autocomplete="off" autofocus class="form-control" name="searchTerm" placeholder="Search Notes"
                 type="text">
         </div>
-        <button class="btn btn-primary" type="submit">Search</button>
+        <button class="btn btn-primary button" type="submit"><span class="material-icons">
+            search
+            </span></button>
     </form>
+   </div>
 </div>
 {% endblock %}
